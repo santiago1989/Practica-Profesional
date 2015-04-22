@@ -8,6 +8,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+	<form action="${pageContext.request.contextPath}/welcome.htm">
+		<input value="submit" type="submit"/>
+	</form>
 </body>
 </html>
