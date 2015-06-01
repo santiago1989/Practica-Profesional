@@ -5,11 +5,33 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/login/login.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/common.css">
+<title>Login</title>
 </head>
 <body>
-	<form action="${pageContext.request.contextPath}/welcome.htm">
-		<input value="submit" type="submit"/>
-	</form>
+	<div class="head">
+		<!-- <img class="bannerHead" alt="fondo" src="${pageContext.request.contextPath}/images/images.jpg"> -->
+	</div>
+	<div class="parent">
+		<form action="${pageContext.request.contextPath}/login.htm" method="post">
+			<div class="child">
+				<div class="cell">
+					<span>User:</span>
+					<input name="user" type="text" />
+				</div>
+				<div class="cell">
+					<span>Password:</span>
+					<input name="password" type="password"/>
+				</div>
+				<div class="cell">
+					<input value="Login" type="submit"/>
+				</div>
+				<div class="cell">
+					<span class="error">${errorMessage}</span>
+				</div>
+			</div>
+		</form>
+	</div>
 </body>
 </html>
