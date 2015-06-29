@@ -10,27 +10,20 @@
 
         <nav class="rm-nav rm-nojs rm-lighten">
             <ul>
-                <li><a href="#">Incidencias</a>
-                    <ul>
-                        <li><a href="#">Nueva Incidencia</a></li>
-                        <li><a href="#">Administración</a>
-                        	<ul>
-                        		<li><a href="#">Mis Incidencias</a></li>
-                        		<li><a href="#">Buscar</a></li>
-                        	</ul>
-                        </li>
-                        <li><a href="#">Tipo de incidencias</a>
-                            <ul>
-                                <li><a href="#">Nuevo Tipo de Incidencia</a></li>
-                                <li><a href="#">Administración Tipo de incidencia</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+               	<li><a href="${pageContext.request.contextPath}">Inicio</a></li>
+            	<li><a href="#">Mis Tickets</a></li>
+            	<li><a href="${pageContext.request.contextPath}/searchEntity.htm?entityName=Incidencia">Gestión Tickets</a></li>
+                <li><a href="${pageContext.request.contextPath}/jsp/ticket/ticket.jsp">Nuevo Ticket</a></li>
+				<li><a href="#">Tipos de Tickets</a>
+                     <ul>
+                          <li><a href="#">Nuevo Tipo de Ticket</a></li>
+                          <li><a href="#">Administración Tipo de Ticket</a></li>
+                      </ul>
                 </li>
                 <li><a href="#">Usuarios</a>
                     <ul>
                         <li><a href="#">Nuevo Usuario</a></li>
-                        <li><a href="#">Administración</a></li>
+                        <li><a href="#">Gestión</a></li>
                     </ul>
                 </li>
                 <li><a href="${pageContext.request.contextPath}/logout.htm">Logout</a>

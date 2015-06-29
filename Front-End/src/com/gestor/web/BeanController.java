@@ -1,5 +1,8 @@
 package com.gestor.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -12,40 +15,66 @@ import com.gestor.web.utils.Constants;
 
 @Controller
 public class BeanController {
-		
+
+	private static final String ENTITY_NAME_REQUEST_PARAM = "entityName";
+	
+	private static Map<String,String> navigationMap = new HashMap<String,String>();
+
+	private static final String TICKET_SEARCH = "/ticket/ticketsSearch";
+	
+	private static final String LOGIN_VIEW = "login";
+	
+	private static final String HOME_VIEW = "home";
+	
+	static{
+		navigationMap.put("Incidencia",TICKET_SEARCH);
+	}
+	
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletRequest request){
 		String user = request.getParameter(Constants.USER_SESSION);
 		String password = request.getParameter("password");
 		if(!Utils.isNullOrEmpty(user) && !Utils.isNullOrEmpty(password)){
 			request.getSession(true).setAttribute(Constants.USER_SESSION,user);
-			return new ModelAndView("home");			
+			return new ModelAndView(HOME_VIEW);			
 		}
 		else{
 			request.setAttribute("errorMessage","Ingrese usuario / contraseña");
-			return new ModelAndView("login");
+			return new ModelAndView(LOGIN_VIEW);
 		}
 	}
 
 	@RequestMapping("/homePage")
 	public ModelAndView homePage(HttpServletRequest request){
 		if(request.getSession().getAttribute(Constants.USER_SESSION)== null){
-			return new ModelAndView("login");			
+			return new ModelAndView(LOGIN_VIEW);
 		}else {
-			return new ModelAndView("home");
+			return new ModelAndView(HOME_VIEW);
 		}
 	}
 	
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpServletRequest request){
 		request.getSession().removeAttribute(Constants.USER_SESSION);
-		return new ModelAndView("login");
+		return new ModelAndView(LOGIN_VIEW);
 	}
 	
 	@RequestMapping("/showPopup")
 	public ModelAndView showPopup(HttpServletRequest request){
 		showPopup(request,"Prueba de popup",PopupType.INFORMATION);
-		return new ModelAndView("home");
+		return new ModelAndView(HOME_VIEW);
+	}
+	
+	@RequestMapping("/saveEntity")
+	public ModelAndView saveEntity(HttpServletRequest request){
+		return searchEntity(request);
+	}
+	
+	@RequestMapping("/searchEntity")
+	public ModelAndView searchEntity(HttpServletRequest request){
+		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+		String viewPath = navigationMap.get(clazName);
+		return new ModelAndView(viewPath);		
 	}
 	
 	private void showPopup(HttpServletRequest request,String text,PopupType type){
