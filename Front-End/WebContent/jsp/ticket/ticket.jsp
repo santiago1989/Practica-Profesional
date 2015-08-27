@@ -22,6 +22,11 @@ $( document ).ready(function() {
 		<input name="entityName" type="hidden" value="<%=Incidencia.class.getSimpleName()%>"/>
 		<div id="frame">
 			<div>
+				<!-- Número de incidencia -->
+				<span>Número de incidencia</span>
+				<input>
+			</div>
+			<div>
 				<!-- Titulo -->
 				<span>Titulo</span>
 				<input type="text" name="tituloIncidencia"/>
