@@ -24,8 +24,23 @@ $( document ).ready(function() {
 			<div>
 				<!-- Número de incidencia -->
 				<span>Número de incidencia</span>
-				<input>
+				<input type="text" name="numero"/>
 			</div>
+			<div>
+				<!-- Owner -->
+				<span>Creada por </span>
+				<input type="text" name="owner"/>
+			</div>
+			<div>
+				<!-- FechaCreación -->
+				<span>Fecha de creación </span>
+				<input type="text" name="fechaCreacion"/>
+			</div>
+			<div>
+				<!-- FechaModificación -->
+				<span>Última modificación </span>
+				<input type="text" name="fechaModificacion"/>
+			</div>			
 			<div>
 				<!-- Titulo -->
 				<span>Titulo</span>
@@ -56,7 +71,7 @@ $( document ).ready(function() {
 			<div>
 				<span>Estado:</span>
 				<select>
-					<option value="">Seleccione Opcion</option>
+					<option value="">Seleccione Opción</option>
 					<option value="A">Abierta</option>
 					<option value="AS">Asignada</option>
 					<option value="R">"Resulta</option>
