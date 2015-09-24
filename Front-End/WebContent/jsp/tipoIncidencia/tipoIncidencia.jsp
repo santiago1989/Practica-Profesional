@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Usuario</title>
+<title>Tipo de incidencia</title>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-1.11.3.js"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
