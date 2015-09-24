@@ -5,11 +5,11 @@ import java.util.List;
 import com.gestor.common.interfaces.Criteria;
 import com.gestor.common.interfaces.Identificable;
 
-public interface DAO<T> {
+public interface DAO {
 	
-	void guardar(T entidad);
+	void guardar(Identificable entidad);
 
-	T get(Identificable entidad);
+	Identificable get(Class claz,Integer id);
 	
-	List<T> buscar(Criteria criteria);
+	List buscar(Criteria criteria);
 }

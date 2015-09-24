@@ -3,13 +3,15 @@ package com.gestor.web.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapperResult<T> {
+import com.gestor.common.interfaces.Identificable;
+
+public class MapperResult {
 	
-	private T entity;
+	private Identificable entity;
 
 	private List<String> errorMessages;
 	
-	public MapperResult(T entity){
+	public MapperResult(Identificable entity){
 		this.entity = entity;
 		init();
 	}
@@ -30,11 +32,11 @@ public class MapperResult<T> {
 		this.errorMessages.add(message);
 	}
 	
-	public T getEntity() {
+	public Identificable getEntity() {
 		return entity;
 	}
 
-	public void setEntity(T entity) {
+	public void setEntity(Identificable entity) {
 		this.entity = entity;
 	}
 }

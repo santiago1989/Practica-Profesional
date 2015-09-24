@@ -7,25 +7,26 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.gestor.common.annotations.RequestMapped;
+import com.gestor.common.interfaces.Identificable;
 import com.gestor.common.reflect.ReflectionUtils;
 import com.gestor.web.Utils;
 import com.gestor.web.dto.MapperResult;
 import com.gestor.web.validator.TypeValidator;
 
-public class RequestMapper<T> {
+public class RequestMapper {
 	
-	private Class<T> claz;
+	private Class claz;
 	
-	public RequestMapper(Class<T> claz){
+	public RequestMapper(Class claz){
 		this.claz = claz;
 	}
 	
-	public T build(HttpServletRequest request){
-		MapperResult<T> result = new MapperResult<T>();
-		T object = null;
+	public Identificable build(HttpServletRequest request){
+		MapperResult result = new MapperResult();
+		Identificable object = null;
 		boolean entityValid = true;
 		try {
-			object = claz.newInstance();
+			object = (Identificable) claz.newInstance();
 			Field[] fieldList = object.getClass().getDeclaredFields();
 			for (Field field : fieldList) {
 				RequestMapped annotation = field.getAnnotation(RequestMapped.class);

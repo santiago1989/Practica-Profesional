@@ -9,8 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gestor.backend.service.Service;
+import com.gestor.backend.service.impl.ServiceImpl;
+import com.gestor.common.interfaces.Identificable;
 import com.gestor.web.dto.Popup;
 import com.gestor.web.enums.PopupType;
+import com.gestor.web.mapper.RequestMapper;
 import com.gestor.web.utils.Constants;
 
 @Controller
@@ -26,7 +30,12 @@ public class BeanController {
 	
 	private static final String HOME_VIEW = "home";
 	
+	private static final String ERROR_VIEW = "error";
+	
+	private Service service = new ServiceImpl();
+	
 	static{
+//		ACA SE AGREGAN LAS REGLAS DE NAVEGACION DEL SITIO
 		navigationMap.put("Incidencia",TICKET_SEARCH);
 	}
 	
@@ -36,7 +45,7 @@ public class BeanController {
 		String password = request.getParameter("password");
 		if(!Utils.isNullOrEmpty(user) && !Utils.isNullOrEmpty(password)){
 			request.getSession(true).setAttribute(Constants.USER_SESSION,user);
-			return new ModelAndView(HOME_VIEW);			
+			return new ModelAndView(HOME_VIEW);
 		}
 		else{
 			request.setAttribute("errorMessage","Ingrese usuario / contraseña");
@@ -67,7 +76,23 @@ public class BeanController {
 	
 	@RequestMapping("/saveEntity")
 	public ModelAndView saveEntity(HttpServletRequest request){
-		return searchEntity(request);
+		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+		try {
+			Class claz = Class.forName(clazName);
+			Identificable entity = new RequestMapper(claz).build(request);
+			service.guardar(entity);
+			String viewPath = navigationMap.get(clazName);
+			return new ModelAndView(viewPath);
+		} catch (ClassNotFoundException e) {
+			return new ModelAndView(ERROR_VIEW);
+		}
+	}
+
+	@RequestMapping("/getResults")
+	public ModelAndView getResults(HttpServletRequest request){
+		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+		String viewPath = navigationMap.get(clazName);
+		return new ModelAndView(viewPath);
 	}
 	
 	@RequestMapping("/searchEntity")

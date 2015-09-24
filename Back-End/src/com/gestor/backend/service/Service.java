@@ -3,17 +3,18 @@ package com.gestor.backend.service;
 import java.util.List;
 
 import com.gestor.backend.dto.Filtro;
+import com.gestor.common.interfaces.Identificable;
 
-public interface Service<T> {
+public interface Service {
 	
-	void guardar(T object);
+	void guardar(Identificable object);
 	
-	void actualizar(T object);
+	void actualizar(Identificable object);
 	
-	void eliminar(T object);
+	void eliminar(Identificable object);
 	
-	T get(Class<T> claz,int id);
+	Identificable get(Class claz,int id);
 
-	List<T> buscar(Class<T> claz,List<Filtro> filtros);
+	List buscar(Class claz,List<Filtro> filtros);
 	
 }
