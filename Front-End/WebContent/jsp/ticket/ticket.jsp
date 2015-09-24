@@ -22,8 +22,8 @@ $( document ).ready(function() {
 		<input name="entityName" type="hidden" value="<%=Incidencia.class.getSimpleName()%>"/>
 		<div id="frame">
 			<div>
-				<!-- N鷐ero de incidencia -->
-				<span>N鷐ero de incidencia</span>
+				<!-- N煤mero de incidencia -->
+				<span>N煤mero de incidencia</span>
 				<input type="text" name="numero"/>
 			</div>
 			<div>
@@ -32,13 +32,13 @@ $( document ).ready(function() {
 				<input type="text" name="owner"/>
 			</div>
 			<div>
-				<!-- FechaCreaci髇 -->
-				<span>Fecha de creaci髇 </span>
+				<!-- FechaCreaci贸n -->
+				<span>Fecha de creaci贸n </span>
 				<input type="text" name="fechaCreacion"/>
 			</div>
 			<div>
-				<!-- FechaModificaci髇 -->
-				<span>趌tima modificaci髇 </span>
+				<!-- FechaModificaci贸n -->
+				<span>脷ltima modificaci贸n </span>
 				<input type="text" name="fechaModificacion"/>
 			</div>			
 			<div>
@@ -52,7 +52,7 @@ $( document ).ready(function() {
 				<select name="tipoIncidencia">
 					<option value="I">Insumos</option>
 					<option value="M">Mantenimiento</option>
-					<option value="A">Aplicaci髇</option>
+					<option value="A">Aplicaci贸n</option>
 				</select>
 			</div>
 			<div>
@@ -71,10 +71,10 @@ $( document ).ready(function() {
 			<div>
 				<span>Estado:</span>
 				<select>
-					<option value="">Seleccione Opci髇</option>
+					<option value="">Seleccione Opci贸n</option>
 					<option value="A">Abierta</option>
 					<option value="AS">Asignada</option>
-					<option value="R">"Resulta</option>
+					<option value="R">Resulta</option>
 					<option value="C">Cerrada</option>
 				</select>
 			</div>
