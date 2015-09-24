@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@page import="com.gestor.entidades.TipoIncidencia"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -17,7 +18,7 @@ $( document ).ready(function() {
 </head>
 <body>
 	<form action="${pageContext.request.contextPath}/saveEntity.htm" method="post">
-		<input name="entityName" type="hidden" value="<%=tipoIncidencia.class.getSimpleName()%>"/>
+		<input name="entityName" type="hidden" value="<%=TipoIncidencia.class.getSimpleName()%>"/>
 		<div id="frame">
 			<div>
 				<!-- Código -->
