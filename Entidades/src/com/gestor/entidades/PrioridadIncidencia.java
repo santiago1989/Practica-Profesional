@@ -1,8 +1,8 @@
 package com.gestor.entidades;
 
-public class EstadoIncidencia {
-
-	private Integer id;
+public class PrioridadIncidencia {
+	
+	private Integer id;	
 	private String nombre;
 
 	public Integer getId() {

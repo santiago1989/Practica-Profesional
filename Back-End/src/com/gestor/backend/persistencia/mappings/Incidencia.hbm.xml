@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 30/09/2015 20:49:03 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.gestor.entidades.Incidencia" table="INCIDENCIA">
+        <id name="numero" type="int">
+            <column name="NUMERO" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="owner" class="com.gestor.web.seguridad.Usuario" fetch="join">
+            <column name="OWNER" />
+        </many-to-one>
+        <many-to-one name="responsable" class="com.gestor.web.seguridad.Usuario" fetch="join">
+            <column name="RESPONSABLE" />
+        </many-to-one>
+        <many-to-one name="estado" class="com.gestor.entidades.EstadoIncidencia" fetch="join">
+            <column name="ESTADO" />
+        </many-to-one>
+        <many-to-one name="prioridad" class="com.gestor.entidades.PrioridadIncidencia" fetch="join">
+            <column name="PRIORIDAD" />
+        </many-to-one>
+        <many-to-one name="tipoIncidencia" class="com.gestor.entidades.TipoIncidencia" fetch="join">
+            <column name="TIPOINCIDENCIA" />
+        </many-to-one>
+        <property name="detalle" type="java.lang.String">
+            <column name="DETALLE" />
+        </property>
+        <property name="titulo" type="java.lang.String">
+            <column name="TITULO" />
+        </property>
+        <bag name="adjuntos" table="INCIDENCIA" inverse="false" lazy="true">
+            <key>
+                <column name="NUMERO" />
+            </key>
+            <element type="java.lang.String">
+                <column name="ADJUNTOS" />
+            </element>
+        </bag>
+        <bag name="notas" table="INCIDENCIA" inverse="false" lazy="true">
+            <key>
+                <column name="NUMERO" />
+            </key>
+            <element type="java.lang.String">
+                <column name="NOTAS" />
+            </element>
+        </bag>
+        <property name="fechaCreacion" type="java.util.Date">
+            <column name="FECHACREACION" />
+        </property>
+        <property name="fechaModificacion" type="java.util.Date">
+            <column name="FECHAMODIFICACION" />
+        </property>
+    </class>
+</hibernate-mapping>

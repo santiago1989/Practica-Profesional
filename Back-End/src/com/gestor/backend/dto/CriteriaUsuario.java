@@ -1,8 +1,9 @@
 package com.gestor.backend.dto;
 
-import com.gestor.common.interfaces.Criteria;
+import com.gestor.web.seguridad.Usuario;
 
-public class CriteriaUsuario implements Criteria{
+
+public class CriteriaUsuario implements Criteria<Usuario>{
 	
 	private String legajo;
 	
@@ -32,5 +33,11 @@ public class CriteriaUsuario implements Criteria{
 
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
+	}
+
+	@Override
+	public void build(Usuario object) {
+		// TODO Auto-generated method stub
+		
 	}
 }

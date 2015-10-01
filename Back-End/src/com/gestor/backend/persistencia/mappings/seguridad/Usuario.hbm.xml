@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 30/09/2015 20:49:03 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.gestor.web.seguridad.Usuario" table="USUARIO">
+        <id name="apellido" type="java.lang.String">
+            <column name="APELLIDO" />
+            <generator class="assigned" />
+        </id>
+        <property name="legajo" type="int">
+            <column name="LEGAJO" />
+        </property>
+        <property name="contrase&#241;a" type="java.lang.String">
+            <column name="CONTRASE&#209;A" />
+        </property>
+        <property name="nombre" type="java.lang.String">
+            <column name="NOMBRE" />
+        </property>
+        <property name="dni" type="java.lang.String">
+            <column name="DNI" />
+        </property>
+        <property name="correo" type="java.lang.String">
+            <column name="CORREO" />
+        </property>
+        <set name="roles" table="ROL" inverse="false" lazy="true">
+            <key>
+                <column name="APELLIDO" />
+            </key>
+            <one-to-many class="com.gestor.web.seguridad.Rol" />
+        </set>
+        <property name="telefono" type="java.lang.String">
+            <column name="TELEFONO" />
+        </property>
+        <property name="estado" type="boolean">
+            <column name="ESTADO" />
+        </property>
+    </class>
+</hibernate-mapping>

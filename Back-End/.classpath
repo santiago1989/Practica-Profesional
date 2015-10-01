@@ -15,5 +15,8 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>
 	<classpathentry kind="lib" path="/CommonsLibs/commons-collections4-4.0.jar" sourcepath="/CommonsLibs/source/commons-collections4-4.0-sources.jar"/>
+	<classpathentry kind="lib" path="/CommonsLibs/hibernate-3.0.5.jar"/>
+	<classpathentry kind="lib" path="/CommonsLibs/spring-orm-4.2.1.RELEASE (1).jar"/>
+	<classpathentry kind="lib" path="/CommonsLibs/hsqldb-1.7.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
