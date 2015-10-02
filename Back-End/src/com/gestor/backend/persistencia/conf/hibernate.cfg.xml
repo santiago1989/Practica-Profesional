@@ -11,5 +11,12 @@
         <property name="hibernate.connection.password">admin</property>
         <property name="hibernate.connection.url">jdbc:hsqldb:mem:example</property>
         <property name="hibernate.hbm2ddl.auto">create</property>
+		<!-- Hibernate mappings -->        
+	    <mapping resource="src/com/gestor/backend/persistencia/mappings/Incidencia.hbm.xml"/>
+	    <mapping resource="src/com/gestor/backend/persistencia/mappings/EstadoIncidencia.hbm.xml"/>
+	    <mapping resource="src/com/gestor/backend/persistencia/mappings/PrioridadIncidencia.hbm.xml"/>
+	    <mapping resource="src/com/gestor/backend/persistencia/mappings/TipoIncidencia.hbm.xml"/>
+	    <mapping resource="src/com/gestor/backend/persistencia/mappings/seguridad/Usuario.hbm.xml"/>
+	    <mapping resource="src/com/gestor/backend/persistencia/mappings/seguridad/Rol.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

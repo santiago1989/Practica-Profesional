@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.ServiceImpl;
+import com.gestor.backend.util.CriteriaUtils;
 import com.gestor.common.interfaces.Identificable;
 import com.gestor.web.dto.Popup;
 import com.gestor.web.enums.PopupType;
@@ -31,6 +32,8 @@ public class BeanController {
 	private static final String HOME_VIEW = "home";
 	
 	private static final String ERROR_VIEW = "error";
+	
+	private String SEARCH_BEAN_REQUEST = "searchBean";
 	
 	private Service service = new ServiceImpl();
 	
@@ -98,6 +101,13 @@ public class BeanController {
 	@RequestMapping("/searchEntity")
 	public ModelAndView searchEntity(HttpServletRequest request){
 		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+		try {
+			request.setAttribute(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(Class.forName(clazName)));
+		} catch (InstantiationException | IllegalAccessException
+				| ClassNotFoundException e) {
+			// TODO agreggar loguer
+			e.printStackTrace();
+		}
 		String viewPath = navigationMap.get(clazName);
 		return new ModelAndView(viewPath);		
 	}

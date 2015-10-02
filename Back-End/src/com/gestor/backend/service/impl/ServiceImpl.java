@@ -39,7 +39,7 @@ public class ServiceImpl implements Service{
 
 	@Override
 	public List buscar(Class claz,List<Filtro> filtros) {
-		return dao.buscar(null);//FIXME ARREGLAR, se puso el null para que compile
+		return dao.buscar(claz,filtros);//FIXME ARREGLAR, se puso el null para que compile
 	}
 		
 }

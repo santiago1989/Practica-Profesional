@@ -6,6 +6,7 @@ import org.hibernate.Session;
 
 import com.gestor.backend.dao.DAO;
 import com.gestor.backend.dto.Criteria;
+import com.gestor.backend.dto.Filtro;
 import com.gestor.backend.util.SessionSingletion;
 import com.gestor.common.interfaces.Identificable;
 
@@ -24,7 +25,7 @@ public class DAOImpl implements DAO {
 	}
 
 	@Override
-	public List buscar(Criteria criteria) {
+	public List buscar(Class claz,List<Filtro> filtros) {
 		// TODO Auto-generated method stub
 		return null;
 	}

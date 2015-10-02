@@ -1,21 +1,23 @@
 package com.gestor.backend.dto;
 
+import java.util.List;
+
 import com.gestor.web.seguridad.Usuario;
 
 
 public class CriteriaUsuario implements Criteria<Usuario>{
 	
-	private String legajo;
+	private Integer legajo;
 	
 	private String nombre;
 	
 	private String apellido;
 
-	public String getLegajo() {
+	public Integer getLegajo() {
 		return legajo;
 	}
 
-	public void setLegajo(String legajo) {
+	public void setLegajo(Integer legajo) {
 		this.legajo = legajo;
 	}
 
@@ -37,7 +39,14 @@ public class CriteriaUsuario implements Criteria<Usuario>{
 
 	@Override
 	public void build(Usuario object) {
+		this.legajo = object.getLegajo();
+		this.nombre = object.getNombre();
+		this.apellido = object.getApellido();
+	}
+
+	@Override
+	public List<Filtro> getFiltros() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 }
