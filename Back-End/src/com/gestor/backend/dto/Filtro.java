@@ -1,12 +1,12 @@
 package com.gestor.backend.dto;
 
-import com.gestor.common.annotations.DBField;
+import org.hibernate.criterion.Criterion;
 
 public class Filtro {
 	
 	private String fieldName;
 
-	private DBField sqlField;
+	private Criterion criterion;
 
 	public String getFieldName() {
 		return fieldName;
@@ -16,11 +16,11 @@ public class Filtro {
 		this.fieldName = fieldName;
 	}
 
-	public DBField getSqlField() {
-		return sqlField;
+	public Criterion getCriterion() {
+		return criterion;
 	}
 
-	public void setSqlField(DBField sqlField) {
-		this.sqlField = sqlField;
+	public void setCriterion(Criterion criterion) {
+		this.criterion = criterion;
 	}
 }

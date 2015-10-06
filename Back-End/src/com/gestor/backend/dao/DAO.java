@@ -1,15 +1,15 @@
 package com.gestor.backend.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
-import com.gestor.backend.dto.Filtro;
-import com.gestor.common.interfaces.Identificable;
+import org.hibernate.criterion.Criterion;
 
 public interface DAO {
 	
-	void guardar(Identificable entidad);
+	void guardar(Object entidad);
 
-	Identificable get(Class claz,Integer id);
+	Object get(Class<?> claz,Serializable id);
 	
-	List buscar(Class claz,List<Filtro> filtros);
+	List<?> buscar(Class<?> claz,List<Criterion> filtros);
 }

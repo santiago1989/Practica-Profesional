@@ -1,6 +1,7 @@
 package com.gestor.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gestor.backend.dto.BaseCriteria;
 import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
 import com.gestor.common.interfaces.Identificable;
+import com.gestor.common.util.Utils;
 import com.gestor.web.dto.Popup;
 import com.gestor.web.enums.PopupType;
 import com.gestor.web.mapper.RequestMapper;
@@ -81,7 +84,7 @@ public class BeanController {
 	public ModelAndView saveEntity(HttpServletRequest request){
 		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
 		try {
-			Class claz = Class.forName(clazName);
+			Class<?> claz = Class.forName(clazName);
 			Identificable entity = new RequestMapper(claz).build(request);
 			service.guardar(entity);
 			String viewPath = navigationMap.get(clazName);
@@ -92,10 +95,16 @@ public class BeanController {
 	}
 
 	@RequestMapping("/getResults")
-	public ModelAndView getResults(HttpServletRequest request){
-		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
-		String viewPath = navigationMap.get(clazName);
-		return new ModelAndView(viewPath);
+	public ModelAndView getResults(HttpServletRequest request,BaseCriteria baseCriteria){
+		Map<String,Object> model = new HashMap<String,Object>();
+		String viewPath = navigationMap.get(baseCriteria.getClazName());
+		try {
+			List<?> collection = service.buscar(Class.forName(baseCriteria.getClazName()), baseCriteria.getFiltros());
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ModelAndView(viewPath,model);
 	}
 	
 	@RequestMapping("/searchEntity")

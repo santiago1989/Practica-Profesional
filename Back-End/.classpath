@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Entidades"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.0">
@@ -8,15 +9,21 @@
 			<attribute name="owner.project.facets" value="jst.utility"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_45">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>
-	<classpathentry kind="lib" path="/CommonsLibs/commons-collections4-4.0.jar" sourcepath="/CommonsLibs/source/commons-collections4-4.0-sources.jar"/>
+	<classpathentry kind="lib" path="/CommonsLibs/commons-collections-3.2.jar" sourcepath="/CommonsLibs/source/commons-collections4-4.0-sources.jar"/>
 	<classpathentry kind="lib" path="/CommonsLibs/hibernate-3.0.5.jar"/>
 	<classpathentry kind="lib" path="/CommonsLibs/spring-orm-4.2.1.RELEASE (1).jar"/>
 	<classpathentry kind="lib" path="/CommonsLibs/hsqldb-1.7.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/CommonsLibs/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="/CommonsLibs/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/CommonsLibs/ehcache-1.1.jar"/>
+	<classpathentry kind="lib" path="/CommonsLibs/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="/CommonsLibs/cglib-full-2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

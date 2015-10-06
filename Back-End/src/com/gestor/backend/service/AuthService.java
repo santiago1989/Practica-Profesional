@@ -9,6 +9,6 @@ public class AuthService {
 	
 	public boolean isCredentialValid(Integer legajo,String password){
 		Usuario usuario = (Usuario) service.get(Usuario.class,legajo);
-		return (usuario == null )?false:usuario.getContraseña().equals(password);
+		return (usuario == null )?false:usuario.getContrasena().equals(password);
 	}
 }

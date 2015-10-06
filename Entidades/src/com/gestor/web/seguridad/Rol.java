@@ -1,18 +1,17 @@
 package com.gestor.web.seguridad;
 
-import com.gestor.common.interfaces.Identificable;
 
-public class Rol implements Identificable{
+public class Rol{
 
-	private int code;
+	private String code;
 	
 	private String acction;
 
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 
@@ -22,10 +21,5 @@ public class Rol implements Identificable{
 
 	public void setAcction(String acction) {
 		this.acction = acction;
-	}
-
-	@Override
-	public Integer getId() {
-		return getCode();
 	}
 }

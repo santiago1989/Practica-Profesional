@@ -13,7 +13,7 @@ public class Usuario implements Identificable{
 	private int legajo;
 
 	@RequestMapped(regexp="[A-Za-z0-9]+")
-	private String contraseña;
+	private String contrasena;
 	
 	@RequestMapped(regexp="[A-z]+")
 	private String nombre;
@@ -75,11 +75,11 @@ public class Usuario implements Identificable{
 	public void setRoles(Set<Rol> roles) {
 		this.roles = roles;
 	}
-	public String getContraseña() {
-		return contraseña;
+	public String getContrasena() {
+		return contrasena;
 	}
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
 	public boolean isEstado() {
 		return estado;

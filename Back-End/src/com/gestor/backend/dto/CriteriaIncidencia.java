@@ -3,10 +3,10 @@ package com.gestor.backend.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.gestor.entidades.Incidencia;
+import org.hibernate.criterion.Criterion;
 
 
-public class CriteriaIncidencia implements Criteria<Incidencia> {
+public class CriteriaIncidencia extends BaseCriteria {
 	
 	private Integer numero;
 	private String owner;
@@ -20,17 +20,18 @@ public class CriteriaIncidencia implements Criteria<Incidencia> {
 	private Date fechaModificacion;
 	
 	@Override
-	public void build(Incidencia object) {
-//		TODO validar si se va a usar o no
-		this.numero = object.getNumero();		
-		this.fechaModificacion = object.getFechaModificacion();
-		this.fechaCreacion = object.getFechaCreacion();
-	}
-
-	@Override
-	public List<Filtro> getFiltros() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Criterion> getFiltros() {
+		addLike("numero",String.format("%s%",numero == null? "":numero));
+		addLike("owner",String.format("%s%",owner == null? "":owner));
+		addLike("responsable",String.format("%s%",responsable == null? "":responsable));		
+		addLike("estado",String.format("%s",estado == null? "":estado));
+		addLike("prioridad",String.format("%s",prioridad == null? "":prioridad));	
+		addLike("tipo",String.format("%s",tipo == null? "":tipo));
+		addLike("detalle",String.format("%%s%",detalle == null? "":detalle));
+		addLike("titulo",String.format("%%s%",titulo == null? "":titulo));
+		addLike("fechaCreacion",String.format("%s",fechaCreacion == null? "":fechaCreacion));
+		addLike("fechaModificacion",String.format("%s",fechaModificacion == null? "":fechaModificacion));
+		return criteriosList;
 	}
 
 }

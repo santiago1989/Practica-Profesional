@@ -1,8 +1,10 @@
 package com.gestor.backend.service;
 
+import java.io.Serializable;
 import java.util.List;
 
-import com.gestor.backend.dto.Filtro;
+import org.hibernate.criterion.Criterion;
+
 import com.gestor.common.interfaces.Identificable;
 
 public interface Service {
@@ -13,8 +15,8 @@ public interface Service {
 	
 	void eliminar(Identificable object);
 	
-	Identificable get(Class claz,int id);
+	Object get(Class<?> claz,Serializable id);
 
-	List buscar(Class claz,List<Filtro> filtros);
+	List<?> buscar(Class<?> claz,List<Criterion> filtros);
 	
 }

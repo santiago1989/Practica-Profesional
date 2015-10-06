@@ -17,7 +17,7 @@
         location.href = '${pageContext.request.contextPath}/tag.run?' + parameterString;
     }
 </script>
-<title>Insert title here</title>
+<title>B&uacute;squeda de Usuarios</title>
 </head>
 <body>
      <jmesa:tableModel id="jmesaTag" items="${users}" maxRows="8" exportTypes="csv,excel" maxRowsIncrements="8,16,24" filterMatcherMap="org.jmesaweb.controller.TagFilterMatcherMap"

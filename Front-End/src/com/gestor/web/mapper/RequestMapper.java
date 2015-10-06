@@ -6,19 +6,24 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import com.gestor.backend.service.Service;
+import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.common.annotations.RequestMapped;
 import com.gestor.common.interfaces.Identificable;
 import com.gestor.common.reflect.ReflectionUtils;
-import com.gestor.web.Utils;
+import com.gestor.common.util.Utils;
 import com.gestor.web.dto.MapperResult;
 import com.gestor.web.validator.TypeValidator;
 
 public class RequestMapper {
 	
+	private Service service;
+	
 	private Class claz;
 	
 	public RequestMapper(Class claz){
 		this.claz = claz;
+		this.service = new ServiceImpl();
 	}
 	
 	public Identificable build(HttpServletRequest request){
@@ -41,8 +46,13 @@ public class RequestMapper {
 						boolean valid = TypeValidator.validate(field,value);
 						entityValid&=valid;
 						if(valid){
-							Object valueParsed = ReflectionUtils.parse(field.getType(),value);
-							BeanUtils.setProperty(object,field.getName(),valueParsed);
+							if(annotation.customType()){
+								Object objectPersisted = service.get(field.getType(), value);
+								BeanUtils.setProperty(object,field.getName(),objectPersisted);
+							}else{
+								Object valueParsed = ReflectionUtils.parse(field.getType(),value);
+								BeanUtils.setProperty(object,field.getName(),valueParsed);
+							}
 						}else{
 							result.addError(String.format("El campo %s es no valido.",field.getName()));
 						}

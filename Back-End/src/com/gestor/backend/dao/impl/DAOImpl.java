@@ -1,32 +1,37 @@
 package com.gestor.backend.dao.impl;
 
+import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
 
 import com.gestor.backend.dao.DAO;
-import com.gestor.backend.dto.Criteria;
-import com.gestor.backend.dto.Filtro;
 import com.gestor.backend.util.SessionSingletion;
-import com.gestor.common.interfaces.Identificable;
 
 public class DAOImpl implements DAO {
 
 	@Override
-	public void guardar(Identificable entidad) {
+	public void guardar(Object entidad) {
 		Session session = SessionSingletion.getInstance().getSession();
 		session.saveOrUpdate(entidad);
 	}
 
 	@Override
-	public Identificable get(Class claz,Integer id) {
+	public Object get(Class<?> claz,Serializable id) {
 		Session session = SessionSingletion.getInstance().getSession();
-		return (Identificable) session.get(claz,id);
+		return session.get(claz,id);
 	}
 
 	@Override
-	public List buscar(Class claz,List<Filtro> filtros) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<?> buscar(Class<?> claz,List<Criterion> filtros) {
+		Session session = SessionSingletion.getInstance().getSession();
+		Criteria criteria = session.createCriteria(claz);
+		for (Criterion criterion : filtros) {
+			criteria.add(criterion);
+		}
+		List<?> list = criteria.list();
+		return list;
 	}
 }

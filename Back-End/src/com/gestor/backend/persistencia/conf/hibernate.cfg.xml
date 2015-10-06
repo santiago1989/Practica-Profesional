@@ -5,18 +5,19 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>  
-        <property name="hibernate.show_sql">true</property>    
+        <property name="hibernate.show_sql">true</property> 
+        <property name="hibernate.format_sql">true</property>            
         <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>    
-        <property name="hibernate.connection.username">admin</property>    
-        <property name="hibernate.connection.password">admin</property>
+<!--         <property name="hibernate.connection.username"></property>     -->
+<!--         <property name="hibernate.connection.password"></property> -->
         <property name="hibernate.connection.url">jdbc:hsqldb:mem:example</property>
         <property name="hibernate.hbm2ddl.auto">create</property>
 		<!-- Hibernate mappings -->        
-	    <mapping resource="src/com/gestor/backend/persistencia/mappings/Incidencia.hbm.xml"/>
-	    <mapping resource="src/com/gestor/backend/persistencia/mappings/EstadoIncidencia.hbm.xml"/>
-	    <mapping resource="src/com/gestor/backend/persistencia/mappings/PrioridadIncidencia.hbm.xml"/>
-	    <mapping resource="src/com/gestor/backend/persistencia/mappings/TipoIncidencia.hbm.xml"/>
-	    <mapping resource="src/com/gestor/backend/persistencia/mappings/seguridad/Usuario.hbm.xml"/>
-	    <mapping resource="src/com/gestor/backend/persistencia/mappings/seguridad/Rol.hbm.xml"/>
+	    <mapping resource="com/gestor/backend/persistencia/mappings/Incidencia.hbm.xml"/>
+	    <mapping resource="com/gestor/backend/persistencia/mappings/EstadoIncidencia.hbm.xml"/>
+	    <mapping resource="com/gestor/backend/persistencia/mappings/PrioridadIncidencia.hbm.xml"/>
+	    <mapping resource="com/gestor/backend/persistencia/mappings/TipoIncidencia.hbm.xml"/>
+	    <mapping resource="com/gestor/backend/persistencia/mappings/seguridad/Usuario.hbm.xml"/>
+	    <mapping resource="com/gestor/backend/persistencia/mappings/seguridad/Rol.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

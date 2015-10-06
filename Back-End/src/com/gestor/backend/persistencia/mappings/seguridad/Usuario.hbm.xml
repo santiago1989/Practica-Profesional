@@ -4,15 +4,15 @@
 <!-- Generated 30/09/2015 20:49:03 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.gestor.web.seguridad.Usuario" table="USUARIO">
-        <id name="apellido" type="java.lang.String">
-            <column name="APELLIDO" />
-            <generator class="assigned" />
-        </id>
-        <property name="legajo" type="int">
+        <id name="legajo" type="int">
             <column name="LEGAJO" />
+            <generator class="increment" />
+        </id>
+        <property name="contrasena" type="java.lang.String">
+            <column name="CONTRASENA"/>
         </property>
-        <property name="contrase&#241;a" type="java.lang.String">
-            <column name="CONTRASE&#209;A" />
+        <property name="apellido" type="java.lang.String">
+            <column name="APELLIDO"/>
         </property>
         <property name="nombre" type="java.lang.String">
             <column name="NOMBRE" />

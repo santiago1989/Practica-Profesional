@@ -2,22 +2,22 @@ package com.gestor.backend.dto;
 
 import java.util.List;
 
-import com.gestor.web.seguridad.Usuario;
+import org.hibernate.criterion.Criterion;
 
 
-public class CriteriaUsuario implements Criteria<Usuario>{
+public class CriteriaUsuario extends BaseCriteria{
 	
-	private Integer legajo;
+	private String legajo;
 	
 	private String nombre;
 	
 	private String apellido;
 
-	public Integer getLegajo() {
+	public String getLegajo() {
 		return legajo;
 	}
 
-	public void setLegajo(Integer legajo) {
+	public void setLegajo(String legajo) {
 		this.legajo = legajo;
 	}
 
@@ -38,15 +38,10 @@ public class CriteriaUsuario implements Criteria<Usuario>{
 	}
 
 	@Override
-	public void build(Usuario object) {
-		this.legajo = object.getLegajo();
-		this.nombre = object.getNombre();
-		this.apellido = object.getApellido();
-	}
-
-	@Override
-	public List<Filtro> getFiltros() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Criterion> getFiltros() {
+		addLike("legajo",legajo == null? "":legajo.concat("%"));
+		addLike("nombre",nombre);
+		addLike("apellido",apellido);
+		return criteriosList;
 	}
 }
