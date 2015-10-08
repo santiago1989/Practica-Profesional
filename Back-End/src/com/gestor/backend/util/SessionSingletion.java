@@ -16,7 +16,6 @@ public class SessionSingletion {
 	
 	private void init(){
 		String hibernateConfLocation = "com/gestor/backend/persistencia/conf/hibernate.cfg.xml";
-//		String hibernateConfLocation = this.getClass().getClassLoader().getResource("/com/gestor/backend/persistencia/conf/hibernate.cfg.xml").getPath();
 		SessionFactory sessionFactory = new Configuration().configure(hibernateConfLocation).buildSessionFactory();
 		this.session = sessionFactory.openSession();
 	}

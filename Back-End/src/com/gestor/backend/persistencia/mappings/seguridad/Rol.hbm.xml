@@ -7,8 +7,14 @@
         <id name="code" type="java.lang.String">
             <column name="CODE" />
         </id>
-        <property name="acction" type="java.lang.String">
-            <column name="ACCTION" />
+        <property name="nombre" type="java.lang.String">
+            <column name="NOMBRE" />
         </property>
+        <set name="privilegios" table="Rol_Privilegios" inverse="false">
+            <key>
+                <column name="code"/>
+            </key>
+            <one-to-many class="com.gestor.web.seguridad.Privilegio" />
+        </set>
     </class>
 </hibernate-mapping>

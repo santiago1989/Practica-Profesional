@@ -16,9 +16,14 @@ import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
 import com.gestor.common.interfaces.Identificable;
 import com.gestor.common.util.Utils;
+import com.gestor.entidades.Incidencia;
+import com.gestor.web.dto.CollectionsBean;
 import com.gestor.web.dto.Popup;
+import com.gestor.web.dto.UsuarioCollectionsBean;
 import com.gestor.web.enums.PopupType;
 import com.gestor.web.mapper.RequestMapper;
+import com.gestor.web.seguridad.Rol;
+import com.gestor.web.seguridad.Usuario;
 import com.gestor.web.utils.Constants;
 
 @Controller
@@ -26,9 +31,17 @@ public class BeanController {
 
 	private static final String ENTITY_NAME_REQUEST_PARAM = "entityName";
 	
-	private static Map<String,String> navigationMap = new HashMap<String,String>();
+	private static Map<String,String> searchNavigationMap = new HashMap<String,String>();
 
+	private static Map<String,String> loadNavigationMap = new HashMap<String,String>();	
+
+	private static Map<String,CollectionsBean> collectionsBeanMap = new HashMap<String, CollectionsBean>();
+	
 	private static final String TICKET_SEARCH = "/ticket/ticketsSearch";
+
+	private static final String USER_SEARCH = "/users/usersSearch";
+
+	private static final String USER_DATA_LOAD = "/users/users";
 	
 	private static final String LOGIN_VIEW = "login";
 	
@@ -36,13 +49,21 @@ public class BeanController {
 	
 	private static final String ERROR_VIEW = "error";
 	
+	
 	private String SEARCH_BEAN_REQUEST = "searchBean";
 	
-	private Service service = new ServiceImpl();
+	private String COLLECTIONS_BEAN_REQUEST = "collectionsBean";
+	
+	private static Service service = new ServiceImpl();
 	
 	static{
 //		ACA SE AGREGAN LAS REGLAS DE NAVEGACION DEL SITIO
-		navigationMap.put("Incidencia",TICKET_SEARCH);
+		searchNavigationMap.put(Incidencia.class.getSimpleName(),TICKET_SEARCH);
+		searchNavigationMap.put(Usuario.class.getSimpleName(),USER_SEARCH);
+		
+		loadNavigationMap.put(Usuario.class.getSimpleName(),USER_DATA_LOAD);
+		
+		collectionsBeanMap.put(Usuario.class.getSimpleName(),new UsuarioCollectionsBean(service.findAll(Rol.class)));
 	}
 	
 	@RequestMapping("/login")
@@ -87,7 +108,7 @@ public class BeanController {
 			Class<?> claz = Class.forName(clazName);
 			Identificable entity = new RequestMapper(claz).build(request);
 			service.guardar(entity);
-			String viewPath = navigationMap.get(clazName);
+			String viewPath = searchNavigationMap.get(clazName);
 			return new ModelAndView(viewPath);
 		} catch (ClassNotFoundException e) {
 			return new ModelAndView(ERROR_VIEW);
@@ -97,7 +118,7 @@ public class BeanController {
 	@RequestMapping("/getResults")
 	public ModelAndView getResults(HttpServletRequest request,BaseCriteria baseCriteria){
 		Map<String,Object> model = new HashMap<String,Object>();
-		String viewPath = navigationMap.get(baseCriteria.getClazName());
+		String viewPath = searchNavigationMap.get(baseCriteria.getClazName());
 		try {
 			List<?> collection = service.buscar(Class.forName(baseCriteria.getClazName()), baseCriteria.getFiltros());
 		} catch (ClassNotFoundException e) {
@@ -117,9 +138,18 @@ public class BeanController {
 			// TODO agreggar loguer
 			e.printStackTrace();
 		}
-		String viewPath = navigationMap.get(clazName);
+		String viewPath = searchNavigationMap.get(clazName);
 		return new ModelAndView(viewPath);		
 	}
+
+	@RequestMapping("/newEntity")
+	public ModelAndView newEntity(HttpServletRequest request){
+		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+		String viewPath = loadNavigationMap.get(clazName);
+		request.setAttribute(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(clazName));
+		return new ModelAndView(viewPath);
+	}
+
 	
 	private void showPopup(HttpServletRequest request,String text,PopupType type){
 		Popup popup = new Popup(text, type);

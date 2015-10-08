@@ -23,11 +23,11 @@
         <property name="correo" type="java.lang.String">
             <column name="CORREO" />
         </property>
-        <set name="roles" table="ROL" inverse="false" lazy="true">
+        <set name="roles" table="USUARIO_ROL" inverse="false" lazy="true">
             <key>
-                <column name="APELLIDO" />
+                <column name="legajo" />
             </key>
-            <one-to-many class="com.gestor.web.seguridad.Rol" />
+            <one-to-many class="com.gestor.web.seguridad.Rol"/>
         </set>
         <property name="telefono" type="java.lang.String">
             <column name="TELEFONO" />

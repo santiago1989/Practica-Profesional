@@ -6,15 +6,15 @@ import com.gestor.common.annotations.Id;
 public class Privilegio{
 	
 	@Id
-	private Integer code;
+	private String code;
 	
 	private String description;
 	
-	public Integer getCode() {
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(Integer code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 

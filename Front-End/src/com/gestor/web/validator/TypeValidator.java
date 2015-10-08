@@ -8,6 +8,6 @@ public class TypeValidator {
 	
 	public static boolean validate(Field field, String value){
 		String regExp = field.getAnnotation(RequestMapped.class).regexp();
-		return regExp.matches(regExp);
+		return value.matches(regExp);
 	}
 }

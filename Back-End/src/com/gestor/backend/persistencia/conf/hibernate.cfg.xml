@@ -19,5 +19,6 @@
 	    <mapping resource="com/gestor/backend/persistencia/mappings/TipoIncidencia.hbm.xml"/>
 	    <mapping resource="com/gestor/backend/persistencia/mappings/seguridad/Usuario.hbm.xml"/>
 	    <mapping resource="com/gestor/backend/persistencia/mappings/seguridad/Rol.hbm.xml"/>
+	    <mapping resource="com/gestor/backend/persistencia/mappings/seguridad/Privilegio.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
