@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequestMapped {
 	public boolean customType() default false;
+	public Class customTypeClass() default Object.class;
 	public boolean required() default true;
 	public String regexp();
 }

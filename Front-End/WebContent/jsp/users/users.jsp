@@ -59,11 +59,11 @@ $( document ).ready(function() {
 			<div>
 				<!-- Email -->
 				<span>Email</span>
-				<input type="text" name="email"/>
+				<input type="text" name="correo"/>
 			</div>
 			<div>
 				<span>Rol:</span>
-				<select name="rol">
+				<select name="roles">
 					<option value="">Seleccione Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.roles}">
 						<option value="${item.code}">${item.nombre}</option>

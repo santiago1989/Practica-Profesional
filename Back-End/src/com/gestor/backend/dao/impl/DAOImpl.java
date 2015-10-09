@@ -25,13 +25,13 @@ public class DAOImpl implements DAO {
 	}
 
 	@Override
-	public List<?> buscar(Class<?> claz,List<Criterion> filtros) {
+	public <T> List<T> buscar(Class<T> claz,List<Criterion> filtros) {
 		Session session = SessionSingletion.getInstance().getSession();
 		Criteria criteria = session.createCriteria(claz);
 		for (Criterion criterion : filtros) {
 			criteria.add(criterion);
 		}
-		List<?> list = criteria.list();
+		List<T> list = criteria.list();
 		return list;
 	}
 }

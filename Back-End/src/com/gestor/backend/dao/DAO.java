@@ -11,5 +11,5 @@ public interface DAO {
 
 	Object get(Class<?> claz,Serializable id);
 	
-	List<?> buscar(Class<?> claz,List<Criterion> filtros);
+	<T> List<T> buscar(Class<T> claz,List<Criterion> filtros);
 }

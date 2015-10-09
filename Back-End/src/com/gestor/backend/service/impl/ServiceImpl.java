@@ -2,9 +2,11 @@ package com.gestor.backend.service.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 
 import com.gestor.backend.dao.DAO;
 import com.gestor.backend.dao.impl.DAOImpl;
@@ -56,7 +58,7 @@ public class ServiceImpl implements Service{
 	}
 
 	@Override
-	public List<?> buscar(Class<?> claz,List<Criterion> filtros) {
+	public <T> Collection<T> buscar(Class<T> claz,List<Criterion> filtros) {
 		return dao.buscar(claz,filtros);
 	}
 	
@@ -64,5 +66,12 @@ public class ServiceImpl implements Service{
 	@Override
 	public <T> List<T> findAll(Class<T> claz){
 		return (List<T>) buscar(claz, new ArrayList<Criterion>());
+	}
+	
+	public <T> Collection<T> findIds(Class<T> claz,String ids){
+		List<Criterion> criterionList = new ArrayList<Criterion>();
+		//PARA BUSCAR POR IDS
+		criterionList.add(Restrictions.in("code",ids.split(",")));
+		return buscar(claz, criterionList);
 	}
 }

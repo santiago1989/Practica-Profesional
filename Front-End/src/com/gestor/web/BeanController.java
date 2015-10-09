@@ -59,7 +59,7 @@ public class BeanController {
 	static{
 //		ACA SE AGREGAN LAS REGLAS DE NAVEGACION DEL SITIO
 		searchNavigationMap.put(Incidencia.class.getSimpleName(),TICKET_SEARCH);
-		searchNavigationMap.put(Usuario.class.getSimpleName(),USER_SEARCH);
+		searchNavigationMap.put(Usuario.class.getName(),USER_SEARCH);
 		
 		loadNavigationMap.put(Usuario.class.getSimpleName(),USER_DATA_LOAD);
 		
@@ -109,6 +109,7 @@ public class BeanController {
 			Identificable entity = new RequestMapper(claz).build(request);
 			service.guardar(entity);
 			String viewPath = searchNavigationMap.get(clazName);
+			showPopup(request,"Se dio de alta correctamente el usuario",PopupType.INFORMATION);
 			return new ModelAndView(viewPath);
 		} catch (ClassNotFoundException e) {
 			return new ModelAndView(ERROR_VIEW);
@@ -120,7 +121,7 @@ public class BeanController {
 		Map<String,Object> model = new HashMap<String,Object>();
 		String viewPath = searchNavigationMap.get(baseCriteria.getClazName());
 		try {
-			List<?> collection = service.buscar(Class.forName(baseCriteria.getClazName()), baseCriteria.getFiltros());
+			List collection = (List) service.buscar(Class.forName(baseCriteria.getClazName()), baseCriteria.getFiltros());
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

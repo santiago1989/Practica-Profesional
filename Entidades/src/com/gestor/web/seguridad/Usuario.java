@@ -27,7 +27,7 @@ public class Usuario implements Identificable{
 	@RequestMapped(regexp="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+\\.[A-Za-z]{2,6}$")
 	private String correo;
 	
-	@RequestMapped(regexp="[0-2]",customType=true)
+	@RequestMapped(regexp="[ARS]",customType=true,customTypeClass=Rol.class)
 	private Set<Rol> roles;
 	
 	@RequestMapped(regexp="[0-9]{8,14}",required=false)

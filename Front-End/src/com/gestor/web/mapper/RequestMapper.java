@@ -1,6 +1,9 @@
 package com.gestor.web.mapper;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,8 +50,13 @@ public class RequestMapper {
 						entityValid&=valid;
 						if(valid){
 							if(annotation.customType()){
-								Object objectPersisted = service.get(field.getType(), value);
-								BeanUtils.setProperty(object,field.getName(),objectPersisted);
+								if(Collection.class.isAssignableFrom(field.getType())){
+									Set<?> collection = new HashSet<>(service.findIds(annotation.customTypeClass(),value));
+									BeanUtils.setProperty(object,field.getName(),collection);
+								}else{									
+									Object objectPersisted = service.get(field.getType(), value);
+									BeanUtils.setProperty(object,field.getName(),objectPersisted);
+								}
 							}else{
 								Object valueParsed = ReflectionUtils.parse(field.getType(),value);
 								BeanUtils.setProperty(object,field.getName(),valueParsed);
