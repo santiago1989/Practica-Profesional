@@ -35,6 +35,24 @@ public class Usuario implements Identificable{
 
 	private boolean estado = true;
 
+	public Usuario(){
+	}
+	
+	public Usuario(int legajo, String contrasena, String nombre,
+			String apellido, String dni, String correo, Set<Rol> roles,
+			String telefono, boolean estado) {
+		super();
+		this.legajo = legajo;
+		this.contrasena = contrasena;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.dni = dni;
+		this.correo = correo;
+		this.roles = roles;
+		this.telefono = telefono;
+		this.estado = estado;
+	}
+
 	public Integer getId(){
 		return getLegajo();
 	}

@@ -1,5 +1,6 @@
 package com.gestor.web;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,14 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.gestor.backend.dto.BaseCriteria;
+import com.gestor.backend.dto.CriteriaUsuario;
 import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
-import com.gestor.common.interfaces.Identificable;
-import com.gestor.common.util.Utils;
 import com.gestor.entidades.Incidencia;
 import com.gestor.web.dto.CollectionsBean;
+import com.gestor.web.dto.MapperResult;
 import com.gestor.web.dto.Popup;
 import com.gestor.web.dto.UsuarioCollectionsBean;
 import com.gestor.web.enums.PopupType;
@@ -29,6 +29,8 @@ import com.gestor.web.utils.Constants;
 @Controller
 public class BeanController {
 
+	private static final String COLLECTION = "collection";
+	
 	private static final String ENTITY_NAME_REQUEST_PARAM = "entityName";
 	
 	private static Map<String,String> searchNavigationMap = new HashMap<String,String>();
@@ -54,6 +56,8 @@ public class BeanController {
 	
 	private String COLLECTIONS_BEAN_REQUEST = "collectionsBean";
 	
+	private static final String POPUP_TYPE = "popuptype";
+
 	private static Service service = new ServiceImpl();
 	
 	static{
@@ -68,14 +72,15 @@ public class BeanController {
 	
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletRequest request){
-		String user = request.getParameter(Constants.USER_SESSION);
-		String password = request.getParameter("password");
-		if(!Utils.isNullOrEmpty(user) && !Utils.isNullOrEmpty(password)){
-			request.getSession(true).setAttribute(Constants.USER_SESSION,user);
-			return new ModelAndView(HOME_VIEW);
-		}
-		else{
-			request.setAttribute("errorMessage","Ingrese usuario / contraseña");
+		Integer legajo = Integer.parseInt(request.getParameter(Constants.USER_SESSION));
+		String PASSWORD = "password";
+		String password = request.getParameter(PASSWORD);
+		Usuario usuario = (Usuario)service.get(Usuario.class,legajo);
+		if(usuario != null && usuario.getContrasena().equals(password)){
+			request.getSession(true).setAttribute(Constants.USER_SESSION,usuario);
+			return new ModelAndView(HOME_VIEW);	
+		}else{
+			showPopup(request,"Usuario/Contraseña incorrectos",PopupType.ERROR);
 			return new ModelAndView(LOGIN_VIEW);
 		}
 	}
@@ -97,7 +102,9 @@ public class BeanController {
 	
 	@RequestMapping("/showPopup")
 	public ModelAndView showPopup(HttpServletRequest request){
-		showPopup(request,"Prueba de popup",PopupType.INFORMATION);
+		String desc = request.getParameter(POPUP_TYPE);
+		PopupType popupType = PopupType.lookUp(desc);
+		showPopup(request,"Prueba de popup",popupType == null? PopupType.INFORMATION:popupType);
 		return new ModelAndView(HOME_VIEW);
 	}
 	
@@ -106,23 +113,33 @@ public class BeanController {
 		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
 		try {
 			Class<?> claz = Class.forName(clazName);
-			Identificable entity = new RequestMapper(claz).build(request);
-			service.guardar(entity);
-			String viewPath = searchNavigationMap.get(clazName);
-			showPopup(request,"Se dio de alta correctamente el usuario",PopupType.INFORMATION);
-			return new ModelAndView(viewPath);
+			MapperResult result = new RequestMapper(claz).build(request);
+			if(result.getErrorMessages().isEmpty()){
+				service.guardar(result.getEntity());
+				String viewPath = searchNavigationMap.get(clazName);
+				showPopup(request,"Se dio de alta correctamente el usuario, con legajo: ".concat(String.valueOf(result.getEntity().getId())),PopupType.INFORMATION);
+				return new ModelAndView(viewPath);
+			}
+			else{
+				String viewPath = loadNavigationMap.get(claz.getSimpleName());
+				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
+				request.setAttribute(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(clazName));
+				return new ModelAndView(viewPath);
+			}
 		} catch (ClassNotFoundException e) {
 			return new ModelAndView(ERROR_VIEW);
 		}
 	}
 
-	@RequestMapping("/getResults")
-	public ModelAndView getResults(HttpServletRequest request,BaseCriteria baseCriteria){
+	@RequestMapping("/getUsersResults")
+	public ModelAndView getUsersResults(HttpServletRequest request,CriteriaUsuario searchBean){
 		Map<String,Object> model = new HashMap<String,Object>();
-		String viewPath = searchNavigationMap.get(baseCriteria.getClazName());
+		String viewPath = searchNavigationMap.get(searchBean.getClaz().getName());
 		try {
-			List collection = (List) service.buscar(Class.forName(baseCriteria.getClazName()), baseCriteria.getFiltros());
-		} catch (ClassNotFoundException e) {
+			List collection = (List) service.buscar(Usuario.class, searchBean.getFiltros());
+			model.put(COLLECTION,collection);
+			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(Usuario.class));
+		} catch (InstantiationException | IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -131,16 +148,17 @@ public class BeanController {
 	
 	@RequestMapping("/searchEntity")
 	public ModelAndView searchEntity(HttpServletRequest request){
+		Map<String,Object> model = new HashMap<String,Object>();
 		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
 		try {
-			request.setAttribute(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(Class.forName(clazName)));
+			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(Class.forName(clazName)));
 		} catch (InstantiationException | IllegalAccessException
 				| ClassNotFoundException e) {
 			// TODO agreggar loguer
 			e.printStackTrace();
 		}
 		String viewPath = searchNavigationMap.get(clazName);
-		return new ModelAndView(viewPath);		
+		return new ModelAndView(viewPath,model);
 	}
 
 	@RequestMapping("/newEntity")

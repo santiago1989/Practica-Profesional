@@ -3,10 +3,11 @@ function showPopup(){
 	var popupType = document.getElementById("popupType").value;
 	if(popupText != ""){
         if(popupType == 'info'){
-        	new Messi(popupText, {title: 'Modal Window', modal: true});
+        	new Messi(popupText, {title: 'Informaci&oacute;n', modal: true});
         }else if(popupType == 'confirm'){
-        	Messi.ask('Esta seguro que desea eliminar?',
-        			function(val){ alert(val);});
+        	Messi.ask(popupText,function(val){ alert(val);});
+        }else{
+        	new Messi(popupText, {title: 'Error',titleClass: "error", modal: true});
         }
 	}
 }

@@ -25,7 +25,7 @@
                 <li><a href="#">Usuarios</a>
                     <ul>
                         <li><a href="${pageContext.request.contextPath}/newEntity.htm?entityName=<%=Usuario.class.getSimpleName()%>">Nuevo Usuario</a></li>
-                        <li><a href="#">Gestión</a></li>
+                        <li><a href="${pageContext.request.contextPath}/searchEntity.htm?entityName=<%=Usuario.class.getName()%>">Gestión</a></li>
                     </ul>
                 </li>
                 <li><a href="${pageContext.request.contextPath}/logout.htm">Logout</a>

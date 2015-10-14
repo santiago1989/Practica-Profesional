@@ -9,9 +9,18 @@
 		position: absolute;
 		padding: 5px;
 	}
-	.child{
+	.child, .parent div{
 		text-align: right;
 		vertical-align: middle;
 	}
 	.cell{
+	}
+	.parent span{
+		color: #FFFFFF;
+	}
+	.center,.jmesa {
+    margin: auto;
+    width: 60%;
+    border:3px solid #8AC007;
+    padding: 10px;
 	}

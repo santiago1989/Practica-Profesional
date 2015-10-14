@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.criterion.Criterion;
 
+import com.gestor.entidades.Incidencia;
+
 
 public class CriteriaIncidencia extends BaseCriteria {
 	
@@ -32,6 +34,11 @@ public class CriteriaIncidencia extends BaseCriteria {
 		addLike("fechaCreacion",String.format("%s",fechaCreacion == null? "":fechaCreacion));
 		addLike("fechaModificacion",String.format("%s",fechaModificacion == null? "":fechaModificacion));
 		return criteriosList;
+	}
+
+	@Override
+	public Class<?> getClaz() {
+		return Incidencia.class;
 	}
 
 }

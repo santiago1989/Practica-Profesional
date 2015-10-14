@@ -1,6 +1,7 @@
 <%@page import="com.gestor.entidades.Incidencia"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -22,8 +23,8 @@ $( document ).ready(function() {
 		<input name="entityName" type="hidden" value="<%=Incidencia.class.getSimpleName()%>"/>
 		<div id="frame">
 			<div>
-				<!-- N煤mero de incidencia -->
-				<span>N煤mero de incidencia</span>
+				<!-- N鷐ero de incidencia -->
+				<span>N&uacute;mero de incidencia</span>
 				<input type="text" name="numero"/>
 			</div>
 			<div>
@@ -32,13 +33,13 @@ $( document ).ready(function() {
 				<input type="text" name="owner"/>
 			</div>
 			<div>
-				<!-- FechaCreaci贸n -->
-				<span>Fecha de creaci贸n </span>
+				<!-- FechaCreaci髇 -->
+				<span>Fecha de creaci&oacute;n </span>
 				<input type="text" name="fechaCreacion"/>
 			</div>
 			<div>
-				<!-- FechaModificaci贸n -->
-				<span>脷ltima modificaci贸n </span>
+				<!-- FechaModificaci髇 -->
+				<span>脷ltima modificaci&oacute;n </span>
 				<input type="text" name="fechaModificacion"/>
 			</div>			
 			<div>

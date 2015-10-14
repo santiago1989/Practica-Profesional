@@ -11,6 +11,8 @@ public abstract class BaseCriteria{
 	private String clazName;
 	
 	protected List<Criterion> criteriosList = new ArrayList<Criterion>();
+
+	public abstract Class<?> getClaz();
 	
 	public abstract List<Criterion> getFiltros();
 	
@@ -20,12 +22,11 @@ public abstract class BaseCriteria{
 		}
 	}
 
-	protected void addLikeBegins(String property,String value){
-		if(value.indexOf("%") >= 0){
-			criteriosList.add(Restrictions.like(property, value));
+	protected void addEqualInteger(String property,Integer value){
+		if(value != null){
+			criteriosList.add(Restrictions.eq(property, value));
 		}
 	}
-
 	
 	public String getClazName() {
 		return clazName;

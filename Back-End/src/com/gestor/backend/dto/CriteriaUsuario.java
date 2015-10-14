@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.hibernate.criterion.Criterion;
 
+import com.gestor.web.seguridad.Usuario;
+
 
 public class CriteriaUsuario extends BaseCriteria{
 	
@@ -39,9 +41,14 @@ public class CriteriaUsuario extends BaseCriteria{
 
 	@Override
 	public List<Criterion> getFiltros() {
-		addLike("legajo",legajo == null? "":legajo.concat("%"));
+		addEqualInteger("legajo",legajo == null? 0:Integer.valueOf(legajo));
 		addLike("nombre",nombre);
 		addLike("apellido",apellido);
 		return criteriosList;
+	}
+	
+	@Override
+	public Class<?> getClaz() {
+		return Usuario.class;
 	}
 }

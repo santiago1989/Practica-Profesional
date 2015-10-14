@@ -29,7 +29,7 @@ public class RequestMapper {
 		this.service = new ServiceImpl();
 	}
 	
-	public Identificable build(HttpServletRequest request){
+	public MapperResult build(HttpServletRequest request){
 		MapperResult result = new MapperResult();
 		Identificable object = null;
 		boolean entityValid = true;
@@ -73,7 +73,7 @@ public class RequestMapper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return object;
+		return result;
 	}
 	
 }
