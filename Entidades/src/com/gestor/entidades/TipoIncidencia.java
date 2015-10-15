@@ -1,8 +1,12 @@
 package com.gestor.entidades;
 
+import com.gestor.common.annotations.RequestMapped;
+
 public class TipoIncidencia {
 
 	private Integer id;
+	
+	@RequestMapped(regexp="[A-z]+")
 	private String nombre;
 
 	public Integer getId() {

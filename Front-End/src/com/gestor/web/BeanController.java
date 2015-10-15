@@ -11,11 +11,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gestor.backend.dto.BaseCriteria;
+import com.gestor.backend.dto.CriteriaIncidencia;
+import com.gestor.backend.dto.CriteriaTipoIncidencia;
 import com.gestor.backend.dto.CriteriaUsuario;
 import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
 import com.gestor.entidades.Incidencia;
+import com.gestor.entidades.TipoIncidencia;
 import com.gestor.web.dto.CollectionsBean;
 import com.gestor.web.dto.MapperResult;
 import com.gestor.web.dto.Popup;
@@ -133,17 +137,29 @@ public class BeanController {
 
 	@RequestMapping("/getUsersResults")
 	public ModelAndView getUsersResults(HttpServletRequest request,CriteriaUsuario searchBean){
+		return getResults(request,searchBean, Usuario.class);
+	}
+	
+	@RequestMapping("/getTicketsResults")
+	public ModelAndView getTicketsResults(HttpServletRequest request,CriteriaIncidencia searchBean){
+		return getResults(request,searchBean, Incidencia.class);
+	}
+
+	@RequestMapping("/getTicketsTypeResults")
+	public ModelAndView getTicketTypeResults(HttpServletRequest request,CriteriaTipoIncidencia searchBean){
+		return getResults(request,searchBean, TipoIncidencia.class);
+	}
+	
+	private ModelAndView getResults(HttpServletRequest request,BaseCriteria criteria,Class<?> claz){
 		Map<String,Object> model = new HashMap<String,Object>();
-		String viewPath = searchNavigationMap.get(searchBean.getClaz().getName());
-		try {
-			List collection = (List) service.buscar(Usuario.class, searchBean.getFiltros());
-			model.put(COLLECTION,collection);
-			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(Usuario.class));
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String viewPath = searchNavigationMap.get(claz.getName());
+		List collection = (List) service.buscar(claz, criteria.getFiltros());
+		model.put(COLLECTION,collection);
+		model.put(SEARCH_BEAN_REQUEST,criteria);
+		if(collection.isEmpty()){
+			showPopup(request, "No se han encontrado resultados, para la busqued realizada.",PopupType.INFORMATION);
 		}
-		return new ModelAndView(viewPath,model);
+		return new ModelAndView(viewPath,model);		
 	}
 	
 	@RequestMapping("/searchEntity")

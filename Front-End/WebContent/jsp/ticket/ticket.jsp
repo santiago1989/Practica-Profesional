@@ -33,19 +33,24 @@ $( document ).ready(function() {
 				<input type="text" name="owner"/>
 			</div>
 			<div>
+				<!-- Owner -->
+				<span>Creada por </span>
+				<input type="text" name="responsable"/>
+			</div>
+			<div>
 				<!-- FechaCreaciÛn -->
 				<span>Fecha de creaci&oacute;n </span>
 				<input type="text" name="fechaCreacion"/>
 			</div>
 			<div>
 				<!-- FechaModificaciÛn -->
-				<span>√öltima modificaci&oacute;n </span>
+				<span>&Uacute;ltima modificaci&oacute;n </span>
 				<input type="text" name="fechaModificacion"/>
 			</div>			
 			<div>
 				<!-- Titulo -->
 				<span>Titulo</span>
-				<input type="text" name="tituloIncidencia"/>
+				<input type="text" name="titulo"/>
 			</div>
 			<div>
 				<!-- Tipo Incidencia -->
@@ -53,13 +58,13 @@ $( document ).ready(function() {
 				<select name="tipoIncidencia">
 					<option value="I">Insumos</option>
 					<option value="M">Mantenimiento</option>
-					<option value="A">Aplicaci√≥n</option>
+					<option value="A">Aplicaci&oacute;n</option>
 				</select>
 			</div>
 			<div>
 				<!--Prioridad incidencia-->
 				<span>Prioridad Incidencia</span>
-				<select name="prioridadIncidencia">
+				<select name="prioridad">
 					<option value="A">Alta</option>
 					<option value="M">Media</option>
 					<option value="B">Baja</option>
@@ -67,14 +72,14 @@ $( document ).ready(function() {
 			</div>
 			<div>
 				<span>Detalle:</span>
-				<textarea id="detail" rows="10" cols="5"></textarea>			
+				<textarea name="detalle" rows="10" cols="5"></textarea>
 			</div>
 			<div>
 				<span>Estado:</span>
-				<select>
-					<option value="">Seleccione Opci√≥n</option>
+				<select name="estado">
+					<option value="">Seleccione Opci&oacute;n</option>
 					<option value="A">Abierta</option>
-					<option value="AS">Asignada</option>
+					<option value="S">Asignada</option>
 					<option value="R">Resulta</option>
 					<option value="C">Cerrada</option>
 				</select>

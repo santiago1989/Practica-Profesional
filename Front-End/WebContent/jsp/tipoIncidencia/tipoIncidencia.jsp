@@ -5,8 +5,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<jsp:include page="../comon/head.jsp"/>
 <title>Tipo de incidencia</title>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-1.11.3.js"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
 	$("#cancelButton").click(function(){
@@ -17,13 +17,15 @@ $( document ).ready(function() {
 </script>
 </head>
 <body>
+	<jsp:include page="../comon/menu.jsp"/>
+	<jsp:include page="../comon/alert.jsp"/>
 	<form action="${pageContext.request.contextPath}/saveEntity.htm" method="post">
 		<input name="entityName" type="hidden" value="<%=TipoIncidencia.class.getSimpleName()%>"/>
 		<div id="frame">
 			<div>
 				<!-- Código -->
 				<span>ID</span>
-				<input type="int" name="ID"/>
+				<input type="text" name="code"/>
 			</div>
 			<div>
 				<!-- Nombre -->

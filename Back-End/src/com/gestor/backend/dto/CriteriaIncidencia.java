@@ -1,5 +1,6 @@
 package com.gestor.backend.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import com.gestor.entidades.Incidencia;
 
 public class CriteriaIncidencia extends BaseCriteria {
 	
-	private Integer numero;
+	private String numero;
 	private String owner;
 	private String responsable;
 	private String estado;
@@ -18,11 +19,12 @@ public class CriteriaIncidencia extends BaseCriteria {
 	private String tipo;
 	private String detalle;
 	private String titulo;
-	private Date fechaCreacion;
-	private Date fechaModificacion;
+	private String fechaCreacion;
+	private String fechaModificacion;
 	
 	@Override
 	public List<Criterion> getFiltros() {
+		criteriosList = new ArrayList<Criterion>();
 		addLike("numero",String.format("%s%",numero == null? "":numero));
 		addLike("owner",String.format("%s%",owner == null? "":owner));
 		addLike("responsable",String.format("%s%",responsable == null? "":responsable));		
@@ -41,4 +43,83 @@ public class CriteriaIncidencia extends BaseCriteria {
 		return Incidencia.class;
 	}
 
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public String getResponsable() {
+		return responsable;
+	}
+
+	public void setResponsable(String responsable) {
+		this.responsable = responsable;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public String getPrioridad() {
+		return prioridad;
+	}
+
+	public void setPrioridad(String prioridad) {
+		this.prioridad = prioridad;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(String detalle) {
+		this.detalle = detalle;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public String getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(String fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public String getFechaModificacion() {
+		return fechaModificacion;
+	}
+
+	public void setFechaModificacion(String fechaModificacion) {
+		this.fechaModificacion = fechaModificacion;
+	}
 }

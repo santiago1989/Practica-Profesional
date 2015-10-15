@@ -71,9 +71,6 @@ $( document ).ready(function() {
 					<c:forEach var="item" items="${collectionsBean.roles}">
 						<option value="${item.code}">${item.nombre}</option>
 					</c:forEach>
-<!-- 					<option value="A">Administrativo</option> -->
-<!-- 					<option value="R">Responsable</option> -->
-<!-- 					<option value="S">Superusuario</option> -->
 				</select>
 			</div>
 		<div id="footer">

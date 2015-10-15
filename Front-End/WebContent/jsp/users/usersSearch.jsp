@@ -1,4 +1,3 @@
-<%@page import="com.gestor.web.seguridad.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="/WEB-INF/tld/jmesa.tld" prefix="jmesa" %>
@@ -15,9 +14,8 @@
 <body>
 	<jsp:include page="../comon/menu.jsp"/>
 	<jsp:include page="../comon/alert.jsp"/>
-	<form action="${pageContext.request.contextPath}/getResults.htm" method="post">
-		<input type="hidden" name="clazName" value="<%=Usuario.class.getName()%>"/>
-		<div class="parent" style="display: inline-block;">			
+	<form action="${pageContext.request.contextPath}/getUsersResults.htm" method="post">
+		<div class="parent" style="display: inline-block;">
 			<div>
 				<span>Legajo</span>
 				<input name="legajo" type="text" value="${searchBean.legajo}"/>

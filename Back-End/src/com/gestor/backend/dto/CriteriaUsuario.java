@@ -1,5 +1,6 @@
 package com.gestor.backend.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
@@ -41,6 +42,7 @@ public class CriteriaUsuario extends BaseCriteria{
 
 	@Override
 	public List<Criterion> getFiltros() {
+		criteriosList = new ArrayList<Criterion>();
 		addEqualInteger("legajo",legajo == null? 0:Integer.valueOf(legajo));
 		addLike("nombre",nombre);
 		addLike("apellido",apellido);

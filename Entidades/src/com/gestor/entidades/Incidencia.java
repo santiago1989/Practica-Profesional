@@ -3,20 +3,37 @@ package com.gestor.entidades;
 import java.util.Collection;
 import java.util.Date;
 
+import com.gestor.common.annotations.RequestMapped;
 import com.gestor.web.seguridad.Usuario;
 
 public class Incidencia {
 
 	private int numero;
+	
+	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class)
 	private Usuario owner;
+
+	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class)
 	private Usuario responsable;
+	
+	@RequestMapped(regexp="[ARCS]",customType=true,customTypeClass=EstadoIncidencia.class)
 	private EstadoIncidencia estado;
+	
+	@RequestMapped(regexp="[AMB]",customType=true,customTypeClass=PrioridadIncidencia.class)
 	private PrioridadIncidencia prioridad;
+
+	@RequestMapped(regexp="[A-Za-z]",customType=true,customTypeClass=TipoIncidencia.class)
 	private TipoIncidencia tipoIncidencia;
+	
+	@RequestMapped(regexp="[A-Za-z]+")
 	private String detalle;
+
+	@RequestMapped(regexp="[A-Za-z]+")
 	private String titulo;
+		
 	private Collection<String> adjuntos;
 	private Collection<String> notas;
+	
 	private Date fechaCreacion;
 	private Date fechaModificacion;
 
