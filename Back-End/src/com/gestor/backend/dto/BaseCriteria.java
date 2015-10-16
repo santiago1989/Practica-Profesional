@@ -17,14 +17,26 @@ public abstract class BaseCriteria{
 	public abstract List<Criterion> getFiltros();
 	
 	protected void addLike(String property,String value){
-		if(value != null && value.indexOf("%") >= 0){
-			criteriosList.add(Restrictions.like(property, value));
+		if(value != null && !value.isEmpty()){
+			criteriosList.add(Restrictions.like(property, value.concat("%")));
 		}
 	}
 
 	protected void addEqualInteger(String property,Integer value){
+		if(value != null && !value.equals(0)){
+			criteriosList.add(Restrictions.eq(property, value));
+		}
+	}
+	
+	protected void addEqual(String property,Object value){
 		if(value != null){
 			criteriosList.add(Restrictions.eq(property, value));
+		}
+	}
+	
+	protected void addIn(String property,String ids) {
+		if(ids != null){
+			criteriosList.add(Restrictions.in(property,ids.split(",")));
 		}
 	}
 	

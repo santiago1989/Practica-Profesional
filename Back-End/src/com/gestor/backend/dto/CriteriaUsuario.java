@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.criterion.Criterion;
 
+import com.gestor.common.util.Utils;
 import com.gestor.web.seguridad.Usuario;
 
 
@@ -15,6 +16,8 @@ public class CriteriaUsuario extends BaseCriteria{
 	private String nombre;
 	
 	private String apellido;
+	
+	private String roles;
 
 	public String getLegajo() {
 		return legajo;
@@ -40,12 +43,21 @@ public class CriteriaUsuario extends BaseCriteria{
 		this.apellido = apellido;
 	}
 
+	public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
+	}
+
 	@Override
 	public List<Criterion> getFiltros() {
 		criteriosList = new ArrayList<Criterion>();
-		addEqualInteger("legajo",legajo == null? 0:Integer.valueOf(legajo));
+		addEqualInteger("legajo",Utils.isNullOrEmpty(legajo)? 0:Integer.valueOf(legajo));
 		addLike("nombre",nombre);
 		addLike("apellido",apellido);
+		addIn("roles",roles);
 		return criteriosList;
 	}
 	

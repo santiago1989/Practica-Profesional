@@ -27,7 +27,8 @@
 				<select name="owner">
 					<option value="">Seleccionar Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.owners}">
-						<option value="${item.legajo}">${item.apellido},${item.nombre}</option>
+						<option value="">Seleccionar Opci&oacute;n</option>
+						<option value="${item.legajo}" selected="${searchBean.owner == item.legajo? 'selected' : ''}">${item.apellido},${item.nombre}</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -35,11 +36,39 @@
 				<span>Responsable</span>
 				<select name="responsable">
 					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.owners}">
-						<option value="${item.legajo}">${item.apellido},${item.nombre}</option>
+					<c:forEach var="item" items="${collectionsBean.responsables}">
+						<option value="${item.legajo}" selected="${searchBean.owner == item.legajo? 'selected' : ''}">${item.apellido},${item.nombre}</option>
 					</c:forEach>
 				</select>
 			</div>
+			<div>
+				<span>Tipo de incidencia</span>
+				<select name="tipo">
+					<option value="">Seleccionar Opci&oacute;n</option>
+					<c:forEach var="item" items="${collectionsBean.tiposIncidencia}">
+						<option value="${item.id}" selected="${searchBean.tipo == item.id? 'selected' : ''}">${item.nombre}</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div>
+				<span>Prioridad de incidencia</span>
+				<select name="prioridad">
+					<option value="">Seleccionar Opci&oacute;n</option>
+					<c:forEach var="item" items="${collectionsBean.prioridadIncidencia}">
+						<option value="${item.id}" selected="${searchBean.prioridad == item.id? 'selected' : ''}">${item.nombre}</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div>
+				<span>Estado de incidencia</span>
+				<select name="estado">
+					<option value="">Seleccionar Opci&oacute;n</option>
+					<c:forEach var="item" items="${collectionsBean.estadosIncidencia}">
+						<option value="${item.id}" selected="${searchBean.estado == item.id? 'selected' : ''}">${item.nombre}</option>
+					</c:forEach>
+				</select>
+			</div>
+			
 			<div>
 				<input type="submit" value="Buscar"/>
 			</div>

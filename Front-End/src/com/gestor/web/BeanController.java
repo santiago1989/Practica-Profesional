@@ -18,9 +18,12 @@ import com.gestor.backend.dto.CriteriaUsuario;
 import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
+import com.gestor.entidades.EstadoIncidencia;
 import com.gestor.entidades.Incidencia;
+import com.gestor.entidades.PrioridadIncidencia;
 import com.gestor.entidades.TipoIncidencia;
 import com.gestor.web.dto.CollectionsBean;
+import com.gestor.web.dto.IncidenciaCollectionsBean;
 import com.gestor.web.dto.MapperResult;
 import com.gestor.web.dto.Popup;
 import com.gestor.web.dto.UsuarioCollectionsBean;
@@ -72,6 +75,8 @@ public class BeanController {
 		loadNavigationMap.put(Usuario.class.getSimpleName(),USER_DATA_LOAD);
 		
 		collectionsBeanMap.put(Usuario.class.getSimpleName(),new UsuarioCollectionsBean(service.findAll(Rol.class)));
+//		TODO agregar el filro en la busqueda de responsables.
+		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service.findAll(Usuario.class),service.findAll(Usuario.class),service.findAll(TipoIncidencia.class),service.findAll(EstadoIncidencia.class),service.findAll(PrioridadIncidencia.class)));
 	}
 	
 	@RequestMapping("/login")
@@ -156,6 +161,7 @@ public class BeanController {
 		List collection = (List) service.buscar(claz, criteria.getFiltros());
 		model.put(COLLECTION,collection);
 		model.put(SEARCH_BEAN_REQUEST,criteria);
+		model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(claz.getSimpleName()));
 		if(collection.isEmpty()){
 			showPopup(request, "No se han encontrado resultados, para la busqued realizada.",PopupType.INFORMATION);
 		}
@@ -167,7 +173,9 @@ public class BeanController {
 		Map<String,Object> model = new HashMap<String,Object>();
 		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
 		try {
-			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(Class.forName(clazName)));
+			Class<?> claz = Class.forName(clazName);
+			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
+			model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(claz.getSimpleName()));
 		} catch (InstantiationException | IllegalAccessException
 				| ClassNotFoundException e) {
 			// TODO agreggar loguer
