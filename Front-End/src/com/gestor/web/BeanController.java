@@ -46,6 +46,8 @@ public class BeanController {
 
 	private static Map<String,CollectionsBean> collectionsBeanMap = new HashMap<String, CollectionsBean>();
 	
+	private static Map<String,String> popupTextMap = new HashMap<String,String>();
+	
 	private static final String TICKET_SEARCH = "/ticket/ticketsSearch";
 
 	private static final String USER_SEARCH = "/users/usersSearch";
@@ -77,6 +79,9 @@ public class BeanController {
 		collectionsBeanMap.put(Usuario.class.getSimpleName(),new UsuarioCollectionsBean(service.findAll(Rol.class)));
 //		TODO agregar el filro en la busqueda de responsables.
 		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service.findAll(Usuario.class),service.findAll(Usuario.class),service.findAll(TipoIncidencia.class),service.findAll(EstadoIncidencia.class),service.findAll(PrioridadIncidencia.class)));
+
+		popupTextMap.put(Usuario.class.getSimpleName(),"Se dio de alta correctamente el usuario, con legajo: ");
+		popupTextMap.put(Incidencia.class.getSimpleName(),"Se dio de alta correctamente la incidencia, con número: ");
 	}
 	
 	@RequestMapping("/login")
@@ -126,7 +131,7 @@ public class BeanController {
 			if(result.getErrorMessages().isEmpty()){
 				service.guardar(result.getEntity());
 				String viewPath = searchNavigationMap.get(clazName);
-				showPopup(request,"Se dio de alta correctamente el usuario, con legajo: ".concat(String.valueOf(result.getEntity().getId())),PopupType.INFORMATION);
+				showPopup(request,popupTextMap.get(claz.getSimpleName()).concat(String.valueOf(result.getEntity().getId())),PopupType.INFORMATION);
 				return new ModelAndView(viewPath);
 			}
 			else{
