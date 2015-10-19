@@ -2,18 +2,18 @@ package com.gestor.web.dto;
 
 import java.util.List;
 
-import com.gestor.web.seguridad.Rol;
+import org.hibernate.collection.PersistentSet;
 
 
 public class UsuarioCollectionsBean extends CollectionsBean {
 	
-	private List<Rol> roles;
+	private List roles;
 	
-	public UsuarioCollectionsBean(List<Rol> roles){
+	public UsuarioCollectionsBean(List roles){
 		this.roles = roles;
 	}
 
-	public List<Rol> getRoles() {
+	public List getRoles() {
 		return roles;
 	}
 

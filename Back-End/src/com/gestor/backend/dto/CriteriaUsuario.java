@@ -19,6 +19,13 @@ public class CriteriaUsuario extends BaseCriteria{
 	
 	private String roles;
 
+	public CriteriaUsuario(){
+	}
+
+	public CriteriaUsuario(String rol){
+		this.roles = rol;
+	}
+	
 	public String getLegajo() {
 		return legajo;
 	}

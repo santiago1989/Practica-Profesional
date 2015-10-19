@@ -3,6 +3,7 @@ package com.gestor.backend.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.collection.PersistentSet;
 import org.hibernate.criterion.Criterion;
 
 public interface DAO {
@@ -11,5 +12,5 @@ public interface DAO {
 
 	Object get(Class<?> claz,Serializable id);
 	
-	<T> List<T> buscar(Class<T> claz,List<Criterion> filtros);
+	List buscar(Class claz,List<Criterion> filtros);
 }

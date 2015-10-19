@@ -3,13 +3,13 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 07/10/2015 23:24:18 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.gestor.web.seguridad.Privilegio" table="PRIVILEGIO">
+    <class name="com.gestor.web.seguridad.Privilegio" table="PRIVILEGIOS">
         <id name="code" type="java.lang.Integer">
-            <column name="CODE" />
+            <column name="id" />
             <generator class="assigned" />
         </id>
         <property name="description" type="java.lang.String">
-            <column name="DESCRIPTION" />
+            <column name="accion" />
         </property>
     </class>
 </hibernate-mapping>

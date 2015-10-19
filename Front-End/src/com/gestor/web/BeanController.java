@@ -18,6 +18,7 @@ import com.gestor.backend.dto.CriteriaUsuario;
 import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
+import com.gestor.common.enums.RolType;
 import com.gestor.entidades.EstadoIncidencia;
 import com.gestor.entidades.Incidencia;
 import com.gestor.entidades.PrioridadIncidencia;
@@ -54,6 +55,8 @@ public class BeanController {
 
 	private static final String USER_DATA_LOAD = "/users/users";
 	
+	private static final String TICKET_DATA_LOAD = "/ticket/ticket";
+	
 	private static final String LOGIN_VIEW = "login";
 	
 	private static final String HOME_VIEW = "home";
@@ -69,17 +72,23 @@ public class BeanController {
 
 	private static Service service = new ServiceImpl();
 	
+	private static CriteriaUsuario criteriaAdministrativo = new CriteriaUsuario(RolType.ADMINISTRATIVO.getCode());
+
+	private static CriteriaUsuario criteriaResponsable = new CriteriaUsuario(RolType.RESPONSABLE.getCode());
+	
 	static{
 //		ACA SE AGREGAN LAS REGLAS DE NAVEGACION DEL SITIO
 		searchNavigationMap.put(Incidencia.class.getSimpleName(),TICKET_SEARCH);
 		searchNavigationMap.put(Usuario.class.getName(),USER_SEARCH);
 		
 		loadNavigationMap.put(Usuario.class.getSimpleName(),USER_DATA_LOAD);
+		loadNavigationMap.put(Incidencia.class.getSimpleName(),TICKET_DATA_LOAD);
+
 		
 		collectionsBeanMap.put(Usuario.class.getSimpleName(),new UsuarioCollectionsBean(service.findAll(Rol.class)));
 //		TODO agregar el filro en la busqueda de responsables.
+//		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service.buscar(Usuario.class,criteriaAdministrativo.getFiltros()),service.buscar(Usuario.class,criteriaResponsable.getFiltros()),service.findAll(TipoIncidencia.class),service.findAll(EstadoIncidencia.class),service.findAll(PrioridadIncidencia.class)));
 		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service.findAll(Usuario.class),service.findAll(Usuario.class),service.findAll(TipoIncidencia.class),service.findAll(EstadoIncidencia.class),service.findAll(PrioridadIncidencia.class)));
-
 		popupTextMap.put(Usuario.class.getSimpleName(),"Se dio de alta correctamente el usuario, con legajo: ");
 		popupTextMap.put(Incidencia.class.getSimpleName(),"Se dio de alta correctamente la incidencia, con número: ");
 	}

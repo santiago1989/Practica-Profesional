@@ -3,48 +3,44 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 30/09/2015 20:49:03 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.gestor.entidades.Incidencia" table="INCIDENCIA">
+    <class name="com.gestor.entidades.Incidencia" table="incidencias">
         <id name="numero" type="int">
-            <column name="NUMERO" />
+            <column name="ID" />
             <generator class="assigned" />
         </id>
         <many-to-one name="owner" class="com.gestor.web.seguridad.Usuario" fetch="join">
-            <column name="OWNER" />
+            <column name="idOwner" />
         </many-to-one>
         <many-to-one name="responsable" class="com.gestor.web.seguridad.Usuario" fetch="join">
-            <column name="RESPONSABLE" />
+            <column name="idResponsable" />
         </many-to-one>
         <many-to-one name="estado" class="com.gestor.entidades.EstadoIncidencia" fetch="join">
-            <column name="ESTADO" />
+            <column name="idEstado" />
         </many-to-one>
         <many-to-one name="prioridad" class="com.gestor.entidades.PrioridadIncidencia" fetch="join">
-            <column name="PRIORIDAD" />
+            <column name="idPrioridad" />
         </many-to-one>
         <many-to-one name="tipoIncidencia" class="com.gestor.entidades.TipoIncidencia" fetch="join">
-            <column name="TIPOINCIDENCIA" />
+            <column name="idTipoIncidencia" />
         </many-to-one>
         <property name="detalle" type="java.lang.String">
-            <column name="DETALLE" />
+            <column name="detalle" />
         </property>
         <property name="titulo" type="java.lang.String">
-            <column name="TITULO" />
+            <column name="titulo" />
         </property>
-        <bag name="adjuntos" table="INCIDENCIA" inverse="false" lazy="true">
+        <set name="adjuntos" table="ADJUNTOS" inverse="false">
             <key>
-                <column name="NUMERO" />
+                <column name="id" />
             </key>
-            <element type="java.lang.String">
-                <column name="ADJUNTOS" />
-            </element>
-        </bag>
-        <bag name="notas" table="INCIDENCIA" inverse="false" lazy="true">
+            <one-to-many class="com.gestor.entidades.Adjunto"/>
+        </set>
+        <set name="notas" table="NOTAS" inverse="false">
             <key>
-                <column name="NUMERO" />
+                <column name="id" />
             </key>
-            <element type="java.lang.String">
-                <column name="NOTAS" />
-            </element>
-        </bag>
+            <one-to-many class="com.gestor.entidades.Nota"/>
+        </set>
         <property name="fechaCreacion" type="java.util.Date">
             <column name="FECHACREACION" />
         </property>

@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.type.NullableType;
 
 import com.gestor.backend.dao.DAO;
 import com.gestor.backend.util.SessionSingletion;
@@ -24,14 +27,21 @@ public class DAOImpl implements DAO {
 		return session.get(claz,id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public <T> List<T> buscar(Class<T> claz,List<Criterion> filtros) {
+	public List buscar(Class claz,List<Criterion> filtros) {
 		Session session = SessionSingletion.getInstance().getSession();
 		Criteria criteria = session.createCriteria(claz);
 		for (Criterion criterion : filtros) {
 			criteria.add(criterion);
 		}
-		List<T> list = criteria.list();
+		List list =  criteria.list();
 		return list;
+	}
+	
+	public List sqlQuery(String sqlQuery,String id,NullableType type){
+		Session session = SessionSingletion.getInstance().getSession();
+		SQLQuery query = session.createSQLQuery(sqlQuery).addScalar(id,type);
+		return query.list();
 	}
 }

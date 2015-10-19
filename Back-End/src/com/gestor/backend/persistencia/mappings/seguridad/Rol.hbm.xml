@@ -3,18 +3,18 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 30/09/2015 20:49:03 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.gestor.web.seguridad.Rol" table="ROL">
+    <class name="com.gestor.web.seguridad.Rol" table="ROLES">
         <id name="code" type="java.lang.String">
-            <column name="CODE" />
+            <column name="id" />
         </id>
         <property name="nombre" type="java.lang.String">
             <column name="NOMBRE" />
         </property>
-        <set name="privilegios" table="Rol_Privilegios" inverse="false">
-            <key>
-                <column name="code"/>
-            </key>
-            <one-to-many class="com.gestor.web.seguridad.Privilegio" />
-        </set>
+<!--         <set name="privilegios" table="Rol_Privilegios"> -->
+<!--             <key> -->
+<!--                 <column name="code"/> -->
+<!--             </key> -->
+<!--             <many-to-many column="idRol" class="com.gestor.web.seguridad.Privilegio" /> -->
+<!--         </set> -->
     </class>
 </hibernate-mapping>

@@ -1,7 +1,7 @@
 package com.gestor.entidades;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 import com.gestor.common.annotations.RequestMapped;
 import com.gestor.web.seguridad.Usuario;
@@ -31,8 +31,8 @@ public class Incidencia {
 	@RequestMapped(regexp="[A-Za-z]+")
 	private String titulo;
 		
-	private Collection<String> adjuntos;
-	private Collection<String> notas;
+	private Set<String> adjuntos;
+	private Set<String> notas;
 	
 	private Date fechaCreacion;
 	private Date fechaModificacion;
@@ -85,16 +85,16 @@ public class Incidencia {
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
-	public Collection<String> getAdjuntos() {
+	public Set<String> getAdjuntos() {
 		return adjuntos;
 	}
-	public void setAdjuntos(Collection<String> adjuntos) {
+	public void setAdjuntos(Set<String> adjuntos) {
 		this.adjuntos = adjuntos;
 	}
-	public Collection<String> getNotas() {
+	public Set<String> getNotas() {
 		return notas;
 	}
-	public void setNotas(Collection<String> notas) {
+	public void setNotas(Set<String> notas) {
 		this.notas = notas;
 	}
 	public Date getFechaCreacion() {

@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 30/09/2015 20:49:03 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.gestor.web.seguridad.Usuario" table="USUARIO">
+    <class name="com.gestor.web.seguridad.Usuario" table="USUARIOS">
         <id name="legajo" type="int">
             <column name="LEGAJO" />
             <generator class="increment" />
@@ -23,11 +23,9 @@
         <property name="correo" type="java.lang.String">
             <column name="CORREO" />
         </property>
-        <set name="roles" table="USUARIO_ROL" inverse="false" lazy="true">
-            <key>
-                <column name="legajo" />
-            </key>
-            <one-to-many class="com.gestor.web.seguridad.Rol"/>
+        <set name="roles" table="usuariosroles">
+            <key column="legajoUsuario" />
+            <many-to-many column="idRol" class="com.gestor.web.seguridad.Rol"/>
         </set>
         <property name="telefono" type="java.lang.String">
             <column name="TELEFONO" />

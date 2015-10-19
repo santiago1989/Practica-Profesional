@@ -5,6 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<jsp:include page="../comon/head.jsp"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Incidencia</title>
 <!-- JQUERY -->
@@ -21,7 +23,7 @@ $( document ).ready(function() {
 <body>
 	<form action="${pageContext.request.contextPath}/saveEntity.htm" method="post">
 		<input name="entityName" type="hidden" value="<%=Incidencia.class.getSimpleName()%>"/>
-		<div id="frame">
+		<div id="frame" class="parent" style="width: 340px;margin-left:-205px">
 			<div>
 				<!-- Número de incidencia -->
 				<span>N&uacute;mero de incidencia</span>
@@ -30,12 +32,22 @@ $( document ).ready(function() {
 			<div>
 				<!-- Owner -->
 				<span>Creada por </span>
-				<input type="text" name="owner"/>
+				<select name="owner">
+					<option value="">Seleccionar Opci&oacute;n</option>
+					<c:forEach var="item" items="${collectionsBean.owners}">
+						<option value="${item.legajo}">${item.apellido},${item.nombre}</option>
+					</c:forEach>
+				</select>
 			</div>
 			<div>
 				<!-- Owner -->
-				<span>Creada por </span>
-				<input type="text" name="responsable"/>
+				<span>Asignada a: </span>
+				<select name="responsable">
+					<option value="">Seleccionar Opci&oacute;n</option>
+					<c:forEach var="item" items="${collectionsBean.responsables}">
+						<option value="${item.legajo}">${item.apellido},${item.nombre}</option>
+					</c:forEach>
+				</select>
 			</div>
 			<div>
 				<!-- FechaCreación -->
@@ -56,32 +68,33 @@ $( document ).ready(function() {
 				<!-- Tipo Incidencia -->
 				<span>Tipo Incidencia</span>
 				<select name="tipoIncidencia">
-					<option value="I">Insumos</option>
-					<option value="M">Mantenimiento</option>
-					<option value="A">Aplicaci&oacute;n</option>
+					<option value="">Seleccionar Opci&oacute;n</option>
+					<c:forEach var="item" items="${collectionsBean.tiposIncidencia}">
+						<option value="${item.id}">${item.nombre}</option>
+					</c:forEach>
 				</select>
 			</div>
 			<div>
 				<!--Prioridad incidencia-->
 				<span>Prioridad Incidencia</span>
 				<select name="prioridad">
-					<option value="A">Alta</option>
-					<option value="M">Media</option>
-					<option value="B">Baja</option>
+					<option value="">Seleccionar Opci&oacute;n</option>
+					<c:forEach var="item" items="${collectionsBean.prioridadIncidencia}">
+						<option value="${item.id}">${item.nombre}</option>
+					</c:forEach>
 				</select>
 			</div>
 			<div>
 				<span>Detalle:</span>
-				<textarea name="detalle" rows="10" cols="5"></textarea>
+				<textarea name="detalle" rows="3" cols="19" style="overflow: scroll;"></textarea>
 			</div>
 			<div>
 				<span>Estado:</span>
 				<select name="estado">
-					<option value="">Seleccione Opci&oacute;n</option>
-					<option value="A">Abierta</option>
-					<option value="S">Asignada</option>
-					<option value="R">Resulta</option>
-					<option value="C">Cerrada</option>
+					<option value="">Seleccionar Opci&oacute;n</option>
+					<c:forEach var="item" items="${collectionsBean.estadosIncidencia}">
+						<option value="${item.id}">${item.nombre}</option>
+					</c:forEach>
 				</select>
 			</div>
 		</div>

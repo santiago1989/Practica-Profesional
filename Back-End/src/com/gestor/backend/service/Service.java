@@ -16,9 +16,11 @@ public interface Service {
 	
 	Object get(Class<?> claz,Serializable id);
 
-	<T> Collection<T> buscar(Class<T> claz,List<Criterion> filtros);
+	List buscar(Class claz,List<Criterion> filtros);
 	
-	<T> List<T> findAll(Class<T> claz);
+	List findAll(Class claz);
 	
-	<T> Collection<T> findIds(Class<T> claz,String ids);
+	<T> Collection<T> findIds(Class<T> claz,String idName,String ids);
+	
+	<T> Collection<T> findIds(Class<T> claz,String idName,Object[] ids);
 }

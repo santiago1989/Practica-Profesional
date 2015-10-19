@@ -21,4 +21,8 @@ public class TipoIncidencia {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	
+	public String getIdString(){
+		return String.valueOf(id);
+	}
 }

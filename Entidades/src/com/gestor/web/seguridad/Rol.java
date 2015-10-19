@@ -1,6 +1,6 @@
 package com.gestor.web.seguridad;
 
-import java.util.List;
+import java.util.Set;
 
 
 public class Rol{
@@ -9,13 +9,7 @@ public class Rol{
 	
 	private String nombre;
 	
-	private List<Privilegio> privilegios;
-	
-	public Rol(String code, String nombre) {
-		super();
-		this.code = code;
-		this.nombre = nombre;
-	}
+	private Set<Privilegio> privilegios;
 
 	public String getCode() {
 		return code;
@@ -33,11 +27,11 @@ public class Rol{
 		this.nombre = nombre;
 	}
 
-	public List<Privilegio> getPrivilegios() {
+	public Set<Privilegio> getPrivilegios() {
 		return privilegios;
 	}
 
-	public void setPrivilegios(List<Privilegio> privilegios) {
+	public void setPrivilegios(Set<Privilegio> privilegios) {
 		this.privilegios = privilegios;
 	}
 }
