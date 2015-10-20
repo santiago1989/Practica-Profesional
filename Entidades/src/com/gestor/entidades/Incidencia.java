@@ -1,6 +1,7 @@
 package com.gestor.entidades;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Set;
 
 import com.gestor.common.annotations.RequestMapped;
@@ -98,13 +99,13 @@ public class Incidencia {
 		this.notas = notas;
 	}
 	public Date getFechaCreacion() {
-		return fechaCreacion;
+		return fechaCreacion == null ? GregorianCalendar.getInstance().getTime():fechaCreacion;
 	}
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
 	public Date getFechaModificacion() {
-		return fechaModificacion;
+		return fechaModificacion == null ? GregorianCalendar.getInstance().getTime():fechaModificacion;
 	}
 	public void setFechaModificacion(Date fechaModificacion) {
 		this.fechaModificacion = fechaModificacion;

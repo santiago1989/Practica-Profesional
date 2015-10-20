@@ -16,7 +16,7 @@
 	            <ul>
 	               	<li><a href="${pageContext.request.contextPath}">Inicio</a></li>
 	            	<li><a href="#">Mis Tickets</a></li>
-	            	<li><a href="${pageContext.request.contextPath}/searchEntity.htm?entityName=<%=Incidencia.class.getSimpleName()%>">Gestión Tickets</a></li>
+	            	<li><a href="${pageContext.request.contextPath}/searchEntity.htm?entityName=<%=Incidencia.class.getName()%>">Gestión Tickets</a></li>
 	                <li><a href="${pageContext.request.contextPath}/newEntity.htm?entityName=<%=Incidencia.class.getSimpleName()%>">Nuevo Ticket</a></li>
 					<li><a href="#">Tipos de Tickets</a>
 	                     <ul>

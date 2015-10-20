@@ -5,12 +5,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<jsp:include page="../comon/head.jsp"/>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jmesa/jmesa.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
-<jsp:include page="../comon/head.jsp"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jquery/jquery-ui.min.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-ui.min.js"></script>
 <title>Gestión de Tickets</title>
+<script type="text/javascript">
+$( document ).ready(function() {
+	$("#fechaC").datepicker({dateFormat: 'dd/mm/yy'});
+	$("#fechaM").datepicker({dateFormat: 'dd/mm/yy'});
+});
+</script>
+
 </head>
 <body>
 <body id="body">
@@ -20,7 +29,7 @@
 		<div class="parent" style="display: inline-block;">			
 			<div>
 				<span>N&uacute;mero</span>
-				<input name="numero" type="text" value="${searchBean.legajo}"/>
+				<input name="numero" type="text" value="${searchBean.numero}"/>
 			</div>
 			<div>
 				<span>Autor</span>
@@ -68,7 +77,16 @@
 					</c:forEach>
 				</select>
 			</div>
-			
+			<div>
+				<!-- FechaCreación -->
+				<span>Fecha de creaci&oacute;n </span>
+				<input id="fechaC" type="text" name="fechaCreacion"/>
+			</div>
+			<div>
+				<!-- FechaModificación -->
+				<span>&Uacute;ltima modificaci&oacute;n </span>
+				<input id="fechaM" type="text" name="fechaModificacion"/>
+			</div>
 			<div>
 				<input type="submit" value="Buscar"/>
 			</div>
@@ -77,10 +95,12 @@
 				     <jmesa:tableModel id="jmesaTag" items="${collection}" exportTypes="csv,excel" 
 				       stateAttr="restore" var="bean"> 
 				           <jmesa:htmlTable captionKey="presidents.caption" width="600px">		 
-				                 <jmesa:htmlRow>	 
-				                     <jmesa:htmlColumn property="legajo" title="Last Name"/> 
-				                     <jmesa:htmlColumn property="apellido" title="Last Name"/> 
-				                     <jmesa:htmlColumn property="nombre" filterEditor="org.jmesa.view.html.editor.DroplistFilterEditor"/>
+				                 <jmesa:htmlRow>
+				                     <jmesa:htmlColumn property="numero" title="ID"/> 
+				                     <jmesa:htmlColumn property="titulo" title="Titulo"/> 
+				                     <jmesa:htmlColumn property="tipoIncidencia.nombre" title="Tipo"/>
+				                     <jmesa:htmlColumn property="prioridad.nombre" title="Prioridad"/>
+				                     <jmesa:htmlColumn property="estado.nombre" title="Estado"/>
 				                     <jmesa:htmlColumn title="Acciones">
 				                         <a href="http://www.whitehouse.gov/history/presidents/">Editar</a> 
 				                     </jmesa:htmlColumn>

@@ -8,7 +8,9 @@ import com.gestor.entidades.TipoIncidencia;
 import com.gestor.web.seguridad.Usuario;
 
 public class IncidenciaCollectionsBean extends CollectionsBean {
-	
+
+	private List<Usuario> owners;
+
 	private List<Usuario> responsables;
 	
 	private List<TipoIncidencia> tiposIncidencia;
@@ -17,10 +19,11 @@ public class IncidenciaCollectionsBean extends CollectionsBean {
 	
 	private List<PrioridadIncidencia> prioridadIncidencia;
 	
-	public IncidenciaCollectionsBean(List<Usuario> responsables, List<TipoIncidencia> tiposIncidencia,
+	public IncidenciaCollectionsBean(List<Usuario> owners,List<Usuario> responsables, List<TipoIncidencia> tiposIncidencia,
 			List<EstadoIncidencia> estadosIncidencia,
 			List<PrioridadIncidencia> prioridadIncidencia) {
 		super();
+		this.owners = owners;
 		this.responsables = responsables;
 		this.tiposIncidencia = tiposIncidencia;
 		this.estadosIncidencia = estadosIncidencia;
@@ -57,5 +60,13 @@ public class IncidenciaCollectionsBean extends CollectionsBean {
 
 	public void setPrioridadIncidencia(List<PrioridadIncidencia> prioridadIncidencia) {
 		this.prioridadIncidencia = prioridadIncidencia;
+	}
+
+	public List<Usuario> getOwners() {
+		return owners;
+	}
+
+	public void setOwners(List<Usuario> owners) {
+		this.owners = owners;
 	}
 }

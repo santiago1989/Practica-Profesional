@@ -19,8 +19,6 @@ $( document ).ready(function() {
 		var href = $("#backLink").attr("href");
 		window.location.href = href;
 	});
-	$("#fechaC").datepicker({dateFormat: 'dd/mm/yy'});
-	$("#fechaM").datepicker({dateFormat: 'dd/mm/yy'});
 });
 </script>
 </head>
@@ -49,16 +47,6 @@ $( document ).ready(function() {
 					</c:forEach>
 				</select>
 			</div>
-			<div>
-				<!-- FechaCreación -->
-				<span>Fecha de creaci&oacute;n </span>
-				<input id="fechaC" type="text" name="fechaCreacion"/>
-			</div>
-			<div>
-				<!-- FechaModificación -->
-				<span>&Uacute;ltima modificaci&oacute;n </span>
-				<input id="fechaM" type="text" name="fechaModificacion"/>
-			</div>			
 			<div>
 				<!-- Titulo -->
 				<span>Titulo</span>

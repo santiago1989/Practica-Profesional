@@ -71,12 +71,14 @@ public class BeanController {
 	private static final String POPUP_TYPE = "popuptype";
 
 	private static Service service = new ServiceImpl();
-	
+
+	private static CriteriaUsuario criteriaAdministrativo = new CriteriaUsuario(RolType.ADMINISTRATIVO.getCode());
+
 	private static CriteriaUsuario criteriaResponsable = new CriteriaUsuario(RolType.RESPONSABLE.getCode());
 	
 	static{
 //		ACA SE AGREGAN LAS REGLAS DE NAVEGACION DEL SITIO
-		searchNavigationMap.put(Incidencia.class.getSimpleName(),TICKET_SEARCH);
+		searchNavigationMap.put(Incidencia.class.getName(),TICKET_SEARCH);
 		searchNavigationMap.put(Usuario.class.getName(),USER_SEARCH);
 		
 		loadNavigationMap.put(Usuario.class.getSimpleName(),USER_DATA_LOAD);
@@ -85,7 +87,7 @@ public class BeanController {
 		
 		collectionsBeanMap.put(Usuario.class.getSimpleName(),new UsuarioCollectionsBean(service.findAll(Rol.class)));
 //		TODO agregar el filro en la busqueda de responsables.
-		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service.buscar(Usuario.class,criteriaResponsable.getFiltros()),service.findAll(TipoIncidencia.class),service.findAll(EstadoIncidencia.class),service.findAll(PrioridadIncidencia.class)));
+		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service.buscar(Usuario.class,criteriaAdministrativo.getFiltros()),service.buscar(Usuario.class,criteriaResponsable.getFiltros()),service.findAll(TipoIncidencia.class),service.findAll(EstadoIncidencia.class),service.findAll(PrioridadIncidencia.class)));
 		popupTextMap.put(Usuario.class.getSimpleName(),"Se dio de alta correctamente el usuario, con legajo: ");
 		popupTextMap.put(Incidencia.class.getSimpleName(),"Se dio de alta correctamente la incidencia, con número: ");
 	}
