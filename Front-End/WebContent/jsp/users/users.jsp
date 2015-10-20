@@ -66,7 +66,7 @@ $( document ).ready(function() {
 			</div>
 			<div>
 				<span>Rol:</span>
-				<select name="roles">
+				<select name="rol">
 					<option value="">Seleccione Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.roles}">
 						<option value="${item.code}">${item.nombre}</option>

@@ -32,6 +32,17 @@
 				<input type="submit" value="Buscar"/>
 			</div>
 			<div>
+				<span>Rol:</span>
+			</div>
+			<div>
+				<select name="rol">
+					<option value="">Seleccione Opci&oacute;n</option>
+					<c:forEach var="item" items="${collectionsBean.roles}">
+						<option value="${item.code}">${item.nombre}</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div>
 			    <c:if test="${not empty collection}">
 				     <jmesa:tableModel id="jmesaTag" items="${collection}" exportTypes="csv,excel" 
 				       stateAttr="restore" var="bean"> 

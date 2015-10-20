@@ -27,9 +27,9 @@ public class CriteriaIncidencia extends BaseCriteria {
 		addEqualInteger("numero",numero == null ?Integer.parseInt(numero):0);
 		addEqualInteger("owner",Integer.parseInt(owner));
 		addEqualInteger("responsable",Integer.parseInt(responsable));
-		addEqual("estado",estado);
-		addEqual("prioridad",prioridad);	
-		addEqual("tipo",tipo);
+		addEqual("estado.id",estado);
+		addEqual("prioridad.id",prioridad);	
+		addEqual("tipo.id",tipo);
 		addLike("detalle",detalle);
 		addLike("titulo",titulo);
 		addEqual("fechaCreacion",fechaCreacion);

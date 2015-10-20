@@ -7,41 +7,41 @@
 <head>
 <jsp:include page="../comon/head.jsp"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jquery/jquery-ui.min.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Incidencia</title>
 <!-- JQUERY -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-ui.min.js"></script>
+<%-- <script type="text/javascript" src="${pageContext.request.contextPath}/jquery/dcalendar.picker.js"></script> --%>
 <script type="text/javascript">
 $( document ).ready(function() {
 	$("#cancelButton").click(function(){
 		var href = $("#backLink").attr("href");
 		window.location.href = href;
 	});
+	$("#fechaC").datepicker({dateFormat: 'dd/mm/yy'});
+	$("#fechaM").datepicker({dateFormat: 'dd/mm/yy'});
 });
 </script>
 </head>
 <body>
+	<jsp:include page="../comon/menu.jsp"/>
+	<jsp:include page="../comon/alert.jsp"/>
 	<form action="${pageContext.request.contextPath}/saveEntity.htm" method="post">
 		<input name="entityName" type="hidden" value="<%=Incidencia.class.getSimpleName()%>"/>
 		<div id="frame" class="parent" style="width: 340px;margin-left:-205px">
-			<div>
+			<div style="display: none;">
 				<!-- Número de incidencia -->
 				<span>N&uacute;mero de incidencia</span>
-				<input type="text" name="numero"/>
+				<input type="text" name="numero" disabled="disabled"/>
+			</div>
+			<div style="display: none;">
+				<!-- Owner -->
+				<input type="hidden" name="owner" value="${user.legajo}"/>
 			</div>
 			<div>
 				<!-- Owner -->
-				<span>Creada por </span>
-				<select name="owner">
-					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.owners}">
-						<option value="${item.legajo}">${item.apellido},${item.nombre}</option>
-					</c:forEach>
-				</select>
-			</div>
-			<div>
-				<!-- Owner -->
-				<span>Asignada a: </span>
+				<span>Asignada a:</span>
 				<select name="responsable">
 					<option value="">Seleccionar Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.responsables}">
@@ -52,12 +52,12 @@ $( document ).ready(function() {
 			<div>
 				<!-- FechaCreación -->
 				<span>Fecha de creaci&oacute;n </span>
-				<input type="text" name="fechaCreacion"/>
+				<input id="fechaC" type="text" name="fechaCreacion"/>
 			</div>
 			<div>
 				<!-- FechaModificación -->
 				<span>&Uacute;ltima modificaci&oacute;n </span>
-				<input type="text" name="fechaModificacion"/>
+				<input id="fechaM" type="text" name="fechaModificacion"/>
 			</div>			
 			<div>
 				<!-- Titulo -->
@@ -97,11 +97,11 @@ $( document ).ready(function() {
 					</c:forEach>
 				</select>
 			</div>
-		</div>
-		<div id="footer">
-			<input value="Aceptar" type="submit">
-			<input id="cancelButton" value="Cancelar" type="button">
-			<a id="backLink" style="display: none;" href="${pageContext.request.contextPath}/searchEntity.htm?entityName=Incidencia"></a>
+			<div id="footer">
+				<input value="Aceptar" type="submit">
+				<input id="cancelButton" value="Cancelar" type="button">
+				<a id="backLink" style="display: none;" href="${pageContext.request.contextPath}/searchEntity.htm?entityName=Incidencia"></a>
+			</div>
 		</div>
 	</form>
 </body>

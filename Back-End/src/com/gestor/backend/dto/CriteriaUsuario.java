@@ -17,13 +17,13 @@ public class CriteriaUsuario extends BaseCriteria{
 	
 	private String apellido;
 	
-	private String roles;
+	private String rol;
 
 	public CriteriaUsuario(){
 	}
 
 	public CriteriaUsuario(String rol){
-		this.roles = rol;
+		this.rol = rol;
 	}
 	
 	public String getLegajo() {
@@ -50,12 +50,12 @@ public class CriteriaUsuario extends BaseCriteria{
 		this.apellido = apellido;
 	}
 
-	public String getRoles() {
-		return roles;
+	public String getRol() {
+		return rol;
 	}
 
-	public void setRoles(String roles) {
-		this.roles = roles;
+	public void setRol(String rol) {
+		this.rol = rol;
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class CriteriaUsuario extends BaseCriteria{
 		addEqualInteger("legajo",Utils.isNullOrEmpty(legajo)? 0:Integer.valueOf(legajo));
 		addLike("nombre",nombre);
 		addLike("apellido",apellido);
-		addIn("roles",roles);
+		addIn("rol.code",rol);
 		return criteriosList;
 	}
 	

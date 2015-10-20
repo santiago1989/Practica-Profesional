@@ -53,7 +53,7 @@ public class RequestMapper {
 								if(Collection.class.isAssignableFrom(field.getType())){
 									Set<?> collection = new HashSet<>(service.findIds(annotation.customTypeClass(),"code",value));
 									BeanUtils.setProperty(object,field.getName(),collection);
-								}else{									
+								}else{
 									Object objectPersisted = service.get(field.getType(), value);
 									BeanUtils.setProperty(object,field.getName(),objectPersisted);
 								}

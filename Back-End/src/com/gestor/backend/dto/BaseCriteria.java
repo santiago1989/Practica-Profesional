@@ -37,7 +37,7 @@ public abstract class BaseCriteria{
 	}
 	
 	protected void addIn(String property,String ids) {
-		if(ids != null){
+		if(!Utils.isNullOrEmpty(ids)){
 			criteriosList.add(Restrictions.in(property,ids.split(",")));
 		}
 	}

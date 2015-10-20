@@ -10,10 +10,10 @@ public class Incidencia {
 
 	private int numero;
 	
-	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class)
+	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class,required=false)
 	private Usuario owner;
 
-	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class)
+	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class,required=false)
 	private Usuario responsable;
 	
 	@RequestMapped(regexp="[ARCS]",customType=true,customTypeClass=EstadoIncidencia.class)
@@ -31,9 +31,9 @@ public class Incidencia {
 	@RequestMapped(regexp="[A-Za-z]+")
 	private String titulo;
 		
-	private Set<String> adjuntos;
-	private Set<String> notas;
-	
+	private Set<Adjunto> adjuntos;
+	private Set<Nota> notas;
+		
 	private Date fechaCreacion;
 	private Date fechaModificacion;
 
@@ -85,16 +85,16 @@ public class Incidencia {
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
-	public Set<String> getAdjuntos() {
+	public Set<Adjunto> getAdjuntos() {
 		return adjuntos;
 	}
-	public void setAdjuntos(Set<String> adjuntos) {
+	public void setAdjuntos(Set<Adjunto> adjuntos) {
 		this.adjuntos = adjuntos;
 	}
-	public Set<String> getNotas() {
+	public Set<Nota> getNotas() {
 		return notas;
 	}
-	public void setNotas(Set<String> notas) {
+	public void setNotas(Set<Nota> notas) {
 		this.notas = notas;
 	}
 	public Date getFechaCreacion() {

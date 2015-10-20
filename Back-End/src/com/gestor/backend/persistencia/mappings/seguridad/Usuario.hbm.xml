@@ -23,10 +23,9 @@
         <property name="correo" type="java.lang.String">
             <column name="CORREO" />
         </property>
-        <set name="roles" table="usuariosroles">
-            <key column="legajoUsuario" />
-            <many-to-many column="idRol" class="com.gestor.web.seguridad.Rol"/>
-        </set>
+        <many-to-one name="rol" class="com.gestor.web.seguridad.Rol" fetch="join">
+        	<column name="idRol"/>
+        </many-to-one>
         <property name="telefono" type="java.lang.String">
             <column name="TELEFONO" />
         </property>
