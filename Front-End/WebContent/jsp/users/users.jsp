@@ -66,12 +66,15 @@ $( document ).ready(function() {
 			</div>
 			<div>
 				<span>Rol:</span>
-				<select name="rol">
-					<option value="">Seleccione Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.roles}">
-						<option value="${item.code}">${item.nombre}</option>
-					</c:forEach>
-				</select>
+<!-- 				<select name="roles"> -->
+<!-- 					<option value="">Seleccione Opci&oacute;n</option> -->
+<%-- 					<c:forEach var="item" items="${collectionsBean.roles}"> --%>
+<%-- 						<option value="${item.code}">${item.nombre}</option> --%>
+<%-- 					</c:forEach> --%>
+<!-- 				</select> -->
+				<c:forEach var="item" items="${collectionsBean.roles}">
+					<input name="roles" type="checkbox" value="${item.code}">${item.nombre}</input>
+				</c:forEach>
 			</div>
 		<div id="footer">
 			<input value="Aceptar" type="submit">

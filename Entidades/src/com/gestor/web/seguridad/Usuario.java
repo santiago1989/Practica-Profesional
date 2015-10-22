@@ -1,5 +1,8 @@
 package com.gestor.web.seguridad;
 
+import java.util.Arrays;
+import java.util.Set;
+
 import com.gestor.common.annotations.RequestMapped;
 import com.gestor.common.annotations.Table;
 import com.gestor.common.enums.Schema;
@@ -26,7 +29,7 @@ public class Usuario implements Identificable{
 	private String correo;
 	
 	@RequestMapped(regexp="[ARS]",customType=true,customTypeClass=Rol.class)
-	private Rol rol;
+	private Set<Rol> roles;
 	
 	@RequestMapped(regexp="[0-9]{8,14}",required=false)
 	private String telefono;
@@ -37,7 +40,7 @@ public class Usuario implements Identificable{
 	}
 	
 	public Usuario(int legajo, String contrasena, String nombre,
-			String apellido, String dni, String correo, Rol rol,
+			String apellido, String dni, String correo, Set<Rol> roles,
 			String telefono, boolean estado) {
 		super();
 		this.legajo = legajo;
@@ -46,7 +49,7 @@ public class Usuario implements Identificable{
 		this.apellido = apellido;
 		this.dni = dni;
 		this.correo = correo;
-		this.rol = rol;
+		this.roles = roles;
 		this.telefono = telefono;
 		this.estado = estado;
 	}
@@ -85,11 +88,11 @@ public class Usuario implements Identificable{
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
-	public Rol getRol() {
-		return rol;
+	public Set<Rol> getRoles() {
+		return roles;
 	}
-	public void setRol(Rol rol) {
-		this.rol = rol;
+	public void setRoles(Set<Rol> roles) {
+		this.roles = roles;
 	}
 	public String getContrasena() {
 		return contrasena;
@@ -108,5 +111,8 @@ public class Usuario implements Identificable{
 	}
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+	public String getRolesDescription(){
+		return Arrays.toString(roles.toArray());
 	}
 }

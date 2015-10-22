@@ -87,7 +87,7 @@ public class BeanController {
 		
 		collectionsBeanMap.put(Usuario.class.getSimpleName(),new UsuarioCollectionsBean(service.findAll(Rol.class)));
 //		TODO agregar el filro en la busqueda de responsables.
-		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service.buscar(Usuario.class,criteriaAdministrativo.getFiltros()),service.buscar(Usuario.class,criteriaResponsable.getFiltros()),service.findAll(TipoIncidencia.class),service.findAll(EstadoIncidencia.class),service.findAll(PrioridadIncidencia.class)));
+		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service.buscar(Usuario.class,criteriaAdministrativo.getCriteria()),service.buscar(Usuario.class,criteriaResponsable.getCriteria()),service.findAll(TipoIncidencia.class),service.findAll(EstadoIncidencia.class),service.findAll(PrioridadIncidencia.class)));
 		popupTextMap.put(Usuario.class.getSimpleName(),"Se dio de alta correctamente el usuario, con legajo: ");
 		popupTextMap.put(Incidencia.class.getSimpleName(),"Se dio de alta correctamente la incidencia, con número: ");
 	}
@@ -171,7 +171,7 @@ public class BeanController {
 	private ModelAndView getResults(HttpServletRequest request,BaseCriteria criteria,Class<?> claz){
 		Map<String,Object> model = new HashMap<String,Object>();
 		String viewPath = searchNavigationMap.get(claz.getName());
-		List collection = (List) service.buscar(claz, criteria.getFiltros());
+		List collection = (List) service.buscar(claz, criteria.getCriteria());
 		model.put(COLLECTION,collection);
 		model.put(SEARCH_BEAN_REQUEST,criteria);
 		model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(claz.getSimpleName()));

@@ -34,4 +34,9 @@ public class Rol{
 	public void setPrivilegios(Set<Privilegio> privilegios) {
 		this.privilegios = privilegios;
 	}
+
+	@Override
+	public String toString() {
+		return nombre;
+	}
 }

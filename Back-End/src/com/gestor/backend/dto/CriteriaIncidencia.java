@@ -1,10 +1,8 @@
 package com.gestor.backend.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.Criteria;
 
-import org.hibernate.criterion.Criterion;
-
+import com.gestor.backend.util.SessionSingletion;
 import com.gestor.entidades.Incidencia;
 
 
@@ -22,19 +20,19 @@ public class CriteriaIncidencia extends BaseCriteria {
 	private String fechaModificacion;
 	
 	@Override
-	public List<Criterion> getFiltros() {
-		criteriosList = new ArrayList<Criterion>();
-		addEqualInteger("numero",numero == null ?Integer.parseInt(numero):0);
-		addEqualInteger("owner",Integer.parseInt(owner));
-		addEqualInteger("responsable",Integer.parseInt(responsable));
-		addEqual("estado.id",estado);
-		addEqual("prioridad.id",prioridad);	
-		addEqual("tipo.id",tipo);
-		addLike("detalle",detalle);
-		addLike("titulo",titulo);
-		addEqual("fechaCreacion",fechaCreacion);
-		addEqual("fechaModificacion",fechaModificacion);
-		return criteriosList;
+	public Criteria getCriteria() {
+		Criteria criteria = SessionSingletion.getInstance().getSession().createCriteria(Incidencia.class);
+		addEqualInteger("numero",numero == null ?Integer.parseInt(numero):0,criteria);
+		addEqualInteger("owner",Integer.parseInt(owner),criteria);
+		addEqualInteger("responsable",Integer.parseInt(responsable),criteria);
+		addEqual("estado.id",estado,criteria);
+		addEqual("prioridad.id",prioridad,criteria);	
+		addEqual("tipo.id",tipo,criteria);
+		addLike("detalle",detalle,criteria);
+		addLike("titulo",titulo,criteria);
+		addEqual("fechaCreacion",fechaCreacion,criteria);
+		addEqual("fechaModificacion",fechaModificacion,criteria);
+		return criteria;
 	}
 
 	@Override

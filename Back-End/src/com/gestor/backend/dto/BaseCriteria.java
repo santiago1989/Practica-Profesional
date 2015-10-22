@@ -1,9 +1,6 @@
 package com.gestor.backend.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hibernate.criterion.Criterion;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
 import com.gestor.common.util.Utils;
@@ -12,36 +9,39 @@ public abstract class BaseCriteria{
 	
 	private String clazName;
 	
-	protected List<Criterion> criteriosList = new ArrayList<Criterion>();
-
 	public abstract Class<?> getClaz();
 	
-	public abstract List<Criterion> getFiltros();
+	public abstract Criteria getCriteria();
 	
-	protected void addLike(String property,String value){
+	protected void addLike(String property,String value,Criteria criteria){
 		if(value != null && !value.isEmpty()){
-			criteriosList.add(Restrictions.like(property, value.concat("%")));
+			criteria.add(Restrictions.like(property, value.concat("%")));
 		}
 	}
 
-	protected void addEqualInteger(String property,Integer value){
+	protected void addEqualInteger(String property,Integer value,Criteria criteria){
 		if(value != null && !value.equals(0)){
-			criteriosList.add(Restrictions.eq(property, value));
+			criteria.add(Restrictions.eq(property, value));
 		}
 	}
 	
-	protected void addEqual(String property,Object value){
+	protected void addEqual(String property,Object value,Criteria criteria){
 		if(value != null){
-			criteriosList.add(Restrictions.eq(property, value));
+			criteria.add(Restrictions.eq(property, value));
 		}
 	}
 	
-	protected void addIn(String property,String ids) {
+	protected void addIn(String property,String ids,Criteria criteria) {
 		if(!Utils.isNullOrEmpty(ids)){
-			criteriosList.add(Restrictions.in(property,ids.split(",")));
+			criteria.add(Restrictions.in(property,ids.split(",")));
 		}
 	}
-	
+	protected void addAliasFilter(Criteria criteria,String property,String alias,String propertyName,Object[] value){
+		if(value != null){
+			criteria.createAlias(property, alias).add(Restrictions.in(alias.concat(".").concat(propertyName), value));
+		}
+	}
+		
 	public String getClazName() {
 		return clazName;
 	}

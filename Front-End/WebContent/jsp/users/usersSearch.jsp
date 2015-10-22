@@ -29,18 +29,16 @@
 				<input name="apellido" type="text" value="${searchBean.apellido}"/>
 			</div>
 			<div>
-				<input type="submit" value="Buscar"/>
-			</div>
-			<div>
 				<span>Rol:</span>
-			</div>
-			<div>
 				<select name="rol">
 					<option value="">Seleccione Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.roles}">
 						<option value="${item.code}">${item.nombre}</option>
 					</c:forEach>
 				</select>
+			</div>
+			<div>
+				<input type="submit" value="Buscar"/>
 			</div>
 			<div>
 			    <c:if test="${not empty collection}">
@@ -51,6 +49,7 @@
 				                     <jmesa:htmlColumn property="legajo" title="Last Name"/> 
 				                     <jmesa:htmlColumn property="apellido" title="Last Name"/> 
 				                     <jmesa:htmlColumn property="nombre" filterEditor="org.jmesa.view.html.editor.DroplistFilterEditor"/>
+				                     <jmesa:htmlColumn property="rolesDescription" title="Roles"/>
 				                     <jmesa:htmlColumn title="Acciones">
 				                         <a href="http://www.whitehouse.gov/history/presidents/">Editar</a> 
 				                     </jmesa:htmlColumn>

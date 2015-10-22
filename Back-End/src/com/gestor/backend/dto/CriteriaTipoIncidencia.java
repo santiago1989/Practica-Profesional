@@ -3,7 +3,11 @@ package com.gestor.backend.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
+
+import com.gestor.backend.util.SessionSingletion;
+import com.gestor.entidades.TipoIncidencia;
 
 public class CriteriaTipoIncidencia extends BaseCriteria {
 
@@ -17,11 +21,11 @@ public class CriteriaTipoIncidencia extends BaseCriteria {
 	}
 
 	@Override
-	public List<Criterion> getFiltros() {
-		criteriosList = new ArrayList<Criterion>();
-		addLike("code",code.concat("%"));
-		addLike("description",description.concat("%"));
-		return criteriosList;
+	public Criteria getCriteria() {
+		Criteria criteria = SessionSingletion.getInstance().getSession().createCriteria(TipoIncidencia.class);
+		addLike("code",code.concat("%"),criteria);
+		addLike("description",description.concat("%"),criteria);
+		return criteria;
 	}
 
 	public String getCode() {

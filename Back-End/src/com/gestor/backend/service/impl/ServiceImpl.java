@@ -1,17 +1,16 @@
 package com.gestor.backend.service.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.collection.PersistentSet;
-import org.hibernate.criterion.Criterion;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
 import com.gestor.backend.dao.DAO;
 import com.gestor.backend.dao.impl.DAOImpl;
 import com.gestor.backend.service.Service;
+import com.gestor.backend.util.SessionSingletion;
 
 
 public class ServiceImpl implements Service{
@@ -44,14 +43,14 @@ public class ServiceImpl implements Service{
 	}
 
 	@Override
-	public List buscar(Class claz,List<Criterion> filtros) {
-		return dao.buscar(claz,filtros);
+	public List buscar(Class claz,Criteria criteria) {
+		return dao.buscar(claz,criteria);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List findAll(Class claz){
-		return buscar(claz, new ArrayList<Criterion>());
+		return buscar(claz,null);
 	}
 	
 	public <T> Collection<T> findIds(Class<T> claz,String idName,String ids){
@@ -59,9 +58,8 @@ public class ServiceImpl implements Service{
 	}
 	
 	public <T> Collection<T> findIds(Class<T> claz,String idName,Object[] ids){
-		List<Criterion> criterionList = new ArrayList<Criterion>();
-		//PARA BUSCAR POR IDS
-		criterionList.add(Restrictions.in(idName,ids));
-		return buscar(claz, criterionList);
+		Criteria criteria = SessionSingletion.getInstance().getSession().createCriteria(claz);
+		criteria.add(Restrictions.in(idName,ids));
+		return buscar(claz, criteria);
 	}
 }

@@ -29,11 +29,9 @@ public class DAOImpl implements DAO {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List buscar(Class claz,List<Criterion> filtros) {
-		Session session = SessionSingletion.getInstance().getSession();
-		Criteria criteria = session.createCriteria(claz);
-		for (Criterion criterion : filtros) {
-			criteria.add(criterion);
+	public List buscar(Class claz,Criteria criteria) {
+		if(criteria == null){
+			criteria = SessionSingletion.getInstance().getSession().createCriteria(claz);
 		}
 		List list =  criteria.list();
 		return list;

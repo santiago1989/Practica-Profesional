@@ -23,14 +23,15 @@
         <property name="correo" type="java.lang.String">
             <column name="CORREO" />
         </property>
-        <many-to-one name="rol" class="com.gestor.web.seguridad.Rol" fetch="join">
-        	<column name="idRol"/>
-        </many-to-one>
         <property name="telefono" type="java.lang.String">
             <column name="TELEFONO" />
         </property>
         <property name="estado" type="boolean">
             <column name="ESTADO" />
         </property>
+        <set name="roles" table="usuariosroles">
+        	<key column="idUsuario"/>
+        	<many-to-many class="com.gestor.web.seguridad.Rol" column="idRol"/>
+        </set>
     </class>
 </hibernate-mapping>

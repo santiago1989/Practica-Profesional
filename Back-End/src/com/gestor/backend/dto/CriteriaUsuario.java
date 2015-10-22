@@ -1,10 +1,8 @@
 package com.gestor.backend.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.Criteria;
 
-import org.hibernate.criterion.Criterion;
-
+import com.gestor.backend.util.SessionSingletion;
 import com.gestor.common.util.Utils;
 import com.gestor.web.seguridad.Usuario;
 
@@ -59,13 +57,16 @@ public class CriteriaUsuario extends BaseCriteria{
 	}
 
 	@Override
-	public List<Criterion> getFiltros() {
-		criteriosList = new ArrayList<Criterion>();
-		addEqualInteger("legajo",Utils.isNullOrEmpty(legajo)? 0:Integer.valueOf(legajo));
-		addLike("nombre",nombre);
-		addLike("apellido",apellido);
-		addIn("rol.code",rol);
-		return criteriosList;
+	public Criteria getCriteria() {
+		Criteria criteria = SessionSingletion.getInstance().getSession().createCriteria(Usuario.class);
+		addEqualInteger("legajo",Utils.isNullOrEmpty(legajo)? 0:Integer.valueOf(legajo),criteria);
+		addLike("nombre",nombre,criteria);
+		addLike("apellido",apellido,criteria);
+//		addIn("roles.code",rol,criteria);
+		if(!Utils.isNullOrEmpty(rol)){
+			addAliasFilter(criteria,"roles","rol","code",rol.split(","));
+		}
+		return criteria;
 	}
 	
 	@Override

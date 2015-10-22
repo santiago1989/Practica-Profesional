@@ -1,6 +1,7 @@
 package com.gestor.web.mapper;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,32 +40,8 @@ public class RequestMapper {
 			for (Field field : fieldList) {
 				RequestMapped annotation = field.getAnnotation(RequestMapped.class);
 				if(annotation!=null){
-					String value = request.getParameter(field.getName());
-					boolean required = annotation.required();
-					if(Utils.isNullOrEmpty(value)){
-						if(required){
-							result.addError(String.format("Ingresar campo %s.",field.getName()));							
-						}
-					}else{
-						boolean valid = TypeValidator.validate(field,value);
-						entityValid&=valid;
-						if(valid){
-							if(annotation.customType()){
-								if(Collection.class.isAssignableFrom(field.getType())){
-									Set<?> collection = new HashSet<>(service.findIds(annotation.customTypeClass(),"code",value));
-									BeanUtils.setProperty(object,field.getName(),collection);
-								}else{
-									Object objectPersisted = service.get(field.getType(), value);
-									BeanUtils.setProperty(object,field.getName(),objectPersisted);
-								}
-							}else{
-								Object valueParsed = ReflectionUtils.parse(field.getType(),value);
-								BeanUtils.setProperty(object,field.getName(),valueParsed);
-							}
-						}else{
-							result.addError(String.format("El campo %s es no valido.",field.getName()));
-						}
-					}
+					entityValid = processField(request, result, object,
+							entityValid, field, annotation);
 				}
 			}
 			if(entityValid){
@@ -74,6 +51,75 @@ public class RequestMapper {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	private boolean processField(HttpServletRequest request,
+			MapperResult result, Identificable object, boolean entityValid,
+			Field field, RequestMapped annotation)
+			throws IllegalAccessException, InvocationTargetException, Exception {
+		boolean required = annotation.required();
+		if(Collection.class.isAssignableFrom(field.getType())){
+			String[] values = request.getParameterValues(field.getName());
+			processValues(result, required, object, field, annotation, values);
+		}else{			
+			String value = request.getParameter(field.getName());
+			if(Utils.isNullOrEmpty(value)){
+				if(required){
+					result.addError(String.format("Ingresar campo %s.",field.getName()));							
+				}
+			}else{
+				entityValid = processValidValue(result, object, entityValid, field,
+						annotation, value);
+			}
+		}
+		return entityValid;
+	}
+
+	private boolean processValidValue(MapperResult result,
+			Identificable object, boolean entityValid, Field field,
+			RequestMapped annotation, String value)
+			throws IllegalAccessException, InvocationTargetException, Exception {
+		boolean valid = TypeValidator.validate(field,value);
+		entityValid&=valid;
+		if(valid){
+			if(annotation.customType()){
+				processCustomType(object, field, annotation, value);
+			}else{
+				Object valueParsed = ReflectionUtils.parse(field.getType(),value);
+				BeanUtils.setProperty(object,field.getName(),valueParsed);
+			}
+		}else{
+			result.addError(String.format("El campo %s es no valido.",field.getName()));
+		}
+		return entityValid;
+	}
+	
+	private boolean processValues(MapperResult result,boolean required,Identificable object,
+			Field field,RequestMapped annotation,String[] values) throws IllegalAccessException, InvocationTargetException{
+		boolean valid = TypeValidator.validate(field, values);
+		if(values == null && required){
+			result.addError(String.format("Ingrese el campo %",field.getName()));
+		}else if(values != null){
+			if(valid){
+				processCustomTypeCollection(object, field, annotation, values);
+			}else{
+				result.addError(String.format("El campo %s es no valido.",field.getName()));
+			}
+		}
+		return valid;
+	}
+
+	private void processCustomType(Identificable object, Field field,
+			RequestMapped annotation, String value)
+			throws IllegalAccessException, InvocationTargetException {
+		Object objectPersisted = service.get(field.getType(), value);
+		BeanUtils.setProperty(object,field.getName(),objectPersisted);
+	}
+	
+	private void processCustomTypeCollection(Identificable object, Field field,
+			RequestMapped annotation, String[] value) throws IllegalAccessException, InvocationTargetException{
+		Set<?> collection = new HashSet<>(service.findIds(annotation.customTypeClass(),"code",value));
+		BeanUtils.setProperty(object,field.getName(),collection);
 	}
 	
 }
