@@ -78,7 +78,7 @@ h1 {
     display: block;
 }
 .rm-container.rm-layout-expanded {
-    float: right;
+    float: left;
 }
 .rm-nav li a,
 .rm-top-menu a {
