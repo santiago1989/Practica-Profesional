@@ -97,7 +97,9 @@ $( document ).ready(function() {
 				           <jmesa:htmlTable captionKey="presidents.caption" width="600px">		 
 				                 <jmesa:htmlRow>
 				                     <jmesa:htmlColumn property="numero" title="ID"/> 
-				                     <jmesa:htmlColumn property="titulo" title="Titulo"/> 
+				                     <jmesa:htmlColumn property="titulo" title="Titulo"/>
+				                     <jmesa:htmlColumn property="owner.nombre" title="Autor"/>
+				                     <jmesa:htmlColumn property="responsable" title="Responsable"/>
 				                     <jmesa:htmlColumn property="tipoIncidencia.nombre" title="Tipo"/>
 				                     <jmesa:htmlColumn property="prioridad.nombre" title="Prioridad"/>
 				                     <jmesa:htmlColumn property="estado.nombre" title="Estado"/>

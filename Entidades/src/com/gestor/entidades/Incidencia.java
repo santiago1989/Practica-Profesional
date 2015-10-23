@@ -5,31 +5,32 @@ import java.util.GregorianCalendar;
 import java.util.Set;
 
 import com.gestor.common.annotations.RequestMapped;
+import com.gestor.common.interfaces.Identificable;
 import com.gestor.web.seguridad.Usuario;
 
-public class Incidencia {
+public class Incidencia implements Identificable{
 
 	private int numero;
 	
-	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class,required=false)
+	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class,required=false,idName="legajo")
 	private Usuario owner;
 
-	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class,required=false)
+	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class,required=false,idName="legajo")
 	private Usuario responsable;
 	
-	@RequestMapped(regexp="[ARCS]",customType=true,customTypeClass=EstadoIncidencia.class)
+	@RequestMapped(regexp="[0-9]",customType=true,customTypeClass=EstadoIncidencia.class)
 	private EstadoIncidencia estado;
 	
-	@RequestMapped(regexp="[AMB]",customType=true,customTypeClass=PrioridadIncidencia.class)
+	@RequestMapped(regexp="[0-9]",customType=true,customTypeClass=PrioridadIncidencia.class)
 	private PrioridadIncidencia prioridad;
 
-	@RequestMapped(regexp="[A-Za-z]",customType=true,customTypeClass=TipoIncidencia.class)
+	@RequestMapped(regexp="[0-9]",customType=true,customTypeClass=TipoIncidencia.class)
 	private TipoIncidencia tipoIncidencia;
 	
-	@RequestMapped(regexp="[A-Za-z]+")
+	@RequestMapped(regexp="[A-Za-z0-9 '-.:]+")
 	private String detalle;
 
-	@RequestMapped(regexp="[A-Za-z]+")
+	@RequestMapped(regexp="[A-Za-z0-9 '-.:]+")
 	private String titulo;
 		
 	private Set<Adjunto> adjuntos;
@@ -109,5 +110,9 @@ public class Incidencia {
 	}
 	public void setFechaModificacion(Date fechaModificacion) {
 		this.fechaModificacion = fechaModificacion;
+	}
+	@Override
+	public Integer getId() {
+		return numero;
 	}
 }

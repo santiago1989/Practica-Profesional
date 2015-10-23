@@ -1,5 +1,6 @@
 package com.gestor.web.mapper;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -111,14 +112,14 @@ public class RequestMapper {
 
 	private void processCustomType(Identificable object, Field field,
 			RequestMapped annotation, String value)
-			throws IllegalAccessException, InvocationTargetException {
-		Object objectPersisted = service.get(field.getType(), value);
+			throws Exception {
+		Object objectPersisted = service.get(field.getType(),(Serializable)ReflectionUtils.parse(annotation.idClass(), value));
 		BeanUtils.setProperty(object,field.getName(),objectPersisted);
 	}
 	
 	private void processCustomTypeCollection(Identificable object, Field field,
 			RequestMapped annotation, String[] value) throws IllegalAccessException, InvocationTargetException{
-		Set<?> collection = new HashSet<>(service.findIds(annotation.customTypeClass(),"code",value));
+		Set<?> collection = new HashSet<>(service.findIds(annotation.customTypeClass(),annotation.idName(),value));
 		BeanUtils.setProperty(object,field.getName(),collection);
 	}
 	

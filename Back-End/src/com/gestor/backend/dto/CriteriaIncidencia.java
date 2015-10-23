@@ -3,6 +3,7 @@ package com.gestor.backend.dto;
 import org.hibernate.Criteria;
 
 import com.gestor.backend.util.SessionSingletion;
+import com.gestor.common.util.Utils;
 import com.gestor.entidades.Incidencia;
 
 
@@ -23,8 +24,8 @@ public class CriteriaIncidencia extends BaseCriteria {
 	public Criteria getCriteria() {
 		Criteria criteria = SessionSingletion.getInstance().getSession().createCriteria(Incidencia.class);
 		addEqualInteger("numero",numero == null ?Integer.parseInt(numero):0,criteria);
-		addEqualInteger("owner",Integer.parseInt(owner),criteria);
-		addEqualInteger("responsable",Integer.parseInt(responsable),criteria);
+		addEqualInteger("owner",!Utils.isNullOrEmpty(owner)?Integer.parseInt(owner):0,criteria);
+		addEqualInteger("responsable",!Utils.isNullOrEmpty(responsable)?Integer.parseInt(responsable):0,criteria);
 		addEqual("estado.id",estado,criteria);
 		addEqual("prioridad.id",prioridad,criteria);	
 		addEqual("tipo.id",tipo,criteria);

@@ -4,10 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.type.NullableType;
 
 import com.gestor.backend.dao.DAO;
@@ -19,6 +17,7 @@ public class DAOImpl implements DAO {
 	public void guardar(Object entidad) {
 		Session session = SessionSingletion.getInstance().getSession();
 		session.saveOrUpdate(entidad);
+		session.flush();
 	}
 
 	@Override

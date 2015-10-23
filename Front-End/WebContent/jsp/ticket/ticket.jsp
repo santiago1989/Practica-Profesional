@@ -26,7 +26,7 @@ $( document ).ready(function() {
 	<jsp:include page="../comon/menu.jsp"/>
 	<jsp:include page="../comon/alert.jsp"/>
 	<form action="${pageContext.request.contextPath}/saveEntity.htm" method="post">
-		<input name="entityName" type="hidden" value="<%=Incidencia.class.getSimpleName()%>"/>
+		<input name="entityName" type="hidden" value="<%=Incidencia.class.getName()%>"/>
 		<div id="frame" class="parent" style="width: 340px;margin-left:-205px">
 			<div style="display: none;">
 				<!-- Número de incidencia -->

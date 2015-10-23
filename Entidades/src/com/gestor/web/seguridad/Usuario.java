@@ -7,6 +7,7 @@ import com.gestor.common.annotations.RequestMapped;
 import com.gestor.common.annotations.Table;
 import com.gestor.common.enums.Schema;
 import com.gestor.common.interfaces.Identificable;
+import com.gestor.common.util.Utils;
 
 @Table(name="T_USUARIO",schema=Schema.SEGURIDAD)
 public class Usuario implements Identificable{
@@ -28,7 +29,7 @@ public class Usuario implements Identificable{
 	@RequestMapped(regexp="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+\\.[A-Za-z]{2,6}$")
 	private String correo;
 	
-	@RequestMapped(regexp="[ARS]",customType=true,customTypeClass=Rol.class)
+	@RequestMapped(regexp="[ARS]",customType=true,customTypeClass=Rol.class,idName="code")
 	private Set<Rol> roles;
 	
 	@RequestMapped(regexp="[0-9]{8,14}",required=false)
@@ -114,5 +115,14 @@ public class Usuario implements Identificable{
 	}
 	public String getRolesDescription(){
 		return Arrays.toString(roles.toArray());
+	}
+
+	@Override
+	public String toString() {
+		if(Utils.isNullOrEmpty(nombre)){
+			return nombre;
+		}else{
+			return "";
+		}
 	}
 }

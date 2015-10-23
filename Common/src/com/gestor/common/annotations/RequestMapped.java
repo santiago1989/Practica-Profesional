@@ -12,4 +12,6 @@ public @interface RequestMapped {
 	public Class customTypeClass() default Object.class;
 	public boolean required() default true;
 	public String regexp();
+	public String idName() default "id";
+	public Class idClass() default Integer.class;
 }
