@@ -6,15 +6,17 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 
+import com.gestor.common.interfaces.Identificable;
+
 public interface Service {
 	
 	void guardar(Object object);
 	
 	void actualizar(Object object);
 	
-	void eliminar(Object object);
+	void eliminar(Identificable object);
 	
-	Object get(Class<?> claz,Serializable id);
+	<T> T get(Class<T> claz,Serializable id);
 
 	List buscar(Class claz,Criteria criteria);
 	

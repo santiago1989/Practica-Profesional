@@ -11,6 +11,7 @@ import com.gestor.backend.dao.DAO;
 import com.gestor.backend.dao.impl.DAOImpl;
 import com.gestor.backend.service.Service;
 import com.gestor.backend.util.SessionSingletion;
+import com.gestor.common.interfaces.Identificable;
 
 
 public class ServiceImpl implements Service{
@@ -33,12 +34,13 @@ public class ServiceImpl implements Service{
 	}
 
 	@Override
-	public void eliminar(Object entidad) {
+	public void eliminar(Identificable entidad) {
+		entidad.setEstado(0);
 		dao.guardar(entidad);
 	}
 
 	@Override
-	public Object get(Class<?> claz, Serializable id) {
+	public <T> T get(Class<T> claz, Serializable id) {
 		return dao.get(claz,id);
 	}
 

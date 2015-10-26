@@ -6,7 +6,7 @@
 <html>
 <head>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa.js"></script>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jmesa/jmesa.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jmesa.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
 <jsp:include page="../comon/head.jsp"/>
 <title>B&uacute;squeda de Usuarios</title>
@@ -40,7 +40,7 @@
 			<div>
 				<input type="submit" value="Buscar"/>
 			</div>
-			<div>
+			<div style="position: relative;left: -82%">
 			    <c:if test="${not empty collection}">
 				     <jmesa:tableModel id="jmesaTag" items="${collection}" exportTypes="csv,excel" 
 				       stateAttr="restore" var="bean"> 
@@ -51,7 +51,15 @@
 				                     <jmesa:htmlColumn property="nombre" filterEditor="org.jmesa.view.html.editor.DroplistFilterEditor"/>
 				                     <jmesa:htmlColumn property="rolesDescription" title="Roles"/>
 				                     <jmesa:htmlColumn title="Acciones">
-				                         <a href="http://www.whitehouse.gov/history/presidents/">Editar</a> 
+   				                         <a href="${pageContext.request.contextPath}/readOrUpdateUsuario.htm?entityId=${bean.legajo}&read=true">
+   				                         	<img title="Consultar" alt="Consultar" src="${pageContext.request.contextPath}/images/buttons/icono-estado.jpg">
+   				                      	 </a>
+				                         <a href="${pageContext.request.contextPath}/readOrUpdateUsuario.htm?entityId=${bean.legajo}&update=true">
+				                         	<img title="Editar" alt="Editar" src="${pageContext.request.contextPath}/images/buttons/iglu-editar.png">
+				                         </a> 
+				                         <a href="#" onclick="showAlert('Esta seguro que desea eliminar el usuario?','${pageContext.request.contextPath}/removeUser.htm?entityId=${bean.legajo}')">
+				                         	<img title="Eliminar" alt="Eliminar" src="${pageContext.request.contextPath}/images/buttons/remove.png">
+				                         </a>
 				                     </jmesa:htmlColumn>
 				                 </jmesa:htmlRow> 
 				             </jmesa:htmlTable>  

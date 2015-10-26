@@ -9,7 +9,7 @@ public interface DAO {
 	
 	void guardar(Object entidad);
 
-	Object get(Class<?> claz,Serializable id);
+	<T> T get(Class<T> claz,Serializable id);
 	
 	List buscar(Class claz,Criteria criteria);
 }

@@ -24,9 +24,9 @@ public class RequestMapper {
 	
 	private Service service;
 	
-	private Class claz;
+	private Class<?> claz;
 	
-	public RequestMapper(Class claz){
+	public RequestMapper(Class<?> claz){
 		this.claz = claz;
 		this.service = new ServiceImpl();
 	}
@@ -45,9 +45,7 @@ public class RequestMapper {
 							entityValid, field, annotation);
 				}
 			}
-			if(entityValid){
-				result.setEntity(object);
-			}
+			result.setEntity(object);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,14 +67,14 @@ public class RequestMapper {
 					result.addError(String.format("Ingresar campo %s.",field.getName()));							
 				}
 			}else{
-				entityValid = processValidValue(result, object, entityValid, field,
+				entityValid = processValidValue(request,result, object, entityValid, field,
 						annotation, value);
 			}
 		}
 		return entityValid;
 	}
 
-	private boolean processValidValue(MapperResult result,
+	private boolean processValidValue(HttpServletRequest request,MapperResult result,
 			Identificable object, boolean entityValid, Field field,
 			RequestMapped annotation, String value)
 			throws IllegalAccessException, InvocationTargetException, Exception {
@@ -87,6 +85,14 @@ public class RequestMapper {
 				processCustomType(object, field, annotation, value);
 			}else{
 				Object valueParsed = ReflectionUtils.parse(field.getType(),value);
+				final String CAMPO_CONFIRMACION = "confirmacion";
+				if(request.getParameter(field.getName().concat(CAMPO_CONFIRMACION)) != null){
+					Object confirmacion = ReflectionUtils.parse(field.getType(),request.getParameter(field.getName().concat(CAMPO_CONFIRMACION)));
+					if(!valueParsed.equals(confirmacion)){
+						result.addError("El campo confirmacion, debe coincidir con el original");
+						entityValid = false;
+					}
+				}
 				BeanUtils.setProperty(object,field.getName(),valueParsed);
 			}
 		}else{
@@ -99,7 +105,7 @@ public class RequestMapper {
 			Field field,RequestMapped annotation,String[] values) throws IllegalAccessException, InvocationTargetException{
 		boolean valid = TypeValidator.validate(field, values);
 		if(values == null && required){
-			result.addError(String.format("Ingrese el campo %",field.getName()));
+			result.addError(String.format("Ingrese el campo %s",field.getName()));
 		}else if(values != null){
 			if(valid){
 				processCustomTypeCollection(object, field, annotation, values);

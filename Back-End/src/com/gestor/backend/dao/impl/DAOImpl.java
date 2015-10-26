@@ -21,9 +21,9 @@ public class DAOImpl implements DAO {
 	}
 
 	@Override
-	public Object get(Class<?> claz,Serializable id) {
+	public <T> T get(Class<T> claz,Serializable id) {
 		Session session = SessionSingletion.getInstance().getSession();
-		return session.get(claz,id);
+		return (T) session.get(claz,id);
 	}
 
 	@SuppressWarnings("rawtypes")

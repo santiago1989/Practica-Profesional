@@ -2,6 +2,7 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/common.css">
 <!-- MESSI POPUP PLUGIN CSS -->
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/messi/messi.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/messi/animate.css"></head>
 <!-- MENU CSS -->
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/responsive-menu/responsive-menu.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/responsive-menu/styles.css">
@@ -18,6 +19,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/responsive-menu/modernizr/modernizr-custom.js"></script>
 <!-- HTML 5 DIV -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/html5shiv/html5shiv.js"></script>
+<script type="text/javascript" src="https://github.com/MessiJS/MessiJS/blob/master/src/extensions.js"></script>
 <!-- Load modernizr or html5shiv -->
 <script src="//cdn.jsdelivr.net/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
 <!-- LOAD MENU JS-->

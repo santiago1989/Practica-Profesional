@@ -12,7 +12,8 @@ import com.gestor.common.util.Utils;
 @Table(name="T_USUARIO",schema=Schema.SEGURIDAD)
 public class Usuario implements Identificable{
 	
-	private int legajo;
+	@RequestMapped(regexp="[0-9]+",required=false)
+	private Integer legajo;
 
 	@RequestMapped(regexp="[A-Za-z0-9]+")
 	private String contrasena;
@@ -59,10 +60,10 @@ public class Usuario implements Identificable{
 		return getLegajo();
 	}
 
-	public int getLegajo() {
+	public Integer getLegajo() {
 		return legajo;
 	}
-	public void setLegajo(int legajo) {
+	public void setLegajo(Integer legajo) {
 		this.legajo = legajo;
 	}
 	public String getNombre() {
@@ -124,5 +125,22 @@ public class Usuario implements Identificable{
 		}else{
 			return "";
 		}
+	}
+
+	@Override
+	public void copyFrom(Object object) {
+		Usuario usuario = (Usuario)object;
+		this.nombre = usuario.nombre;
+		this.apellido = usuario.apellido;
+		this.telefono = usuario.telefono;
+		this.dni = usuario.dni;
+		this.correo = usuario.correo;
+		this.roles = usuario.roles;
+		this.contrasena = usuario.contrasena;
+	}
+
+	@Override
+	public void setEstado(Integer id) {
+		this.estado = id != null?id.equals(1):estado;
 	}
 }

@@ -4,7 +4,7 @@
 <!-- Generated 30/09/2015 20:49:03 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
     <class name="com.gestor.web.seguridad.Usuario" table="USUARIOS">
-        <id name="legajo" type="int">
+        <id name="legajo" type="java.lang.Integer">
             <column name="LEGAJO" />
             <generator class="increment" />
         </id>

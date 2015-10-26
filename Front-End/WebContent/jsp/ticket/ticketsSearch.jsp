@@ -8,7 +8,7 @@
 <jsp:include page="../comon/head.jsp"/>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa.js"></script>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jmesa/jmesa.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jmesa.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jquery/jquery-ui.min.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-ui.min.js"></script>
@@ -36,7 +36,6 @@ $( document ).ready(function() {
 				<select name="owner">
 					<option value="">Seleccionar Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.owners}">
-						<option value="">Seleccionar Opci&oacute;n</option>
 						<option value="${item.legajo}" selected="${searchBean.owner == item.legajo? 'selected' : ''}">${item.apellido},${item.nombre}</option>
 					</c:forEach>
 				</select>

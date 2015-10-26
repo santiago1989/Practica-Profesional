@@ -31,6 +31,12 @@ public abstract class BaseCriteria{
 		}
 	}
 	
+	protected void addEqual(String property,String value,Criteria criteria){
+		if(!Utils.isNullOrEmpty(value)){
+			criteria.add(Restrictions.eq(property, value));
+		}
+	}	
+	
 	protected void addIn(String property,String ids,Criteria criteria) {
 		if(!Utils.isNullOrEmpty(ids)){
 			criteria.add(Restrictions.in(property,ids.split(",")));

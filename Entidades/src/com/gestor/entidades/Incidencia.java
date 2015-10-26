@@ -115,4 +115,14 @@ public class Incidencia implements Identificable{
 	public Integer getId() {
 		return numero;
 	}
+	@Override
+	public void copyFrom(Object object) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setEstado(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
 }

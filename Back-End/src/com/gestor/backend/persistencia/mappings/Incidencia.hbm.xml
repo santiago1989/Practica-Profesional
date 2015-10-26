@@ -6,7 +6,7 @@
     <class name="com.gestor.entidades.Incidencia" table="incidencias">
         <id name="numero" type="int">
             <column name="ID" />
-            <generator class="assigned" />
+            <generator class="increment" />
         </id>
         <many-to-one name="owner" class="com.gestor.web.seguridad.Usuario" fetch="join">
             <column name="idOwner" />

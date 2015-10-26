@@ -19,6 +19,8 @@ import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
 import com.gestor.common.enums.RolType;
+import com.gestor.common.interfaces.Identificable;
+import com.gestor.common.util.Utils;
 import com.gestor.entidades.EstadoIncidencia;
 import com.gestor.entidades.Incidencia;
 import com.gestor.entidades.PrioridadIncidencia;
@@ -37,18 +39,30 @@ import com.gestor.web.utils.Constants;
 @Controller
 public class BeanController {
 
-	private static final String COLLECTION = "collection";
+	private static Service service = new ServiceImpl();
 	
-	private static final String ENTITY_NAME_REQUEST_PARAM = "entityName";
+	private static CriteriaUsuario criteriaAdministrativo = new CriteriaUsuario(RolType.ADMINISTRATIVO.getCode());
 	
+	private static CriteriaUsuario criteriaResponsable = new CriteriaUsuario(RolType.RESPONSABLE.getCode());
+
 	private static Map<String,String> searchNavigationMap = new HashMap<String,String>();
-
+	
 	private static Map<String,String> loadNavigationMap = new HashMap<String,String>();	
-
+	
 	private static Map<String,CollectionsBean> collectionsBeanMap = new HashMap<String, CollectionsBean>();
 	
 	private static Map<String,String> popupTextMap = new HashMap<String,String>();
+
+	private static 	final String UPDATE_FLAG = "update";
 	
+	private static 	final String READ_FLAG = "read";
+	
+	private static final String READ_BEAN = "bean";
+	
+	private static final String COLLECTION = "collection";
+	
+	private static final String ENTITY_NAME_REQUEST_PARAM = "entityName";
+		
 	private static final String TICKET_SEARCH = "/ticket/ticketsSearch";
 
 	private static final String USER_SEARCH = "/users/usersSearch";
@@ -63,18 +77,13 @@ public class BeanController {
 	
 	private static final String ERROR_VIEW = "error";
 	
+	private static final String ENTITY_ID = "entityId";
 	
-	private String SEARCH_BEAN_REQUEST = "searchBean";
+	private static final String SEARCH_BEAN_REQUEST = "searchBean";
 	
-	private String COLLECTIONS_BEAN_REQUEST = "collectionsBean";
+	private static final String COLLECTIONS_BEAN_REQUEST = "collectionsBean";
 	
 	private static final String POPUP_TYPE = "popuptype";
-
-	private static Service service = new ServiceImpl();
-
-	private static CriteriaUsuario criteriaAdministrativo = new CriteriaUsuario(RolType.ADMINISTRATIVO.getCode());
-
-	private static CriteriaUsuario criteriaResponsable = new CriteriaUsuario(RolType.RESPONSABLE.getCode());
 	
 	static{
 //		ACA SE AGREGAN LAS REGLAS DE NAVEGACION DEL SITIO
@@ -94,7 +103,8 @@ public class BeanController {
 	
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletRequest request){
-		Integer legajo = Integer.parseInt(request.getParameter(Constants.USER_SESSION));
+		String legajoStr = request.getParameter(Constants.USER_SESSION);
+		Integer legajo = Integer.parseInt(!Utils.isNullOrNoDigit(legajoStr)? legajoStr:"0");
 		String PASSWORD = "password";
 		String password = request.getParameter(PASSWORD);
 		Usuario usuario = (Usuario)service.get(Usuario.class,legajo);
@@ -132,6 +142,7 @@ public class BeanController {
 	
 	@RequestMapping("/saveEntity")
 	public ModelAndView saveEntity(HttpServletRequest request){
+		Map<String,Object> model = new HashMap<String, Object>();
 		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
 		try {
 			Class<?> claz = Class.forName(clazName);
@@ -145,13 +156,64 @@ public class BeanController {
 			else{
 				String viewPath = loadNavigationMap.get(claz.getSimpleName());
 				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
-				request.setAttribute(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(clazName));
-				return new ModelAndView(viewPath);
+				model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(clazName));
+				model.put(READ_BEAN,result.getEntity());
+				return new ModelAndView(viewPath,model);
 			}
 		} catch (ClassNotFoundException e) {
 			return new ModelAndView(ERROR_VIEW);
 		}
 	}
+	
+	@RequestMapping("/updateEntity")
+	public ModelAndView updateEntity(HttpServletRequest request){
+		Map<String,Object> model = new HashMap<String, Object>();
+		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+		String viewPath = null;
+		try {
+			Class<?> claz = Class.forName(clazName);
+			MapperResult result = new RequestMapper(claz).build(request);
+			if(result.getErrorMessages().isEmpty()){
+				Identificable entity = result.getEntity();
+				Identificable oldEntity = (Identificable) service.get(claz,entity.getId());
+				oldEntity.copyFrom(entity);
+				service.actualizar(oldEntity);
+				showPopup(request,"Se actualizo correctamente",PopupType.INFORMATION);
+				viewPath = searchNavigationMap.get(clazName);
+				return new ModelAndView(viewPath, model);
+			}else{
+				viewPath = loadNavigationMap.get(claz.getSimpleName());
+				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
+				model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(clazName));
+				return new ModelAndView(viewPath, model);				
+			}
+		} catch (ClassNotFoundException e) {
+			return new ModelAndView(ERROR_VIEW);
+		}
+	}
+	
+	
+	private ModelAndView removeEntity(HttpServletRequest request,Class<?> claz){
+		Map<String,Object> model = new HashMap<String, Object>();
+		String viewPath = searchNavigationMap.get(claz.getName());
+		Integer id = Integer.parseInt(request.getParameter(ENTITY_ID));
+		try {
+			Identificable object = (Identificable)service.get(claz, id);
+			service.eliminar(object);
+			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
+			model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(claz.getSimpleName()));
+			showPopup(request,"Eliminación realizada correctamente",PopupType.INFORMATION);
+			return new ModelAndView(viewPath);
+		} catch (InstantiationException | IllegalAccessException e) {
+			return new ModelAndView(ERROR_VIEW);
+		}
+	}
+	
+	@RequestMapping("/removeUser")
+	public ModelAndView removeUsuario(HttpServletRequest request){
+		return removeEntity(request,Usuario.class);
+	}
+	
 
 	@RequestMapping("/getUsersResults")
 	public ModelAndView getUsersResults(HttpServletRequest request,CriteriaUsuario searchBean){
@@ -206,6 +268,35 @@ public class BeanController {
 		return new ModelAndView(viewPath);
 	}
 
+	
+	@RequestMapping("/readOrUpdateUsuario")
+	public ModelAndView readOrUpdateUsuario(HttpServletRequest request){
+		Map<String,Object> model = new HashMap<String,Object>();
+		Integer id = Integer.parseInt(request.getParameter(ENTITY_ID));
+		Boolean update = Boolean.parseBoolean(request.getParameter(UPDATE_FLAG)  == null? "false":request.getParameter(UPDATE_FLAG));
+		Boolean read = Boolean.parseBoolean(request.getParameter(READ_FLAG) == null? "false":request.getParameter(READ_FLAG));
+		Usuario usuario = service.get(Usuario.class,id);
+		model.put(READ_BEAN,usuario);
+		model.put(UPDATE_FLAG,update);
+		model.put(READ_FLAG,read);
+		request.setAttribute(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(Usuario.class.getSimpleName()));
+		String view = loadNavigationMap.get(Usuario.class.getSimpleName());
+		return new ModelAndView(view,model);
+	}
+	
+	@RequestMapping("/readOrUpdateTicket")
+	public ModelAndView readOrUpdateTicket(HttpServletRequest request){
+		Map<String,Object> model = new HashMap<String,Object>();
+		String view = loadNavigationMap.get(Incidencia.class.getSimpleName());
+		return new ModelAndView(view,model);
+	}
+	
+	@RequestMapping("/readOrUpdateTicketType")
+	public ModelAndView readOrUpdateTicketType(HttpServletRequest request){
+		Map<String,Object> model = new HashMap<String,Object>();
+		String view = loadNavigationMap.get(TipoIncidencia.class.getSimpleName());
+		return new ModelAndView(view,model);
+	}
 	
 	private void showPopup(HttpServletRequest request,String text,PopupType type){
 		Popup popup = new Popup(text, type);

@@ -62,10 +62,10 @@ public class CriteriaUsuario extends BaseCriteria{
 		addEqualInteger("legajo",Utils.isNullOrEmpty(legajo)? 0:Integer.valueOf(legajo),criteria);
 		addLike("nombre",nombre,criteria);
 		addLike("apellido",apellido,criteria);
-//		addIn("roles.code",rol,criteria);
 		if(!Utils.isNullOrEmpty(rol)){
 			addAliasFilter(criteria,"roles","rol","code",rol.split(","));
 		}
+		addEqual("estado",Boolean.TRUE, criteria);
 		return criteria;
 	}
 	

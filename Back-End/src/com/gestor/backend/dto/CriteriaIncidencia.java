@@ -26,9 +26,9 @@ public class CriteriaIncidencia extends BaseCriteria {
 		addEqualInteger("numero",numero == null ?Integer.parseInt(numero):0,criteria);
 		addEqualInteger("owner",!Utils.isNullOrEmpty(owner)?Integer.parseInt(owner):0,criteria);
 		addEqualInteger("responsable",!Utils.isNullOrEmpty(responsable)?Integer.parseInt(responsable):0,criteria);
-		addEqual("estado.id",estado,criteria);
-		addEqual("prioridad.id",prioridad,criteria);	
-		addEqual("tipo.id",tipo,criteria);
+		addEqualInteger("estado.id",!Utils.isNullOrEmpty(estado)?Integer.parseInt(estado):0,criteria);
+		addEqualInteger("prioridad.id",!Utils.isNullOrEmpty(prioridad)?Integer.parseInt(prioridad):0,criteria);	
+		addEqualInteger("tipoIncidencia.id",!Utils.isNullOrEmpty(tipo)?Integer.parseInt(tipo):0,criteria);
 		addLike("detalle",detalle,criteria);
 		addLike("titulo",titulo,criteria);
 		addEqual("fechaCreacion",fechaCreacion,criteria);
