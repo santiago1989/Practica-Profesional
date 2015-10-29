@@ -36,7 +36,14 @@ $( document ).ready(function() {
 				<select name="owner">
 					<option value="">Seleccionar Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.owners}">
-						<option value="${item.legajo}" selected="${searchBean.owner == item.legajo? 'selected' : ''}">${item.apellido},${item.nombre}</option>
+						<c:choose>
+							<c:when test="${searchBean.owner == item.legajo}">
+								<option value="${item.legajo}" selected="selected">${item.apellido},${item.nombre}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${item.legajo}">${item.apellido},${item.nombre}</option>
+							</c:otherwise>
+						</c:choose>
 					</c:forEach>
 				</select>
 			</div>
@@ -45,7 +52,14 @@ $( document ).ready(function() {
 				<select name="responsable">
 					<option value="">Seleccionar Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.responsables}">
-						<option value="${item.legajo}" selected="${searchBean.owner == item.legajo? 'selected' : ''}">${item.apellido},${item.nombre}</option>
+						<c:choose>
+							<c:when test="${searchBean.responsable == item.legajo}">
+								<option value="${item.legajo}" selected="selected">${item.apellido},${item.nombre}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${item.legajo}">${item.apellido},${item.nombre}</option>
+							</c:otherwise>
+						</c:choose>
 					</c:forEach>
 				</select>
 			</div>
@@ -54,7 +68,14 @@ $( document ).ready(function() {
 				<select name="tipo">
 					<option value="">Seleccionar Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.tiposIncidencia}">
-						<option value="${item.id}" selected="${searchBean.tipo == item.id? 'selected' : ''}">${item.nombre}</option>
+						<c:choose>
+							<c:when test="${searchBean.tipo == item.id}">
+								<option value="${item.id}" selected="selected">${item.nombre}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${item.id}">${item.nombre}</option>
+							</c:otherwise>
+						</c:choose>
 					</c:forEach>
 				</select>
 			</div>
@@ -63,7 +84,14 @@ $( document ).ready(function() {
 				<select name="prioridad">
 					<option value="">Seleccionar Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.prioridadIncidencia}">
-						<option value="${item.id}" selected="${searchBean.prioridad == item.id? 'selected' : ''}">${item.nombre}</option>
+						<c:choose>
+							<c:when test="${searchBean.prioridad == item.id}">
+								<option value="${item.id}" selected="selected">${item.nombre}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${item.id}">${item.nombre}</option>
+							</c:otherwise>
+						</c:choose>
 					</c:forEach>
 				</select>
 			</div>
@@ -72,7 +100,14 @@ $( document ).ready(function() {
 				<select name="estado">
 					<option value="">Seleccionar Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionsBean.estadosIncidencia}">
-						<option value="${item.id}" selected="${searchBean.estado == item.id? 'selected' : ''}">${item.nombre}</option>
+						<c:choose>
+							<c:when test="${searchBean.estado == item.id}">
+								<option value="${item.id}" selected="selected">${item.nombre}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${item.id}">${item.nombre}</option>
+							</c:otherwise>
+						</c:choose>
 					</c:forEach>
 				</select>
 			</div>
@@ -89,7 +124,7 @@ $( document ).ready(function() {
 			<div>
 				<input type="submit" value="Buscar"/>
 			</div>
-			<div>
+			<div  style="position: relative;left: -82%">
 			    <c:if test="${not empty collection}">
 				     <jmesa:tableModel id="jmesaTag" items="${collection}" exportTypes="csv,excel" 
 				       stateAttr="restore" var="bean"> 
@@ -98,12 +133,20 @@ $( document ).ready(function() {
 				                     <jmesa:htmlColumn property="numero" title="ID"/> 
 				                     <jmesa:htmlColumn property="titulo" title="Titulo"/>
 				                     <jmesa:htmlColumn property="owner.nombre" title="Autor"/>
-				                     <jmesa:htmlColumn property="responsable" title="Responsable"/>
+				                     <jmesa:htmlColumn property="responsable.nombre" title="Responsable"/>
 				                     <jmesa:htmlColumn property="tipoIncidencia.nombre" title="Tipo"/>
 				                     <jmesa:htmlColumn property="prioridad.nombre" title="Prioridad"/>
 				                     <jmesa:htmlColumn property="estado.nombre" title="Estado"/>
 				                     <jmesa:htmlColumn title="Acciones">
-				                         <a href="http://www.whitehouse.gov/history/presidents/">Editar</a> 
+   				                         <a href="${pageContext.request.contextPath}/readOrUpdateTicket.htm?entityId=${bean.numero}&read=true">
+   				                         	<img title="Consultar" alt="Consultar" src="${pageContext.request.contextPath}/images/buttons/icono-estado.jpg">
+   				                      	 </a>
+				                         <a href="${pageContext.request.contextPath}/readOrUpdateTicket.htm?entityId=${bean.numero}&update=true">
+				                         	<img title="Editar" alt="Editar" src="${pageContext.request.contextPath}/images/buttons/iglu-editar.png">
+				                         </a> 
+				                         <a href="#" onclick="showAlert('Esta seguro que desea eliminar el usuario?','${pageContext.request.contextPath}/removeTicket.htm?entityId=${bean.numero}')">
+				                         	<img title="Eliminar" alt="Eliminar" src="${pageContext.request.contextPath}/images/buttons/remove.png">
+				                         </a>
 				                     </jmesa:htmlColumn>
 				                 </jmesa:htmlRow> 
 				             </jmesa:htmlTable>  

@@ -35,7 +35,7 @@ public class ServiceImpl implements Service{
 
 	@Override
 	public void eliminar(Identificable entidad) {
-		entidad.setEstado(0);
+		entidad.setEstado();
 		dao.guardar(entidad);
 	}
 

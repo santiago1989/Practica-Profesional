@@ -1,5 +1,6 @@
 package com.gestor.web;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -41,10 +42,6 @@ public class BeanController {
 
 	private static Service service = new ServiceImpl();
 	
-	private static CriteriaUsuario criteriaAdministrativo = new CriteriaUsuario(RolType.ADMINISTRATIVO.getCode());
-	
-	private static CriteriaUsuario criteriaResponsable = new CriteriaUsuario(RolType.RESPONSABLE.getCode());
-
 	private static Map<String,String> searchNavigationMap = new HashMap<String,String>();
 	
 	private static Map<String,String> loadNavigationMap = new HashMap<String,String>();	
@@ -94,9 +91,9 @@ public class BeanController {
 		loadNavigationMap.put(Incidencia.class.getSimpleName(),TICKET_DATA_LOAD);
 
 		
-		collectionsBeanMap.put(Usuario.class.getSimpleName(),new UsuarioCollectionsBean(service.findAll(Rol.class)));
+		collectionsBeanMap.put(Usuario.class.getSimpleName(),new UsuarioCollectionsBean(service));
 //		TODO agregar el filro en la busqueda de responsables.
-		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service.buscar(Usuario.class,criteriaAdministrativo.getCriteria()),service.buscar(Usuario.class,criteriaResponsable.getCriteria()),service.findAll(TipoIncidencia.class),service.findAll(EstadoIncidencia.class),service.findAll(PrioridadIncidencia.class)));
+		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service));
 		popupTextMap.put(Usuario.class.getSimpleName(),"Se dio de alta correctamente el usuario, con legajo: ");
 		popupTextMap.put(Incidencia.class.getSimpleName(),"Se dio de alta correctamente la incidencia, con número: ");
 	}
@@ -156,13 +153,19 @@ public class BeanController {
 			else{
 				String viewPath = loadNavigationMap.get(claz.getSimpleName());
 				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
-				model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(clazName));
+				model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(clazName));
 				model.put(READ_BEAN,result.getEntity());
 				return new ModelAndView(viewPath,model);
 			}
 		} catch (ClassNotFoundException e) {
 			return new ModelAndView(ERROR_VIEW);
 		}
+	}
+
+	private CollectionsBean getCollectionsBean(String clazName) {
+		final CollectionsBean collectionBean = collectionsBeanMap.get(clazName);
+		collectionBean.refreshCollections();
+		return collectionBean;
 	}
 	
 	@RequestMapping("/updateEntity")
@@ -184,7 +187,7 @@ public class BeanController {
 			}else{
 				viewPath = loadNavigationMap.get(claz.getSimpleName());
 				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
-				model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(clazName));
+				model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(clazName));
 				return new ModelAndView(viewPath, model);				
 			}
 		} catch (ClassNotFoundException e) {
@@ -201,7 +204,7 @@ public class BeanController {
 			Identificable object = (Identificable)service.get(claz, id);
 			service.eliminar(object);
 			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
-			model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(claz.getSimpleName()));
+			model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz.getSimpleName()));
 			showPopup(request,"Eliminación realizada correctamente",PopupType.INFORMATION);
 			return new ModelAndView(viewPath);
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -236,9 +239,9 @@ public class BeanController {
 		List collection = (List) service.buscar(claz, criteria.getCriteria());
 		model.put(COLLECTION,collection);
 		model.put(SEARCH_BEAN_REQUEST,criteria);
-		model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(claz.getSimpleName()));
+		model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz.getSimpleName()));
 		if(collection.isEmpty()){
-			showPopup(request, "No se han encontrado resultados, para la busqued realizada.",PopupType.INFORMATION);
+			showPopup(request, "No se han encontrado resultados, para la busqueda realizada.",PopupType.INFORMATION);
 		}
 		return new ModelAndView(viewPath,model);		
 	}
@@ -250,7 +253,7 @@ public class BeanController {
 		try {
 			Class<?> claz = Class.forName(clazName);
 			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
-			model.put(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(claz.getSimpleName()));
+			model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz.getSimpleName()));
 		} catch (InstantiationException | IllegalAccessException
 				| ClassNotFoundException e) {
 			// TODO agreggar loguer
@@ -264,7 +267,7 @@ public class BeanController {
 	public ModelAndView newEntity(HttpServletRequest request){
 		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
 		String viewPath = loadNavigationMap.get(clazName);
-		request.setAttribute(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(clazName));
+		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(clazName));
 		return new ModelAndView(viewPath);
 	}
 
@@ -273,22 +276,26 @@ public class BeanController {
 	public ModelAndView readOrUpdateUsuario(HttpServletRequest request){
 		Map<String,Object> model = new HashMap<String,Object>();
 		Integer id = Integer.parseInt(request.getParameter(ENTITY_ID));
+		return update(request, model, id,Usuario.class);
+	}
+
+	private ModelAndView update(HttpServletRequest request,Map<String, Object> model, Serializable id,Class<?> claz) {
 		Boolean update = Boolean.parseBoolean(request.getParameter(UPDATE_FLAG)  == null? "false":request.getParameter(UPDATE_FLAG));
 		Boolean read = Boolean.parseBoolean(request.getParameter(READ_FLAG) == null? "false":request.getParameter(READ_FLAG));
-		Usuario usuario = service.get(Usuario.class,id);
-		model.put(READ_BEAN,usuario);
+		Identificable bean = (Identificable) service.get(claz,id);
+		model.put(READ_BEAN,bean);
 		model.put(UPDATE_FLAG,update);
 		model.put(READ_FLAG,read);
-		request.setAttribute(COLLECTIONS_BEAN_REQUEST,collectionsBeanMap.get(Usuario.class.getSimpleName()));
-		String view = loadNavigationMap.get(Usuario.class.getSimpleName());
-		return new ModelAndView(view,model);
+		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz.getSimpleName()));
+		String view = loadNavigationMap.get(claz.getSimpleName());
+		return new ModelAndView(view, model);
 	}
 	
 	@RequestMapping("/readOrUpdateTicket")
 	public ModelAndView readOrUpdateTicket(HttpServletRequest request){
 		Map<String,Object> model = new HashMap<String,Object>();
-		String view = loadNavigationMap.get(Incidencia.class.getSimpleName());
-		return new ModelAndView(view,model);
+		Integer id = Integer.parseInt(request.getParameter(ENTITY_ID));
+		return update(request, model, id, Incidencia.class);
 	}
 	
 	@RequestMapping("/readOrUpdateTicketType")

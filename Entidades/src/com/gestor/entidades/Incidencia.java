@@ -1,5 +1,6 @@
 package com.gestor.entidades;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
@@ -10,7 +11,8 @@ import com.gestor.web.seguridad.Usuario;
 
 public class Incidencia implements Identificable{
 
-	private int numero;
+	@RequestMapped(regexp="[0-9]+",required=false)
+	private Integer numero;
 	
 	@RequestMapped(regexp="[0-9]+",customType=true,customTypeClass=Usuario.class,required=false,idName="legajo")
 	private Usuario owner;
@@ -39,10 +41,10 @@ public class Incidencia implements Identificable{
 	private Date fechaCreacion;
 	private Date fechaModificacion;
 
-	public int getNumero() {
+	public Integer getNumero() {
 		return numero;
 	}
-	public void setNumero(int numero) {
+	public void setNumero(Integer numero) {
 		this.numero = numero;
 	}
 	public Usuario getOwner() {
@@ -117,12 +119,19 @@ public class Incidencia implements Identificable{
 	}
 	@Override
 	public void copyFrom(Object object) {
-		// TODO Auto-generated method stub
+		Incidencia incidencia = (Incidencia) object;
+		this.titulo = incidencia.titulo;
+		this.detalle = incidencia.detalle;
+		this.responsable = incidencia.responsable;
+		this.estado = incidencia.estado;
+		this.prioridad = incidencia.prioridad;
+		this.estado = incidencia.estado;
+		this.tipoIncidencia = incidencia.tipoIncidencia;
+		this.fechaModificacion = GregorianCalendar.getInstance().getTime();
 		
 	}
 	@Override
-	public void setEstado(Integer id) {
-		// TODO Auto-generated method stub
+	public void setEstado() {
 		
 	}
 }

@@ -140,7 +140,7 @@ public class Usuario implements Identificable{
 	}
 
 	@Override
-	public void setEstado(Integer id) {
-		this.estado = id != null?id.equals(1):estado;
+	public void setEstado() {
+		this.estado = Boolean.FALSE;
 	}
 }

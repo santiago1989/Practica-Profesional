@@ -2,6 +2,9 @@ package com.gestor.web.dto;
 
 import java.util.List;
 
+import com.gestor.backend.dto.CriteriaUsuario;
+import com.gestor.backend.service.Service;
+import com.gestor.common.enums.RolType;
 import com.gestor.entidades.EstadoIncidencia;
 import com.gestor.entidades.PrioridadIncidencia;
 import com.gestor.entidades.TipoIncidencia;
@@ -19,15 +22,17 @@ public class IncidenciaCollectionsBean extends CollectionsBean {
 	
 	private List<PrioridadIncidencia> prioridadIncidencia;
 	
-	public IncidenciaCollectionsBean(List<Usuario> owners,List<Usuario> responsables, List<TipoIncidencia> tiposIncidencia,
-			List<EstadoIncidencia> estadosIncidencia,
-			List<PrioridadIncidencia> prioridadIncidencia) {
-		super();
-		this.owners = owners;
-		this.responsables = responsables;
-		this.tiposIncidencia = tiposIncidencia;
-		this.estadosIncidencia = estadosIncidencia;
-		this.prioridadIncidencia = prioridadIncidencia;
+	private static CriteriaUsuario criteriaAdministrativo = new CriteriaUsuario(RolType.ADMINISTRATIVO.getCode());
+	
+	private static CriteriaUsuario criteriaResponsable = new CriteriaUsuario(RolType.RESPONSABLE.getCode());
+	
+	public IncidenciaCollectionsBean(Service service) {
+		super(service);
+		this.owners = service.buscar(Usuario.class,criteriaAdministrativo.getCriteria());
+		this.responsables = service.buscar(Usuario.class,criteriaResponsable.getCriteria());
+		this.tiposIncidencia = service.findAll(TipoIncidencia.class);
+		this.estadosIncidencia = service.findAll(EstadoIncidencia.class);
+		this.prioridadIncidencia = service.findAll(PrioridadIncidencia.class);
 	}
 
 	public List<Usuario> getResponsables() {
@@ -68,5 +73,12 @@ public class IncidenciaCollectionsBean extends CollectionsBean {
 
 	public void setOwners(List<Usuario> owners) {
 		this.owners = owners;
+	}
+
+	@Override
+	public void refreshCollections() {
+		this.owners = service.buscar(Usuario.class,criteriaAdministrativo.getCriteria());
+		this.responsables = service.buscar(Usuario.class,criteriaResponsable.getCriteria());
+		this.tiposIncidencia = service.findAll(TipoIncidencia.class);
 	}
 }

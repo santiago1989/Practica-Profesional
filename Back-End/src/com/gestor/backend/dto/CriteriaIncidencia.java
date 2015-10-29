@@ -23,9 +23,9 @@ public class CriteriaIncidencia extends BaseCriteria {
 	@Override
 	public Criteria getCriteria() {
 		Criteria criteria = SessionSingletion.getInstance().getSession().createCriteria(Incidencia.class);
-		addEqualInteger("numero",numero == null ?Integer.parseInt(numero):0,criteria);
-		addEqualInteger("owner",!Utils.isNullOrEmpty(owner)?Integer.parseInt(owner):0,criteria);
-		addEqualInteger("responsable",!Utils.isNullOrEmpty(responsable)?Integer.parseInt(responsable):0,criteria);
+		addEqualInteger("numero",!Utils.isNullOrEmpty(numero)?Integer.parseInt(numero):0,criteria);
+		addEqualInteger("owner.legajo",!Utils.isNullOrEmpty(owner)?Integer.parseInt(owner):0,criteria);
+		addEqualInteger("responsable.legajo",!Utils.isNullOrEmpty(responsable)?Integer.parseInt(responsable):0,criteria);
 		addEqualInteger("estado.id",!Utils.isNullOrEmpty(estado)?Integer.parseInt(estado):0,criteria);
 		addEqualInteger("prioridad.id",!Utils.isNullOrEmpty(prioridad)?Integer.parseInt(prioridad):0,criteria);	
 		addEqualInteger("tipoIncidencia.id",!Utils.isNullOrEmpty(tipo)?Integer.parseInt(tipo):0,criteria);
