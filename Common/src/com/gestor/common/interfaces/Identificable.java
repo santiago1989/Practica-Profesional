@@ -4,4 +4,5 @@ public interface Identificable {
 	Integer getId();
 	void copyFrom(Object object);
 	void setEstado();
+	Boolean getEstadoAlta();
 }

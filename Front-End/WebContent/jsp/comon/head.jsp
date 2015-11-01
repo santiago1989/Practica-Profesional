@@ -6,7 +6,6 @@
 <!-- MENU CSS -->
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/responsive-menu/responsive-menu.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/responsive-menu/styles.css">
-
 <link rel="stylesheet" type="text/css" href="https://google-code-prettify.googlecode.com/svn/loader/prettify.css"></head>
 <!-- JQUERY -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-1.11.3.js"></script>

@@ -1,8 +1,8 @@
 package com.gestor.entidades;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.gestor.common.annotations.RequestMapped;
@@ -41,6 +41,11 @@ public class Incidencia implements Identificable{
 	private Date fechaCreacion;
 	private Date fechaModificacion;
 
+	public Incidencia(){
+		this.adjuntos = new HashSet<Adjunto>();
+		this.notas = new HashSet<Nota>();
+	}
+	
 	public Integer getNumero() {
 		return numero;
 	}
@@ -98,6 +103,7 @@ public class Incidencia implements Identificable{
 	public Set<Nota> getNotas() {
 		return notas;
 	}
+
 	public void setNotas(Set<Nota> notas) {
 		this.notas = notas;
 	}
@@ -133,5 +139,23 @@ public class Incidencia implements Identificable{
 	@Override
 	public void setEstado() {
 		
+	}
+	
+	public void addNota(Nota comentario){
+		comentario.setIncidencia(this);
+		notas.add(comentario);
+	}
+	
+	public void removeNota(Nota nota){
+		notas.remove(nota);
+	}
+	
+	public void addAdjunto(Adjunto adjunto){
+		adjuntos.add(adjunto);
+	}
+
+	@Override
+	public Boolean getEstadoAlta() {
+		return null;
 	}
 }

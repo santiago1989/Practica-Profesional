@@ -19,12 +19,10 @@ import com.gestor.backend.dto.CriteriaUsuario;
 import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
-import com.gestor.common.enums.RolType;
 import com.gestor.common.interfaces.Identificable;
 import com.gestor.common.util.Utils;
-import com.gestor.entidades.EstadoIncidencia;
 import com.gestor.entidades.Incidencia;
-import com.gestor.entidades.PrioridadIncidencia;
+import com.gestor.entidades.Nota;
 import com.gestor.entidades.TipoIncidencia;
 import com.gestor.web.dto.CollectionsBean;
 import com.gestor.web.dto.IncidenciaCollectionsBean;
@@ -33,7 +31,6 @@ import com.gestor.web.dto.Popup;
 import com.gestor.web.dto.UsuarioCollectionsBean;
 import com.gestor.web.enums.PopupType;
 import com.gestor.web.mapper.RequestMapper;
-import com.gestor.web.seguridad.Rol;
 import com.gestor.web.seguridad.Usuario;
 import com.gestor.web.utils.Constants;
 
@@ -308,5 +305,38 @@ public class BeanController {
 	private void showPopup(HttpServletRequest request,String text,PopupType type){
 		Popup popup = new Popup(text, type);
 		request.setAttribute(Constants.POPUP_REQUEST, popup);
+	}
+	
+	@RequestMapping("/comentar")
+	public ModelAndView comentar(HttpServletRequest request){
+		Map<String,Object> model = new HashMap<String,Object>();
+		Integer numeroIncidencia = Integer.parseInt(request.getParameter("incidencia"));
+		Integer numeroUsuario = Integer.parseInt(request.getParameter("usuario"));
+		String comentario = request.getParameter("comentario");
+		Incidencia incidencia = service.get(Incidencia.class,numeroIncidencia);
+		Usuario usuario = service.get(Usuario.class,numeroUsuario);
+		Nota nota = new Nota(comentario, usuario);
+		incidencia.addNota(nota);
+		service.guardar(nota);
+		model.put(READ_BEAN,incidencia);
+		model.put(UPDATE_FLAG,Boolean.TRUE);
+		model.put(READ_FLAG,Boolean.FALSE);
+		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class.getSimpleName()));
+		return new ModelAndView(TICKET_DATA_LOAD,model);
+	}
+	
+	@RequestMapping("/eliminarComentario")
+	public ModelAndView eliminarComentario(HttpServletRequest request){
+		Integer numeroNota = Integer.parseInt(request.getParameter("nota"));
+		Nota nota = service.get(Nota.class,numeroNota);
+		service.eliminar(nota);
+		Incidencia incidencia = nota.getIncidencia();
+		incidencia.removeNota(nota);
+		Map<String,Object> model = new HashMap<String,Object>();
+		model.put(READ_BEAN,incidencia);
+		model.put(UPDATE_FLAG,Boolean.TRUE);
+		model.put(READ_FLAG,Boolean.FALSE);
+		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class.getSimpleName()));
+		return new ModelAndView(TICKET_DATA_LOAD,model);
 	}
 }

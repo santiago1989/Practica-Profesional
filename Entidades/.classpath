@@ -13,5 +13,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>
+	<classpathentry kind="lib" path="/CommonsLibs/commons-collections-3.2.jar" sourcepath="/CommonsLibs/source/commons-collections4-4.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

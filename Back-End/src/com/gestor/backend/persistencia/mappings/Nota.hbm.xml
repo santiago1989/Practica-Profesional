@@ -3,18 +3,27 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 17/10/2015 11:28:34 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.gestor.entidades.Nota" table="NOTAS">
-
-        <id name="id" type="int">
-            <column name="id" />
-            <generator class="assigned" />
+    <class name="com.gestor.entidades.Nota" table="NOTAS" where="estado = true">
+        <id name="id" type="java.lang.Integer">
+            <column name="id"/>	
+			<generator class="increment"/>
         </id>
-
+	    
         <property name="detalle" type="java.lang.String">
             <column name="detalle" />
         </property>
 
         <many-to-one name="incidencia" class="com.gestor.entidades.Incidencia" 
         	column="idIncidencia"/>
-    </class>
+
+        <many-to-one name="usuario" class="com.gestor.web.seguridad.Usuario" 
+        	column="idUsuario"/>
+        	
+        <property name="fechaPublicacion" type="java.util.Date">
+            <column name="fechaPublicacion" />
+        </property>
+        <property name="estado" type="boolean">
+            <column name="ESTADO" />
+        </property>
+   </class>
 </hibernate-mapping>

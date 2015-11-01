@@ -3,12 +3,14 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
+<!DOCTYPE html>
 <html>
 <head>
 <jsp:include page="../comon/head.jsp"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jquery/jquery-ui.min.css">
+<%-- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/html5/html5_dynamic.css"> --%>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Incidencia</title>
 <!-- JQUERY -->
@@ -174,5 +176,6 @@ $( document ).ready(function() {
 			</div>
 		</div>
 	</form>
+	<jsp:include page="foro.jsp"/>
 </body>
 </html>

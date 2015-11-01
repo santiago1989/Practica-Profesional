@@ -37,7 +37,7 @@
         </set>
         <set name="notas" table="NOTAS" inverse="false">
             <key>
-                <column name="id" />
+                <column name="idIncidencia"/>
             </key>
             <one-to-many class="com.gestor.entidades.Nota"/>
         </set>

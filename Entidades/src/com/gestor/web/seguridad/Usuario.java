@@ -143,4 +143,9 @@ public class Usuario implements Identificable{
 	public void setEstado() {
 		this.estado = Boolean.FALSE;
 	}
+
+	@Override
+	public Boolean getEstadoAlta() {
+		return isEstado();
+	}
 }
