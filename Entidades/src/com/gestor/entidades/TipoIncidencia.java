@@ -1,8 +1,9 @@
 package com.gestor.entidades;
 
 import com.gestor.common.annotations.RequestMapped;
+import com.gestor.common.interfaces.Identificable;
 
-public class TipoIncidencia {
+public class TipoIncidencia implements Identificable {
 
 	private Integer id;
 	
@@ -24,5 +25,20 @@ public class TipoIncidencia {
 	
 	public String getIdString(){
 		return String.valueOf(id);
+	}
+	@Override
+	public void copyFrom(Object object) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setEstado() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public Boolean getEstadoAlta() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

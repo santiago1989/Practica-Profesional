@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@page import="com.gestor.entidades.TipoIncidencia"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -13,6 +14,10 @@ $( document ).ready(function() {
 		var href = $("#backLink").attr("href");
 		window.location.href = href;
 	});
+	$("#backButton").click(function(){
+		var href = $("#backLink").attr("href");
+		window.location.href = href;
+	});
 });
 </script>
 </head>
@@ -22,21 +27,28 @@ $( document ).ready(function() {
 	<form action="${pageContext.request.contextPath}/saveEntity.htm" method="post">
 		<input name="entityName" type="hidden" value="<%=TipoIncidencia.class.getSimpleName()%>"/>
 		<div id="frame">
-			<div>
-				<!-- CÃ³digo -->
-				<span>ID</span>
-				<input type="text" name="code"/>
-			</div>
+			<c:if test="${read || update}">
+				<div>
+					<!-- Código -->
+					<span>ID</span>
+					<input type="text" value="${bean.id}"/>
+				</div>
+			</c:if>
 			<div>
 				<!-- Nombre -->
 				<span>Nombre</span>
-				<input type="text" name="nombre"/>
+				<input type="text" name="nombre" value="${bean.nombre}"/>
 			</div>
 		</div>	
 		<div id="footer">
-			<input value="Aceptar" type="submit">
-			<input id="cancelButton" value="Cancelar" type="button">
-			<a id="backLink" style="display: none;" href="${pageContext.request.contextPath}/searchEntity.htm?entityName=Incidencia"></a>
+			<c:if test="${read == null || read == false}">
+				<input value="Aceptar" type="submit">
+				<input id="cancelButton" value="Cancelar" type="button">
+			</c:if>
+			<c:if test="${read == true }">
+				<input id="backButton" type="button" value="Volver"/>
+			</c:if>
+			<a id="backLink" style="display: none;" href="${pageContext.request.contextPath}/searchEntity.htm?entityName="<%=TipoIncidencia.class.getName() %>></a>
 		</div>
 	</form>
 </body>

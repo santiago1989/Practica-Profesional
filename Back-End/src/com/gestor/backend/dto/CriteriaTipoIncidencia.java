@@ -1,10 +1,6 @@
 package com.gestor.backend.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Criterion;
 
 import com.gestor.backend.util.SessionSingletion;
 import com.gestor.entidades.TipoIncidencia;
