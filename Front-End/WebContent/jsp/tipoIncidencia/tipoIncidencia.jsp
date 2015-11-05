@@ -24,7 +24,14 @@ $( document ).ready(function() {
 <body>
 	<jsp:include page="../comon/menu.jsp"/>
 	<jsp:include page="../comon/alert.jsp"/>
-	<form action="${pageContext.request.contextPath}/saveEntity.htm" method="post">
+		<c:choose>
+			<c:when test="${update != true}">
+				<form action="${pageContext.request.contextPath}/saveEntity.htm" method="post">
+			</c:when>
+			<c:otherwise>
+				<form action="${pageContext.request.contextPath}/updateEntity.htm" method="post">
+			</c:otherwise>
+		</c:choose>
 		<input name="entityName" type="hidden" value="<%=TipoIncidencia.class.getSimpleName()%>"/>
 		<div id="frame">
 			<c:if test="${read || update}">

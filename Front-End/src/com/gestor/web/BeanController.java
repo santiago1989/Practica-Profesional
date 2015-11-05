@@ -8,6 +8,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -298,8 +303,8 @@ public class BeanController {
 	@RequestMapping("/readOrUpdateTicketType")
 	public ModelAndView readOrUpdateTicketType(HttpServletRequest request){
 		Map<String,Object> model = new HashMap<String,Object>();
-		String view = loadNavigationMap.get(TipoIncidencia.class.getSimpleName());
-		return new ModelAndView(view,model);
+		Integer id = Integer.parseInt(request.getParameter(ENTITY_ID));
+		return update(request, model, id, TipoIncidencia.class);
 	}
 	
 	private void showPopup(HttpServletRequest request,String text,PopupType type){
@@ -336,6 +341,21 @@ public class BeanController {
 		model.put(READ_BEAN,incidencia);
 		model.put(UPDATE_FLAG,Boolean.TRUE);
 		model.put(READ_FLAG,Boolean.FALSE);
+		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class.getSimpleName()));
+		return new ModelAndView(TICKET_DATA_LOAD,model);
+	}
+	
+	@RequestMapping("adjuntar")
+	public ModelAndView adjuntar(HttpServletRequest request){
+		Map<String,Object> model = new HashMap<String,Object>();
+		FileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		try {
+			List<FileItem> fields = upload.parseRequest(request);
+		} catch (FileUploadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class.getSimpleName()));
 		return new ModelAndView(TICKET_DATA_LOAD,model);
 	}

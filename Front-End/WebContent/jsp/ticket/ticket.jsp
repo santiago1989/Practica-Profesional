@@ -177,5 +177,6 @@ $( document ).ready(function() {
 		</div>
 	</form>
 	<jsp:include page="foro.jsp"/>
+	<jsp:include page="adjuntos.jsp"/>
 </body>
 </html>

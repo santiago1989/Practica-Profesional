@@ -1,5 +1,7 @@
 package com.gestor.entidades;
 
+import com.gestor.common.util.FileUtils;
+
 public class Adjunto {
 	
 	private int id;
@@ -30,5 +32,13 @@ public class Adjunto {
 
 	public void setIncidencia(Incidencia incidencia) {
 		this.incidencia = incidencia;
+	}
+	
+	public String getFileName(){
+		return FileUtils.getFileName(this.url);
+	}
+
+	public String getFileExtension(){
+		return FileUtils.getFileExtension(this.url);
 	}
 }
