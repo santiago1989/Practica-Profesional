@@ -1,5 +1,9 @@
 package com.gestor.web;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,12 +11,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,8 +30,11 @@ import com.gestor.backend.dto.CriteriaUsuario;
 import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
+import com.gestor.common.enums.ContentType;
 import com.gestor.common.interfaces.Identificable;
+import com.gestor.common.util.FileUtils;
 import com.gestor.common.util.Utils;
+import com.gestor.entidades.Adjunto;
 import com.gestor.entidades.Incidencia;
 import com.gestor.entidades.Nota;
 import com.gestor.entidades.TipoIncidencia;
@@ -35,6 +44,7 @@ import com.gestor.web.dto.MapperResult;
 import com.gestor.web.dto.Popup;
 import com.gestor.web.dto.UsuarioCollectionsBean;
 import com.gestor.web.enums.PopupType;
+import com.gestor.web.io.utils.ServletIOUtils;
 import com.gestor.web.mapper.RequestMapper;
 import com.gestor.web.seguridad.Usuario;
 import com.gestor.web.utils.Constants;
@@ -70,6 +80,10 @@ public class BeanController {
 	
 	private static final String TICKET_DATA_LOAD = "/ticket/ticket";
 	
+	private static final String TIPO_TICKET_DATA_LOAD = "/tipoIncidencia/tipoIncidencia";
+	
+	private static final String TIPO_TICKET_SEARCH = "/tipoIncidencia/tipoIncidenciaSearch";
+
 	private static final String LOGIN_VIEW = "login";
 	
 	private static final String HOME_VIEW = "home";
@@ -88,9 +102,11 @@ public class BeanController {
 //		ACA SE AGREGAN LAS REGLAS DE NAVEGACION DEL SITIO
 		searchNavigationMap.put(Incidencia.class.getName(),TICKET_SEARCH);
 		searchNavigationMap.put(Usuario.class.getName(),USER_SEARCH);
+		searchNavigationMap.put(TipoIncidencia.class.getName(),TIPO_TICKET_SEARCH);
 		
 		loadNavigationMap.put(Usuario.class.getSimpleName(),USER_DATA_LOAD);
 		loadNavigationMap.put(Incidencia.class.getSimpleName(),TICKET_DATA_LOAD);
+		loadNavigationMap.put(TipoIncidencia.class.getSimpleName(),TIPO_TICKET_DATA_LOAD);
 
 		
 		collectionsBeanMap.put(Usuario.class.getSimpleName(),new UsuarioCollectionsBean(service));
@@ -109,6 +125,7 @@ public class BeanController {
 		Usuario usuario = (Usuario)service.get(Usuario.class,legajo);
 		if(usuario != null && usuario.getContrasena().equals(password)){
 			request.getSession(true).setAttribute(Constants.USER_SESSION,usuario);
+			request.getSession().setAttribute("generalBean",Constants.BASE_DIR);
 			return new ModelAndView(HOME_VIEW);	
 		}else{
 			showPopup(request,"Usuario/Contraseña incorrectos",PopupType.ERROR);
@@ -337,25 +354,51 @@ public class BeanController {
 		service.eliminar(nota);
 		Incidencia incidencia = nota.getIncidencia();
 		incidencia.removeNota(nota);
+		return returnToUpdateTicket(incidencia, request);	
+	}
+	
+	@RequestMapping("/adjuntar")
+	public ModelAndView adjuntar(HttpServletRequest request){
+		Integer numeroIncidencia = Integer.parseInt(request.getParameter("incidencia"));
+		FileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		try {
+			Incidencia incidencia = service.get(Incidencia.class,numeroIncidencia);
+			List<FileItem> files = upload.parseRequest(request);
+			List<Adjunto> adjuntos = ServletIOUtils.writeFiles(files, incidencia);
+			service.guardar(adjuntos);
+			incidencia.addAdjuntos(adjuntos);
+			return returnToUpdateTicket(incidencia, request);
+		} catch (FileUploadException | IOException e) {
+			e.printStackTrace();
+			return new ModelAndView(ERROR_VIEW);
+		}
+	}
+	
+	@RequestMapping("/descargar")
+	public ModelAndView descargar(HttpServletRequest request,HttpServletResponse response){
+		String url = request.getParameter("url");
+		Integer numeroIncidencia = Integer.parseInt(request.getParameter("incidencia"));
+		try{
+			Incidencia incidencia = service.get(Incidencia.class,numeroIncidencia);
+			String contentType = ContentType.lookUp(FileUtils.getFileExtension(url)).getMimeType();
+			response.setContentType(contentType);
+			InputStream input = new FileInputStream(url);
+			OutputStream output = response.getOutputStream();
+			IOUtils.copy(input, output);
+			response.flushBuffer();
+			return returnToUpdateTicket(incidencia, request);
+		}catch(IOException ioe){
+			ioe.printStackTrace();
+			return new ModelAndView(ERROR_VIEW);
+		}
+	}
+	
+	private ModelAndView returnToUpdateTicket(Incidencia incidencia,HttpServletRequest request){
 		Map<String,Object> model = new HashMap<String,Object>();
 		model.put(READ_BEAN,incidencia);
 		model.put(UPDATE_FLAG,Boolean.TRUE);
 		model.put(READ_FLAG,Boolean.FALSE);
-		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class.getSimpleName()));
-		return new ModelAndView(TICKET_DATA_LOAD,model);
-	}
-	
-	@RequestMapping("adjuntar")
-	public ModelAndView adjuntar(HttpServletRequest request){
-		Map<String,Object> model = new HashMap<String,Object>();
-		FileItemFactory factory = new DiskFileItemFactory();
-		ServletFileUpload upload = new ServletFileUpload(factory);
-		try {
-			List<FileItem> fields = upload.parseRequest(request);
-		} catch (FileUploadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class.getSimpleName()));
 		return new ModelAndView(TICKET_DATA_LOAD,model);
 	}

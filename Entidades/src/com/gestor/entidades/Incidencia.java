@@ -1,5 +1,6 @@
 package com.gestor.entidades;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -152,6 +153,10 @@ public class Incidencia implements Identificable{
 	
 	public void addAdjunto(Adjunto adjunto){
 		adjuntos.add(adjunto);
+	}
+	
+	public void addAdjuntos(Collection<Adjunto> adjunto){
+		adjuntos.addAll(adjuntos);
 	}
 
 	@Override

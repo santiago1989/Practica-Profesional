@@ -3,16 +3,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:if test="${update == true && bean != null}">
 	<div>
-		<form action="${pageContext.request.contextPath}/adjuntar.htm" method="post" enctype="multipart/form-data">
+		<form action="${pageContext.request.contextPath}/adjuntar.htm?incidencia=${bean.id}" method="post" enctype="multipart/form-data">
 			<input name="filePath" type="file"/>
 			<input type="submit" value="Subir"/>
 		</form>
 	</div>
 	<c:forEach var="item" items="${bean.adjuntos}">
 		<div>
-			<a href="${pageContext.request.contextPath}/${item.url}">
-				${item.fileName}
-			</a>
+<%-- 			<a href="${pageContext.request.contextPath}/download.htm?url=${item.url}&incidencia=${bean.id}"> --%>
+<%-- 				${item.fileName} --%>
+<!-- 			</a> -->
+				${item.url}
 		</div>
 	</c:forEach>
 </c:if>

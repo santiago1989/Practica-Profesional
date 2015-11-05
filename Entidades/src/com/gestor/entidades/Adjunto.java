@@ -10,6 +10,17 @@ public class Adjunto {
 	
 	private Incidencia incidencia;
 
+	public Adjunto(){
+	}
+	
+	public Adjunto(String url, Incidencia incidencia) {
+		super();
+		this.url = url;
+		this.incidencia = incidencia;
+	}
+
+
+
 	public int getId() {
 		return id;
 	}

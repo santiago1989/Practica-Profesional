@@ -27,6 +27,13 @@ public class ServiceImpl implements Service{
 	public void guardar(Object entidad) {
 		dao.guardar(entidad);
 	}
+	
+	@Override
+	public <T> void guardar(List<T> objects) {
+		for (T entity : objects) {
+			guardar(entity);
+		}
+	}	
 
 	@Override
 	public void actualizar(Object entidad) {

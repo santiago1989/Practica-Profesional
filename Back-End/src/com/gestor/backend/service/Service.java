@@ -12,6 +12,8 @@ public interface Service {
 	
 	void guardar(Object object);
 	
+	<T> void guardar(List<T> objects);
+	
 	void actualizar(Object object);
 	
 	void eliminar(Identificable object);

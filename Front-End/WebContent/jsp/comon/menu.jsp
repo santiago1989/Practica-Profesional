@@ -1,5 +1,6 @@
 <%@page import="com.gestor.web.seguridad.Usuario"%>
 <%@page import="com.gestor.entidades.Incidencia"%>
+<%@page import="com.gestor.entidades.TipoIncidencia"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -21,8 +22,8 @@
 		                <li><a href="${pageContext.request.contextPath}/newEntity.htm?entityName=<%=Incidencia.class.getSimpleName()%>">Nuevo Ticket</a></li>
 						<li><a href="#">Tipos de Tickets</a>
 		                     <ul>
-		                          <li><a href="#">Nuevo Tipo de Ticket</a></li>
-		                          <li><a href="#">Administración Tipo de Ticket</a></li>
+		                          <li><a href="${pageContext.request.contextPath}/newEntity.htm?entityName=<%=TipoIncidencia.class.getSimpleName()%>">Nuevo Tipo de Ticket</a></li>
+		                          <li><a href="${pageContext.request.contextPath}/searchEntity.htm?entityName=<%=TipoIncidencia.class.getName()%>">Administración Tipo de Ticket</a></li>
 		                      </ul>
 		                </li>
 		                <li><a href="#">Usuarios</a>
