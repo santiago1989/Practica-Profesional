@@ -1,5 +1,7 @@
 package com.gestor.entidades;
 
+import org.apache.commons.io.FilenameUtils;
+
 import com.gestor.common.util.FileUtils;
 
 public class Adjunto {
@@ -46,10 +48,10 @@ public class Adjunto {
 	}
 	
 	public String getFileName(){
-		return FileUtils.getFileName(this.url);
+		return FilenameUtils.getName(this.url);
 	}
 
 	public String getFileExtension(){
-		return FileUtils.getFileExtension(this.url);
+		return FilenameUtils.getExtension(this.url);
 	}
 }

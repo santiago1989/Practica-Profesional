@@ -18,6 +18,7 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,6 @@ import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
 import com.gestor.common.enums.ContentType;
 import com.gestor.common.interfaces.Identificable;
-import com.gestor.common.util.FileUtils;
 import com.gestor.common.util.Utils;
 import com.gestor.entidades.Adjunto;
 import com.gestor.entidades.Incidencia;
@@ -376,21 +376,21 @@ public class BeanController {
 	}
 	
 	@RequestMapping("/descargar")
-	public ModelAndView descargar(HttpServletRequest request,HttpServletResponse response){
+	public void descargar(HttpServletRequest request,HttpServletResponse response){
 		String url = request.getParameter("url");
-		Integer numeroIncidencia = Integer.parseInt(request.getParameter("incidencia"));
+//		Integer numeroIncidencia = Integer.parseInt(request.getParameter("incidencia"));
 		try{
-			Incidencia incidencia = service.get(Incidencia.class,numeroIncidencia);
-			String contentType = ContentType.lookUp(FileUtils.getFileExtension(url)).getMimeType();
+//			Incidencia incidencia = service.get(Incidencia.class,numeroIncidencia);
+			String contentType = ContentType.lookUp(FilenameUtils.getExtension(url)).getMimeType();
 			response.setContentType(contentType);
 			InputStream input = new FileInputStream(url);
 			OutputStream output = response.getOutputStream();
 			IOUtils.copy(input, output);
 			response.flushBuffer();
-			return returnToUpdateTicket(incidencia, request);
+//			return returnToUpdateTicket(incidencia, request);
 		}catch(IOException ioe){
 			ioe.printStackTrace();
-			return new ModelAndView(ERROR_VIEW);
+//			return new ModelAndView(ERROR_VIEW);
 		}
 	}
 	

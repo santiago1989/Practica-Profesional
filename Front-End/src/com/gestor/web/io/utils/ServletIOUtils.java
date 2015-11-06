@@ -1,5 +1,6 @@
 package com.gestor.web.io.utils;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,7 @@ import java.util.List;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
 
+import com.gestor.common.util.FileUtils;
 import com.gestor.entidades.Adjunto;
 import com.gestor.entidades.Incidencia;
 import com.gestor.web.utils.Constants;
@@ -29,7 +31,8 @@ public class ServletIOUtils {
 	public static Adjunto writeFile(FileItem file,Incidencia incidencia) throws IOException{
 		String relativePath = RELATIVE_URL.concat(file.getName());
 		String absolutePath = Constants.BASE_DIR.concat(relativePath);
-		OutputStream output = new FileOutputStream(absolutePath);
+		File ioFile = FileUtils.buildFile(absolutePath);
+		OutputStream output = new FileOutputStream(ioFile);
 		InputStream input = file.getInputStream();
 		IOUtils.copy(input, output);
 		return new Adjunto(absolutePath, incidencia);

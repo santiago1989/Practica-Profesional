@@ -2,7 +2,7 @@ package com.gestor.common.enums;
 
 public enum ContentType {
 	
-	TXT(".txt","txt/plain"),
+	TXT(".txt","text/plain"),
 	XLS(".xls","xls"),
 	PDF("",""),
 	DOC("","");
@@ -35,7 +35,7 @@ public enum ContentType {
 	
 	public static ContentType lookUp(String extension){
 		for (ContentType contentType : ContentType.values()) {
-			if(contentType.getDescription().equals(extension)){
+			if(contentType.getDescription().endsWith(extension)){
 				return contentType;
 			}
 		}

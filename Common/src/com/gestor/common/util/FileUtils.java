@@ -1,5 +1,6 @@
 package com.gestor.common.util;
 
+import java.io.File;
 import java.util.regex.Pattern;
 
 public class FileUtils {
@@ -14,5 +15,14 @@ public class FileUtils {
 
 	public static String getFileExtension(String url){
 		return patternExtension.matcher(url).group(0);
+	}
+	
+	public static File buildFile(String path){
+		File file = new File(path);
+		File directory = file.getParentFile();
+		if(!file.exists()){
+			directory.mkdirs();
+		}
+		return file;
 	}
 }

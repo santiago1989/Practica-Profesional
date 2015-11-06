@@ -10,10 +10,9 @@
 	</div>
 	<c:forEach var="item" items="${bean.adjuntos}">
 		<div>
-<%-- 			<a href="${pageContext.request.contextPath}/download.htm?url=${item.url}&incidencia=${bean.id}"> --%>
-<%-- 				${item.fileName} --%>
-<!-- 			</a> -->
-				${item.url}
+			<a href="${pageContext.request.contextPath}/descargar.htm?url=${item.url}&incidencia=${bean.id}">
+				${item.fileName}
+			</a>
 		</div>
 	</c:forEach>
 </c:if>
