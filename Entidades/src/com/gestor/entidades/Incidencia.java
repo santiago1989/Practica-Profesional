@@ -155,8 +155,8 @@ public class Incidencia implements Identificable{
 		adjuntos.add(adjunto);
 	}
 	
-	public void addAdjuntos(Collection<Adjunto> adjunto){
-		adjuntos.addAll(adjuntos);
+	public void addAdjuntos(Collection<Adjunto> adjuntos){
+		this.adjuntos.addAll(adjuntos);
 	}
 
 	@Override

@@ -32,6 +32,7 @@ import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
 import com.gestor.common.enums.ContentType;
+import com.gestor.common.enums.RolType;
 import com.gestor.common.interfaces.Identificable;
 import com.gestor.common.util.Utils;
 import com.gestor.entidades.Adjunto;
@@ -54,13 +55,13 @@ public class BeanController {
 
 	private static Service service = new ServiceImpl();
 	
-	private static Map<String,String> searchNavigationMap = new HashMap<String,String>();
+	private static Map<Class<?>,String> searchNavigationMap = new HashMap<Class<?>,String>();
 	
-	private static Map<String,String> loadNavigationMap = new HashMap<String,String>();	
+	private static Map<Class<?>,String> loadNavigationMap = new HashMap<Class<?>,String>();	
 	
-	private static Map<String,CollectionsBean> collectionsBeanMap = new HashMap<String, CollectionsBean>();
+	private static Map<Class<?>,CollectionsBean> collectionsBeanMap = new HashMap<Class<?>, CollectionsBean>();
 	
-	private static Map<String,String> popupTextMap = new HashMap<String,String>();
+	private static Map<Class<?>,String> popupTextMap = new HashMap<Class<?>,String>();
 
 	private static 	final String UPDATE_FLAG = "update";
 	
@@ -100,20 +101,20 @@ public class BeanController {
 	
 	static{
 //		ACA SE AGREGAN LAS REGLAS DE NAVEGACION DEL SITIO
-		searchNavigationMap.put(Incidencia.class.getName(),TICKET_SEARCH);
-		searchNavigationMap.put(Usuario.class.getName(),USER_SEARCH);
-		searchNavigationMap.put(TipoIncidencia.class.getName(),TIPO_TICKET_SEARCH);
+		searchNavigationMap.put(Incidencia.class,TICKET_SEARCH);
+		searchNavigationMap.put(Usuario.class,USER_SEARCH);
+		searchNavigationMap.put(TipoIncidencia.class,TIPO_TICKET_SEARCH);
 		
-		loadNavigationMap.put(Usuario.class.getSimpleName(),USER_DATA_LOAD);
-		loadNavigationMap.put(Incidencia.class.getSimpleName(),TICKET_DATA_LOAD);
-		loadNavigationMap.put(TipoIncidencia.class.getSimpleName(),TIPO_TICKET_DATA_LOAD);
+		loadNavigationMap.put(Usuario.class,USER_DATA_LOAD);
+		loadNavigationMap.put(Incidencia.class,TICKET_DATA_LOAD);
+		loadNavigationMap.put(TipoIncidencia.class,TIPO_TICKET_DATA_LOAD);
 
 		
-		collectionsBeanMap.put(Usuario.class.getSimpleName(),new UsuarioCollectionsBean(service));
+		collectionsBeanMap.put(Usuario.class,new UsuarioCollectionsBean(service));
 //		TODO agregar el filro en la busqueda de responsables.
-		collectionsBeanMap.put(Incidencia.class.getSimpleName(),new IncidenciaCollectionsBean(service));
-		popupTextMap.put(Usuario.class.getSimpleName(),"Se dio de alta correctamente el usuario, con legajo: ");
-		popupTextMap.put(Incidencia.class.getSimpleName(),"Se dio de alta correctamente la incidencia, con número: ");
+		collectionsBeanMap.put(Incidencia.class,new IncidenciaCollectionsBean(service));
+		popupTextMap.put(Usuario.class,"Se dio de alta correctamente el usuario, con legajo: ");
+		popupTextMap.put(Incidencia.class,"Se dio de alta correctamente la incidencia, con número: ");
 	}
 	
 	@RequestMapping("/login")
@@ -125,7 +126,9 @@ public class BeanController {
 		Usuario usuario = (Usuario)service.get(Usuario.class,legajo);
 		if(usuario != null && usuario.getContrasena().equals(password)){
 			request.getSession(true).setAttribute(Constants.USER_SESSION,usuario);
-			request.getSession().setAttribute("generalBean",Constants.BASE_DIR);
+			request.getSession(true).setAttribute("administrativo",RolType.ADMINISTRATIVO.getCode());
+			request.getSession(true).setAttribute("superusuario",RolType.SUPERUSUARIO.getCode());
+			request.getSession(true).setAttribute("responsable",RolType.RESPONSABLE.getCode());			
 			return new ModelAndView(HOME_VIEW);	
 		}else{
 			showPopup(request,"Usuario/Contraseña incorrectos",PopupType.ERROR);
@@ -165,14 +168,14 @@ public class BeanController {
 			MapperResult result = new RequestMapper(claz).build(request);
 			if(result.getErrorMessages().isEmpty()){
 				service.guardar(result.getEntity());
-				String viewPath = searchNavigationMap.get(clazName);
-				showPopup(request,popupTextMap.get(claz.getSimpleName()).concat(String.valueOf(result.getEntity().getId())),PopupType.INFORMATION);
+				String viewPath = searchNavigationMap.get(claz);
+				showPopup(request,popupTextMap.get(claz).concat(String.valueOf(result.getEntity().getId())),PopupType.INFORMATION);
 				return new ModelAndView(viewPath);
 			}
 			else{
-				String viewPath = loadNavigationMap.get(claz.getSimpleName());
+				String viewPath = loadNavigationMap.get(claz);
 				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
-				model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(clazName));
+				model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
 				model.put(READ_BEAN,result.getEntity());
 				return new ModelAndView(viewPath,model);
 			}
@@ -181,8 +184,8 @@ public class BeanController {
 		}
 	}
 
-	private CollectionsBean getCollectionsBean(String clazName) {
-		final CollectionsBean collectionBean = collectionsBeanMap.get(clazName);
+	private CollectionsBean getCollectionsBean(Class<?> claz) {
+		final CollectionsBean collectionBean = collectionsBeanMap.get(claz);
 		collectionBean.refreshCollections();
 		return collectionBean;
 	}
@@ -201,13 +204,13 @@ public class BeanController {
 				oldEntity.copyFrom(entity);
 				service.actualizar(oldEntity);
 				showPopup(request,"Se actualizo correctamente",PopupType.INFORMATION);
-				viewPath = searchNavigationMap.get(clazName);
+				viewPath = searchNavigationMap.get(claz);
 				return new ModelAndView(viewPath, model);
 			}else{
-				viewPath = loadNavigationMap.get(claz.getSimpleName());
+				viewPath = loadNavigationMap.get(claz);
 				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
-				model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(clazName));
-				return new ModelAndView(viewPath, model);				
+				model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
+				return new ModelAndView(viewPath, model);
 			}
 		} catch (ClassNotFoundException e) {
 			return new ModelAndView(ERROR_VIEW);
@@ -217,16 +220,17 @@ public class BeanController {
 	
 	private ModelAndView removeEntity(HttpServletRequest request,Class<?> claz){
 		Map<String,Object> model = new HashMap<String, Object>();
-		String viewPath = searchNavigationMap.get(claz.getName());
+		String viewPath = searchNavigationMap.get(claz);
 		Integer id = Integer.parseInt(request.getParameter(ENTITY_ID));
 		try {
 			Identificable object = (Identificable)service.get(claz, id);
 			service.eliminar(object);
 			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
-			model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz.getSimpleName()));
+			model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
 			showPopup(request,"Eliminación realizada correctamente",PopupType.INFORMATION);
 			return new ModelAndView(viewPath);
 		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
 			return new ModelAndView(ERROR_VIEW);
 		}
 	}
@@ -254,11 +258,11 @@ public class BeanController {
 	
 	private ModelAndView getResults(HttpServletRequest request,BaseCriteria criteria,Class<?> claz){
 		Map<String,Object> model = new HashMap<String,Object>();
-		String viewPath = searchNavigationMap.get(claz.getName());
+		String viewPath = searchNavigationMap.get(claz);
 		List collection = (List) service.buscar(claz, criteria.getCriteria());
 		model.put(COLLECTION,collection);
 		model.put(SEARCH_BEAN_REQUEST,criteria);
-		model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz.getSimpleName()));
+		model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
 		if(collection.isEmpty()){
 			showPopup(request, "No se han encontrado resultados, para la busqueda realizada.",PopupType.INFORMATION);
 		}
@@ -272,22 +276,28 @@ public class BeanController {
 		try {
 			Class<?> claz = Class.forName(clazName);
 			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
-			model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz.getSimpleName()));
+			model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
+			String viewPath = searchNavigationMap.get(claz);
+			return new ModelAndView(viewPath,model);
 		} catch (InstantiationException | IllegalAccessException
 				| ClassNotFoundException e) {
-			// TODO agreggar loguer
 			e.printStackTrace();
+			return new ModelAndView(ERROR_VIEW);
 		}
-		String viewPath = searchNavigationMap.get(clazName);
-		return new ModelAndView(viewPath,model);
 	}
 
 	@RequestMapping("/newEntity")
 	public ModelAndView newEntity(HttpServletRequest request){
 		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
-		String viewPath = loadNavigationMap.get(clazName);
-		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(clazName));
-		return new ModelAndView(viewPath);
+		try {
+			Class<?> claz = Class.forName(clazName);
+			String viewPath = loadNavigationMap.get(claz);
+			request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
+			return new ModelAndView(viewPath);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return new ModelAndView(ERROR_VIEW);
+		}
 	}
 
 	
@@ -305,8 +315,8 @@ public class BeanController {
 		model.put(READ_BEAN,bean);
 		model.put(UPDATE_FLAG,update);
 		model.put(READ_FLAG,read);
-		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz.getSimpleName()));
-		String view = loadNavigationMap.get(claz.getSimpleName());
+		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
+		String view = loadNavigationMap.get(claz);
 		return new ModelAndView(view, model);
 	}
 	
@@ -343,7 +353,7 @@ public class BeanController {
 		model.put(READ_BEAN,incidencia);
 		model.put(UPDATE_FLAG,Boolean.TRUE);
 		model.put(READ_FLAG,Boolean.FALSE);
-		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class.getSimpleName()));
+		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class));
 		return new ModelAndView(TICKET_DATA_LOAD,model);
 	}
 	
@@ -378,19 +388,15 @@ public class BeanController {
 	@RequestMapping("/descargar")
 	public void descargar(HttpServletRequest request,HttpServletResponse response){
 		String url = request.getParameter("url");
-//		Integer numeroIncidencia = Integer.parseInt(request.getParameter("incidencia"));
 		try{
-//			Incidencia incidencia = service.get(Incidencia.class,numeroIncidencia);
 			String contentType = ContentType.lookUp(FilenameUtils.getExtension(url)).getMimeType();
 			response.setContentType(contentType);
 			InputStream input = new FileInputStream(url);
 			OutputStream output = response.getOutputStream();
 			IOUtils.copy(input, output);
 			response.flushBuffer();
-//			return returnToUpdateTicket(incidencia, request);
 		}catch(IOException ioe){
 			ioe.printStackTrace();
-//			return new ModelAndView(ERROR_VIEW);
 		}
 	}
 	
@@ -399,7 +405,30 @@ public class BeanController {
 		model.put(READ_BEAN,incidencia);
 		model.put(UPDATE_FLAG,Boolean.TRUE);
 		model.put(READ_FLAG,Boolean.FALSE);
-		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class.getSimpleName()));
+		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class));
 		return new ModelAndView(TICKET_DATA_LOAD,model);
+	}
+	
+	@RequestMapping("changePassword")
+	public ModelAndView changePassword(HttpServletRequest request){
+		Map<String,Object> model = new HashMap<String,Object>();
+		Integer legajo = Integer.parseInt(request.getParameter("legajo"));
+		Usuario usuario = service.get(Usuario.class,legajo);
+		String oldPass = request.getParameter("oldPass");
+		String newPass = request.getParameter("newPass");
+		String newPassConf = request.getParameter("newPassConf");
+		if(usuario.getContrasena().equals(oldPass) && !Utils.isNullOrEmpty(newPass) && newPass.equals(newPassConf)){
+			usuario.setContrasena(newPass);
+			service.guardar(usuario);
+			showPopup(request,"Contraseña cambiada correctamente",PopupType.INFORMATION);
+		}else{
+			showPopup(request, "Las contraseñas no coinciden.",PopupType.ERROR);
+		}
+		model.put(READ_BEAN,usuario);
+		model.put(UPDATE_FLAG,Boolean.TRUE);
+		model.put(READ_FLAG,Boolean.FALSE);
+		model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Usuario.class));
+		return new ModelAndView(USER_DATA_LOAD, model);
+
 	}
 }

@@ -28,7 +28,7 @@
 					</div>
 					</c:forEach>
 					<div>
-						<textarea rows="4" cols="10" name="comentario" spellcheck="true">
+						<textarea rows="4" cols="10" name="comentario" spellcheck="true" draggable="true">
 						</textarea>
 					</div>
 					<input value="Post" type="submit"/>

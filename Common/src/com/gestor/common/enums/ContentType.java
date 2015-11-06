@@ -3,9 +3,11 @@ package com.gestor.common.enums;
 public enum ContentType {
 	
 	TXT(".txt","text/plain"),
-	XLS(".xls","xls"),
-	PDF("",""),
-	DOC("","");
+	XLS(".xls","application/vnd.ms-excel"),
+	PDF(".pdf","application/pdf"),
+	DOC(".doc","application/msword"),
+	PNG(".png","image/png"),
+	JPG(".jpg","image/jpeg");
 	
 	
 	private String description;

@@ -31,7 +31,7 @@
         </property>
         <set name="adjuntos" table="ADJUNTOS" inverse="false">
             <key>
-                <column name="id" />
+                <column name="idIncidencia" />
             </key>
             <one-to-many class="com.gestor.entidades.Adjunto"/>
         </set>

@@ -117,6 +117,15 @@ public class Usuario implements Identificable{
 	public String getRolesDescription(){
 		return Arrays.toString(roles.toArray());
 	}
+	
+	public String getRolesValues(){
+		StringBuilder builder = new StringBuilder();
+		for (Rol rol : roles) {
+			builder.append(rol.getCode());
+			builder.append(",");
+		}
+		return builder.toString();
+	}
 
 	@Override
 	public String toString() {

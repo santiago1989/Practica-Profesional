@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Alta de usuario</title>
+<script type="text/javascript" src="http://malsup.github.io/jquery.blockUI.js"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
 	$("#cancelButton").click(function(){
@@ -24,6 +25,19 @@ $( document ).ready(function() {
 		window.location.href = href;
 	});
 });
+function popupDiv(idDiv){
+	$.blockUI({
+	  message: $("#" + idDiv),
+
+	  css: {
+	    position: 'absolute',
+	  }
+	});
+}
+function cerrarDiv(){
+	$.unblockUI();
+}
+
 </script>
 </head>
 <body>
@@ -160,6 +174,9 @@ $( document ).ready(function() {
 			<c:if test="${read == null || read == false}">
 				<input value="Aceptar" type="submit">
 				<input id="cancelButton" value="Cancelar" type="button">
+				<c:if test="${update == true}">
+					<input type="button" value="Cambiar Contraseña" onclick="popupDiv('passChange')"/>
+				</c:if>
 			</c:if>
 			<c:if test="${read == true }">
 				<input id="backButton" type="button" value="Volver"/>
@@ -167,5 +184,6 @@ $( document ).ready(function() {
 			<a id="backLink" style="display: none;" href="${pageContext.request.contextPath}/searchEntity.htm?entityName=<%=Usuario.class.getName()%>"></a>
 		</div>
 	</form>
+	<jsp:include page="passChange.jsp"/>
 </body>
 </html>
