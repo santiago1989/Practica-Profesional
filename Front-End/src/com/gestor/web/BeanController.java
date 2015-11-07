@@ -43,6 +43,7 @@ import com.gestor.web.dto.CollectionsBean;
 import com.gestor.web.dto.IncidenciaCollectionsBean;
 import com.gestor.web.dto.MapperResult;
 import com.gestor.web.dto.Popup;
+import com.gestor.web.dto.TipoIncidenciaCollectionsBean;
 import com.gestor.web.dto.UsuarioCollectionsBean;
 import com.gestor.web.enums.PopupType;
 import com.gestor.web.io.utils.ServletIOUtils;
@@ -111,10 +112,12 @@ public class BeanController {
 
 		
 		collectionsBeanMap.put(Usuario.class,new UsuarioCollectionsBean(service));
-//		TODO agregar el filro en la busqueda de responsables.
 		collectionsBeanMap.put(Incidencia.class,new IncidenciaCollectionsBean(service));
+		collectionsBeanMap.put(TipoIncidencia.class,new TipoIncidenciaCollectionsBean(service));
+
 		popupTextMap.put(Usuario.class,"Se dio de alta correctamente el usuario, con legajo: ");
 		popupTextMap.put(Incidencia.class,"Se dio de alta correctamente la incidencia, con número: ");
+		popupTextMap.put(TipoIncidencia.class,"Se dio de alta correctamente el tipoIncidencia con númmero");
 	}
 	
 	@RequestMapping("/login")

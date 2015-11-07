@@ -7,6 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <jsp:include page="../comon/head.jsp"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jquery/jquery-ui.min.css">
 <title>Tipo de incidencia</title>
 <script type="text/javascript">
 $( document ).ready(function() {
@@ -32,13 +34,14 @@ $( document ).ready(function() {
 				<form action="${pageContext.request.contextPath}/updateEntity.htm" method="post">
 			</c:otherwise>
 		</c:choose>
-		<input name="entityName" type="hidden" value="<%=TipoIncidencia.class.getSimpleName()%>"/>
-		<div id="frame">
+		<input name="entityName" type="hidden" value="<%=TipoIncidencia.class.getName()%>"/>
+		<div id="frame" class="parent">
 			<c:if test="${read || update}">
 				<div>
 					<!-- Código -->
 					<span>ID</span>
-					<input type="text" value="${bean.id}"/>
+					<input type="text" value="${bean.id}" disabled="disabled"/>
+					<input type="hidden" name="id" value="${bean.id}"/>
 				</div>
 			</c:if>
 			<div>
@@ -46,17 +49,17 @@ $( document ).ready(function() {
 				<span>Nombre</span>
 				<input type="text" name="nombre" value="${bean.nombre}"/>
 			</div>
+			<div id="footer">
+				<c:if test="${read == null || read == false}">
+					<input value="Aceptar" type="submit">
+					<input id="cancelButton" value="Cancelar" type="button">
+				</c:if>
+				<c:if test="${read == true }">
+					<input id="backButton" type="button" value="Volver"/>
+				</c:if>
+				<a id="backLink" style="display: none;" href="${pageContext.request.contextPath}/searchEntity.htm?entityName=<%=TipoIncidencia.class.getName()%>"></a>
+			</div>
 		</div>	
-		<div id="footer">
-			<c:if test="${read == null || read == false}">
-				<input value="Aceptar" type="submit">
-				<input id="cancelButton" value="Cancelar" type="button">
-			</c:if>
-			<c:if test="${read == true }">
-				<input id="backButton" type="button" value="Volver"/>
-			</c:if>
-			<a id="backLink" style="display: none;" href="${pageContext.request.contextPath}/searchEntity.htm?entityName="<%=TipoIncidencia.class.getName() %>></a>
-		</div>
 	</form>
 </body>
 </html>

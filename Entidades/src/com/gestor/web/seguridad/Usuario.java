@@ -18,10 +18,10 @@ public class Usuario implements Identificable{
 	@RequestMapped(regexp="[A-Za-z0-9]+")
 	private String contrasena;
 	
-	@RequestMapped(regexp="[A-z]+")
+	@RequestMapped(regexp="[A-záéíóúÁÉÍÓÚÑñ ]+")
 	private String nombre;
 	
-	@RequestMapped(regexp="[A-z]+")
+	@RequestMapped(regexp="[A-záéíóúÁÉÍÓÚÑñ ]+")
 	private String apellido;
 
 	@RequestMapped(regexp="[0-9]{8}")

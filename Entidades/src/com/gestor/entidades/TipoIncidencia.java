@@ -5,9 +5,10 @@ import com.gestor.common.interfaces.Identificable;
 
 public class TipoIncidencia implements Identificable {
 
+	@RequestMapped(regexp="[0-9]+",required=false)
 	private Integer id;
 	
-	@RequestMapped(regexp="[A-z]+")
+	@RequestMapped(regexp="[A-záéíóúÁÉÍÓÚÑñ ]+")
 	private String nombre;
 
 	public Integer getId() {
@@ -28,8 +29,8 @@ public class TipoIncidencia implements Identificable {
 	}
 	@Override
 	public void copyFrom(Object object) {
-		// TODO Auto-generated method stub
-		
+		TipoIncidencia tipoIncidencia = (TipoIncidencia)object;
+		this.nombre = tipoIncidencia.nombre;
 	}
 	@Override
 	public void setEstado() {

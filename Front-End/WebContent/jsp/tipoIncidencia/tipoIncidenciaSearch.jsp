@@ -9,6 +9,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jmesa.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jquery/jquery-ui.min.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-ui.min.js"></script>
 <jsp:include page="../comon/head.jsp"/>
 <title>B&uacute;squeda de Tipo de Incidencia</title>
 </head>
@@ -16,7 +18,7 @@
 	<jsp:include page="../comon/menu.jsp"/>
 	<jsp:include page="../comon/alert.jsp"/>
 	<form action="${pageContext.request.contextPath}/getTicketsTypeResults.htm" method="post">
-		<div>
+		<div class="parent" style="display: inline-block;">
 			<div>
 				<span>N&uacute;mero:</span>
 				<input name="code" type="text"/>
