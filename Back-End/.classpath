@@ -29,5 +29,6 @@
 	<classpathentry kind="lib" path="/CommonsLibs/hibernate.osgi-3.2.2.ga.jar"/>
 	<classpathentry kind="lib" path="/CommonsLibs/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="/CommonsLibs/mail-1.4.jar"/>
+	<classpathentry kind="lib" path="/CommonsLibs/jasperreports-6.1.1.jar" sourcepath="/CommonsLibs/source/jasper-reports-sources.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
