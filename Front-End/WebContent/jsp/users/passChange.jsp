@@ -1,6 +1,7 @@
 <div id="passChange" style="display: none;" class="parent">
 	<form action="${pageContext.request.contextPath}/changePassword.htm">
-		<input name="legajo" type="hidden" value="${bean.legajo}"/>
+		<input name="viewFrom" type="hidden" value="${viewfrom}"/>
+		<input name="legajo" type="hidden" value="${user.legajo}"/>
 		<div class="child">
 			<div>
 				Anterior Contrase&ntilde;a:

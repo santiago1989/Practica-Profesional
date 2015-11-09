@@ -29,15 +29,15 @@ $( document ).ready(function() {
 		<div class="parent" style="display: inline-block;">			
 			<div>
 				<span>N&uacute;mero</span>
-				<input name="numero" type="text" value="${searchBean.numero}"/>
+				<input name="numero" type="text" value="${resultsIncidencia.criteria.numero}"/>
 			</div>
 			<div>
 				<span>Autor</span>
 				<select name="owner">
 					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.owners}">
+					<c:forEach var="item" items="${collectionIncidencia.owners}">
 						<c:choose>
-							<c:when test="${searchBean.owner == item.legajo}">
+							<c:when test="${resultsIncidencia.criteria.owner == item.legajo}">
 								<option value="${item.legajo}" selected="selected">${item.apellido},${item.nombre}</option>
 							</c:when>
 							<c:otherwise>
@@ -51,9 +51,9 @@ $( document ).ready(function() {
 				<span>Responsable</span>
 				<select name="responsable">
 					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.responsables}">
+					<c:forEach var="item" items="${collectionIncidencia.responsables}">
 						<c:choose>
-							<c:when test="${searchBean.responsable == item.legajo}">
+							<c:when test="${resultsIncidencia.criteria.responsable == item.legajo}">
 								<option value="${item.legajo}" selected="selected">${item.apellido},${item.nombre}</option>
 							</c:when>
 							<c:otherwise>
@@ -67,9 +67,9 @@ $( document ).ready(function() {
 				<span>Tipo de incidencia</span>
 				<select name="tipo">
 					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.tiposIncidencia}">
+					<c:forEach var="item" items="${collectionIncidencia.tiposIncidencia}">
 						<c:choose>
-							<c:when test="${searchBean.tipo == item.id}">
+							<c:when test="${resultsIncidencia.criteria.tipo == item.id}">
 								<option value="${item.id}" selected="selected">${item.nombre}</option>
 							</c:when>
 							<c:otherwise>
@@ -83,9 +83,9 @@ $( document ).ready(function() {
 				<span>Prioridad de incidencia</span>
 				<select name="prioridad">
 					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.prioridadIncidencia}">
+					<c:forEach var="item" items="${collectionIncidencia.prioridadIncidencia}">
 						<c:choose>
-							<c:when test="${searchBean.prioridad == item.id}">
+							<c:when test="${resultsIncidencia.criteria.prioridad == item.id}">
 								<option value="${item.id}" selected="selected">${item.nombre}</option>
 							</c:when>
 							<c:otherwise>
@@ -99,9 +99,9 @@ $( document ).ready(function() {
 				<span>Estado de incidencia</span>
 				<select name="estado">
 					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.estadosIncidencia}">
+					<c:forEach var="item" items="${collectionIncidencia.estadosIncidencia}">
 						<c:choose>
-							<c:when test="${searchBean.estado == item.id}">
+							<c:when test="${resultsIncidencia.criteria.estado == item.id}">
 								<option value="${item.id}" selected="selected">${item.nombre}</option>
 							</c:when>
 							<c:otherwise>
@@ -125,8 +125,8 @@ $( document ).ready(function() {
 				<input type="submit" value="Buscar"/>
 			</div>
 			<div  style="position: relative;left: -82%">
-			    <c:if test="${not empty collection}">
-				     <jmesa:tableModel id="jmesaTag" items="${collection}" exportTypes="csv,excel" 
+			    <c:if test="${not empty resultsIncidencia.results}">
+				     <jmesa:tableModel id="jmesaTag" items="${resultsIncidencia.results}" exportTypes="csv,excel" 
 				       stateAttr="restore" var="bean"> 
 				           <jmesa:htmlTable captionKey="presidents.caption" width="600px">		 
 				                 <jmesa:htmlRow>

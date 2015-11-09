@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gestor.backend.dto.BaseCriteria;
+import com.gestor.backend.dto.BeanResults;
 import com.gestor.backend.dto.CriteriaIncidencia;
 import com.gestor.backend.dto.CriteriaTipoIncidencia;
 import com.gestor.backend.dto.CriteriaUsuario;
@@ -81,8 +82,6 @@ public class BeanController {
 	
 	private static final String READ_BEAN = "bean";
 	
-	private static final String COLLECTION = "collection";
-	
 	private static final String ENTITY_NAME_REQUEST_PARAM = "entityName";
 		
 	private static final String TICKET_SEARCH = "/ticket/ticketsSearch";
@@ -106,10 +105,20 @@ public class BeanController {
 	private static final String ENTITY_ID = "entityId";
 	
 	private static final String SEARCH_BEAN_REQUEST = "searchBean";
-	
-	private static final String COLLECTIONS_BEAN_REQUEST = "collectionsBean";
-	
+		
 	private static final String POPUP_TYPE = "popuptype";
+	
+	private static final String VIEW_FROM = "viewfrom";
+
+	private static final String COLLECTION_PREFIX = "collection";
+
+	private static final String SEARCH_RESULTS_PREFIX = "results";
+	
+	private static final String COLLECTION_USUARIO = COLLECTION_PREFIX.concat(Usuario.class.getSimpleName());
+	
+	private static final String COLLECTION_INCIDENCIA = COLLECTION_PREFIX.concat(Incidencia.class.getSimpleName());
+
+	private static final String COLLECTION_TIPO_INCIDENCIA = COLLECTION_PREFIX.concat(TipoIncidencia.class.getSimpleName());
 	
 	static{
 //		ACA SE AGREGAN LAS REGLAS DE NAVEGACION DEL SITIO
@@ -140,10 +149,14 @@ public class BeanController {
 		Usuario usuario = (Usuario)service.get(Usuario.class,legajo);
 		if(usuario != null && usuario.getContrasena().equals(password)){
 			request.getSession(true).setAttribute(Constants.USER_SESSION,usuario);
-			request.getSession(true).setAttribute("administrativo",RolType.ADMINISTRATIVO.getCode());
-			request.getSession(true).setAttribute("superusuario",RolType.SUPERUSUARIO.getCode());
-			request.getSession(true).setAttribute("responsable",RolType.RESPONSABLE.getCode());			
-			return new ModelAndView(HOME_VIEW);	
+			request.getSession().setAttribute("administrativo",RolType.ADMINISTRATIVO.getCode());
+			request.getSession().setAttribute("superusuario",RolType.SUPERUSUARIO.getCode());
+			request.getSession().setAttribute("responsable",RolType.RESPONSABLE.getCode());
+			request.getSession().setAttribute(COLLECTION_USUARIO,getCollectionsBean(Usuario.class));
+			request.getSession().setAttribute(COLLECTION_INCIDENCIA,getCollectionsBean(Incidencia.class));
+			request.getSession().setAttribute(COLLECTION_TIPO_INCIDENCIA,getCollectionsBean(TipoIncidencia.class));
+			request.setAttribute(VIEW_FROM,HOME_VIEW);
+			return new ModelAndView(HOME_VIEW);
 		}else{
 			showPopup(request,"Usuario/Contraseña incorrectos",PopupType.ERROR);
 			return new ModelAndView(LOGIN_VIEW);
@@ -153,6 +166,7 @@ public class BeanController {
 	@RequestMapping("/homePage")
 	public ModelAndView homePage(HttpServletRequest request){
 		if(request.getSession().getAttribute(Constants.USER_SESSION)== null){
+			request.setAttribute(VIEW_FROM,HOME_VIEW);
 			return new ModelAndView(LOGIN_VIEW);
 		}else {
 			return new ModelAndView(HOME_VIEW);
@@ -190,7 +204,7 @@ public class BeanController {
 			else{
 				viewPath = loadNavigationMap.get(claz);
 				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
-				model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
+				request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
 				model.put(READ_BEAN,result.getEntity());
 			}
 		} catch (ClassNotFoundException e) {
@@ -199,6 +213,7 @@ public class BeanController {
 		catch(MessagingException e){
 			e.printStackTrace();
 		}
+		request.setAttribute(VIEW_FROM,viewPath);
 		return new ModelAndView(viewPath,model);
 	}
 
@@ -223,16 +238,16 @@ public class BeanController {
 				service.actualizar(oldEntity);
 				showPopup(request,"Se actualizo correctamente",PopupType.INFORMATION);
 				viewPath = searchNavigationMap.get(claz);
-				return new ModelAndView(viewPath, model);
 			}else{
 				viewPath = loadNavigationMap.get(claz);
 				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
-				model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
-				return new ModelAndView(viewPath, model);
+				request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
 			}
 		} catch (ClassNotFoundException e) {
 			return new ModelAndView(ERROR_VIEW);
 		}
+		request.setAttribute(VIEW_FROM,viewPath);
+		return new ModelAndView(viewPath, model);
 	}
 	
 	
@@ -244,8 +259,9 @@ public class BeanController {
 			Identificable object = (Identificable)service.get(claz, id);
 			service.eliminar(object);
 			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
-			model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
+			request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
 			showPopup(request,"Eliminación realizada correctamente",PopupType.INFORMATION);
+			request.setAttribute(VIEW_FROM,viewPath);
 			return new ModelAndView(viewPath);
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
@@ -279,12 +295,12 @@ public class BeanController {
 		String viewPath = searchNavigationMap.get(claz);
 		List<?> collection = (List<?>) service.buscar(claz, criteria.getCriteria());
 		request.getSession().setAttribute(claz.getName().toLowerCase(),collection);
-		model.put(COLLECTION,collection);
-		model.put(SEARCH_BEAN_REQUEST,criteria);
-		model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
+		request.getSession().setAttribute(SEARCH_RESULTS_PREFIX.concat(claz.getSimpleName()),new BeanResults(collection, criteria));
+		request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
 		if(collection.isEmpty()){
 			showPopup(request, "No se han encontrado resultados, para la busqueda realizada.",PopupType.INFORMATION);
 		}
+		request.setAttribute(VIEW_FROM,viewPath);
 		return new ModelAndView(viewPath,model);		
 	}
 	
@@ -295,8 +311,9 @@ public class BeanController {
 		try {
 			Class<?> claz = Class.forName(clazName);
 			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
-			model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
+			request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
 			String viewPath = searchNavigationMap.get(claz);
+			request.setAttribute(VIEW_FROM,viewPath);
 			return new ModelAndView(viewPath,model);
 		} catch (InstantiationException | IllegalAccessException
 				| ClassNotFoundException e) {
@@ -311,7 +328,8 @@ public class BeanController {
 		try {
 			Class<?> claz = Class.forName(clazName);
 			String viewPath = loadNavigationMap.get(claz);
-			request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
+			request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
+			request.setAttribute(VIEW_FROM,viewPath);
 			return new ModelAndView(viewPath);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -334,8 +352,9 @@ public class BeanController {
 		model.put(READ_BEAN,bean);
 		model.put(UPDATE_FLAG,update);
 		model.put(READ_FLAG,read);
-		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
+		request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
 		String view = loadNavigationMap.get(claz);
+		request.setAttribute(VIEW_FROM,view);
 		return new ModelAndView(view, model);
 	}
 	
@@ -372,7 +391,7 @@ public class BeanController {
 		model.put(READ_BEAN,incidencia);
 		model.put(UPDATE_FLAG,Boolean.TRUE);
 		model.put(READ_FLAG,Boolean.FALSE);
-		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class));
+		request.setAttribute(VIEW_FROM,TICKET_DATA_LOAD);
 		return new ModelAndView(TICKET_DATA_LOAD,model);
 	}
 	
@@ -437,16 +456,6 @@ public class BeanController {
 			e.printStackTrace();
 		}
 	}
-
-	
-	private ModelAndView returnToUpdateTicket(Incidencia incidencia,HttpServletRequest request){
-		Map<String,Object> model = new HashMap<String,Object>();
-		model.put(READ_BEAN,incidencia);
-		model.put(UPDATE_FLAG,Boolean.TRUE);
-		model.put(READ_FLAG,Boolean.FALSE);
-		request.setAttribute(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Incidencia.class));
-		return new ModelAndView(TICKET_DATA_LOAD,model);
-	}
 	
 	@RequestMapping("changePassword")
 	public ModelAndView changePassword(HttpServletRequest request){
@@ -456,6 +465,7 @@ public class BeanController {
 		String oldPass = request.getParameter("oldPass");
 		String newPass = request.getParameter("newPass");
 		String newPassConf = request.getParameter("newPassConf");
+		String viewFrom = request.getParameter("viewFrom");
 		if(usuario.getContrasena().equals(oldPass) && !Utils.isNullOrEmpty(newPass) && newPass.equals(newPassConf)){
 			usuario.setContrasena(newPass);
 			service.guardar(usuario);
@@ -466,9 +476,17 @@ public class BeanController {
 		model.put(READ_BEAN,usuario);
 		model.put(UPDATE_FLAG,Boolean.TRUE);
 		model.put(READ_FLAG,Boolean.FALSE);
-		model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(Usuario.class));
-		return new ModelAndView(USER_DATA_LOAD, model);
+		return new ModelAndView(viewFrom, model);
 
 	}
 	
+	private ModelAndView returnToUpdateTicket(Incidencia incidencia,HttpServletRequest request){
+		Map<String,Object> model = new HashMap<String,Object>();
+		model.put(READ_BEAN,incidencia);
+		model.put(UPDATE_FLAG,Boolean.TRUE);
+		model.put(READ_FLAG,Boolean.FALSE);
+		request.getSession().setAttribute(COLLECTION_INCIDENCIA,getCollectionsBean(Incidencia.class));
+		request.setAttribute(VIEW_FROM,TICKET_DATA_LOAD);
+		return new ModelAndView(TICKET_DATA_LOAD,model);
+	}
 }

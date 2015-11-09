@@ -39,13 +39,18 @@
 		                </c:if>
 		                <li><a href="#">${user.apellido},${user.nombre}</a>
 		                    <ul>
-		                        <li><a href="#" class="passChange">Cambiar Contrase&ntilde;a</a></li>
+		                    	<c:if test="${read != true && update != true}">
+			                        <li><a href="#" class="passChange">Cambiar Contrase&ntilde;a</a></li>
+		                    	</c:if>
 		                        <li><a href="${pageContext.request.contextPath}/logout.htm">Cerrar Sesi&oacute;n</a></li>
 		                    </ul>
 		                </li>
 		            </ul>
 		        </nav>
 		    </div>
+			<jsp:include page="../users/passChange.jsp">
+				<jsp:param value="${user.legajo}" name="legajo"/>
+			</jsp:include>
 	    </c:when>
 	    <c:otherwise>
 		    <div style='color: White; text-align: center; background-color: Black; width: 1008px; height: 80px; font-family: "Roboto Condensed", Sans-Serif; font-weight: 400; font-size: 24px; letter-spacing: 1px; vertical-align: middle'>
@@ -54,6 +59,3 @@
 	    </c:otherwise>
 	</c:choose>    
 </div>
-<jsp:include page="../users/passChange.jsp">
-	<jsp:param value="${user}" name="bean"/>
-</jsp:include>

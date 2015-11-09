@@ -131,7 +131,7 @@ $( document ).ready(function() {
 			</div>
 			<div>
 				<span>Rol:</span>
-				<c:forEach var="item" items="${collectionsBean.roles}">
+				<c:forEach var="item" items="${collectionUsuario.roles}">
 					<c:choose>
 						<c:when test="${fn:contains(bean.roles,item.nombre)}">
 							<c:choose>

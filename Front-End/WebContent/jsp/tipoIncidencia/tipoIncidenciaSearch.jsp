@@ -21,18 +21,18 @@
 		<div class="parent" style="display: inline-block;">
 			<div>
 				<span>N&uacute;mero:</span>
-				<input name="code" type="text"/>
+				<input name="code" type="text" value="${resultsTipoIncidencia.criteria.code}"/>
 			</div>
 			<div>
 				<span>Descripci&oacute;</span>
-				<input name="description" type="text"/>
+				<input name="description" type="text" value="${resultsTipoIncidencia.criteria.description}"/>
 			</div>
 			<div>
 				<input type="submit" value="Buscar"/>
 			</div>
 			<div style="position: relative;left: -82%">
-			    <c:if test="${not empty collection}">
-				     <jmesa:tableModel id="jmesaTag" items="${collection}" exportTypes="csv,excel" 
+			    <c:if test="${not empty resultsTipoIncidencia.results}">
+				     <jmesa:tableModel id="jmesaTag" items="${resultsTipoIncidencia.results}" exportTypes="csv,excel" 
 				       stateAttr="restore" var="bean"> 
 				           <jmesa:htmlTable captionKey="presidents.caption" width="600px">		 
 				                 <jmesa:htmlRow>	 

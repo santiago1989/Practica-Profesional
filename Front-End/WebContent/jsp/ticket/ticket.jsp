@@ -72,7 +72,7 @@ $( document ).ready(function() {
 					</c:otherwise>
 				</c:choose>
 					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.responsables}">
+					<c:forEach var="item" items="${collectionIncidencia.responsables}">
 						<c:choose>
 							<c:when test="${fn:contains(bean.responsable.legajo,item.legajo)}">
 								<option value="${item.legajo}" selected="selected">${item.apellido},${item.nombre}</option>
@@ -101,7 +101,7 @@ $( document ).ready(function() {
 					</c:otherwise>
 				</c:choose>
 					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.tiposIncidencia}">
+					<c:forEach var="item" items="${collectionIncidencia.tiposIncidencia}">
 						<c:choose>
 							<c:when test="${fn:contains(bean.tipoIncidencia.id,item.id)}">
 								<option value="${item.id}" selected="selected">${item.nombre}</option>
@@ -125,7 +125,7 @@ $( document ).ready(function() {
 					</c:otherwise>
 				</c:choose>
 					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.prioridadIncidencia}">
+					<c:forEach var="item" items="${collectionIncidencia.prioridadIncidencia}">
 						<c:choose>
 							<c:when test="${fn:contains(bean.prioridad.id,item.id)}">
 								<option value="${item.id}" selected="selected">${item.nombre}</option>
@@ -152,7 +152,7 @@ $( document ).ready(function() {
 					</c:otherwise>
 				</c:choose>
 					<option value="">Seleccionar Opci&oacute;n</option>
-					<c:forEach var="item" items="${collectionsBean.estadosIncidencia}">
+					<c:forEach var="item" items="${collectionIncidencia.estadosIncidencia}">
 						<c:choose>
 							<c:when test="${fn:contains(bean.estado.id,item.id)}">
 								<option value="${item.id}" selected="selected">${item.nombre}</option>
