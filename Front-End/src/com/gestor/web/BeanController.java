@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,7 +29,9 @@ import com.gestor.backend.dto.BaseCriteria;
 import com.gestor.backend.dto.CriteriaIncidencia;
 import com.gestor.backend.dto.CriteriaTipoIncidencia;
 import com.gestor.backend.dto.CriteriaUsuario;
+import com.gestor.backend.service.MailService;
 import com.gestor.backend.service.Service;
+import com.gestor.backend.service.impl.MailServiceImpl;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
 import com.gestor.common.enums.ContentType;
@@ -55,6 +58,8 @@ import com.gestor.web.utils.Constants;
 public class BeanController {
 
 	private static Service service = new ServiceImpl();
+	
+//	private static MailService mailService = new MailServiceImpl();
 	
 	private static Map<Class<?>,String> searchNavigationMap = new HashMap<Class<?>,String>();
 	
@@ -166,25 +171,28 @@ public class BeanController {
 	public ModelAndView saveEntity(HttpServletRequest request){
 		Map<String,Object> model = new HashMap<String, Object>();
 		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+		String viewPath = null;
 		try {
 			Class<?> claz = Class.forName(clazName);
 			MapperResult result = new RequestMapper(claz).build(request);
 			if(result.getErrorMessages().isEmpty()){
 				service.guardar(result.getEntity());
-				String viewPath = searchNavigationMap.get(claz);
+				viewPath = searchNavigationMap.get(claz);
+//				mailService.sendMail(result.getEntity().getMailMessage());
 				showPopup(request,popupTextMap.get(claz).concat(String.valueOf(result.getEntity().getId())),PopupType.INFORMATION);
-				return new ModelAndView(viewPath);
 			}
 			else{
-				String viewPath = loadNavigationMap.get(claz);
+				viewPath = loadNavigationMap.get(claz);
 				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
 				model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
 				model.put(READ_BEAN,result.getEntity());
-				return new ModelAndView(viewPath,model);
 			}
 		} catch (ClassNotFoundException e) {
 			return new ModelAndView(ERROR_VIEW);
+		} catch(MessagingException e){
+			e.printStackTrace();
 		}
+		return new ModelAndView(viewPath,model);
 	}
 
 	private CollectionsBean getCollectionsBean(Class<?> claz) {

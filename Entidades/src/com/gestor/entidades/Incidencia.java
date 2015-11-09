@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.gestor.common.annotations.RequestMapped;
+import com.gestor.common.dto.MailMessage;
 import com.gestor.common.interfaces.Identificable;
 import com.gestor.web.seguridad.Usuario;
 
@@ -161,6 +162,12 @@ public class Incidencia implements Identificable{
 
 	@Override
 	public Boolean getEstadoAlta() {
+		return null;
+	}
+
+	@Override
+	public MailMessage getMailMessage() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

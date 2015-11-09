@@ -2,6 +2,7 @@ package com.gestor.entidades;
 
 import java.util.Date;
 
+import com.gestor.common.dto.MailMessage;
 import com.gestor.common.interfaces.Identificable;
 import com.gestor.web.seguridad.Usuario;
 
@@ -89,5 +90,11 @@ public class Nota implements Identificable{
 	@Override
 	public Boolean getEstadoAlta() {
 		return isEstado();
+	}
+
+	@Override
+	public MailMessage getMailMessage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -5,8 +5,10 @@ import java.util.Set;
 
 import com.gestor.common.annotations.RequestMapped;
 import com.gestor.common.annotations.Table;
+import com.gestor.common.dto.MailMessage;
 import com.gestor.common.enums.Schema;
 import com.gestor.common.interfaces.Identificable;
+import com.gestor.common.util.Constants;
 import com.gestor.common.util.Utils;
 
 @Table(name="T_USUARIO",schema=Schema.SEGURIDAD)
@@ -156,5 +158,15 @@ public class Usuario implements Identificable{
 	@Override
 	public Boolean getEstadoAlta() {
 		return isEstado();
+	}
+
+	@Override
+	public MailMessage getMailMessage() {
+		String body = "Su usuario ha sido creado de forma exitosa, y puede acceder al mismo, ingresando con su legajo: ".concat(String.valueOf(legajo));
+		String subject = "Creacion de usuario";
+		return	new MailMessage(Constants.FROM_ADDRESS, 
+						new String[]{this.correo}, 
+						subject, 
+						body);
 	}
 }

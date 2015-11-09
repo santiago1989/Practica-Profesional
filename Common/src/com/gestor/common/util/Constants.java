@@ -12,5 +12,7 @@ public class Constants {
 	
 	public static final String MAIL = "mail.regexp";
 	
+	public static final String FROM_ADDRESS = "practicaprof.sar@gmail.com";
 	
+	public static final String FROM_ADDRESS_PASSWORD = "Riverplate96";
 }

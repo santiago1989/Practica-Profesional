@@ -11,4 +11,17 @@ function loadMenu(){
 		 */
 		minWidth: '960px',
 	});
+	$('.passChange').click(function(){popupDiv('passChange')});
+}
+function popupDiv(idDiv){
+	$.blockUI({
+	  message: $("#" + idDiv),
+
+	  css: {
+	    position: 'absolute',
+	  }
+	});
+}
+function cerrarDiv(){
+	$.unblockUI();
 }

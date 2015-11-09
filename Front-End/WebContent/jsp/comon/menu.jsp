@@ -37,7 +37,11 @@
 			                    </ul>
 			                </li>
 		                </c:if>
-		                <li><a href="${pageContext.request.contextPath}/logout.htm">Logout</a>		                
+		                <li><a href="#">${user.apellido},${user.nombre}</a>
+		                    <ul>
+		                        <li><a href="#" class="passChange">Cambiar Contrase&ntilde;a</a></li>
+		                        <li><a href="${pageContext.request.contextPath}/logout.htm">Cerrar Sesi&oacute;n</a></li>
+		                    </ul>
 		                </li>
 		            </ul>
 		        </nav>
@@ -50,3 +54,6 @@
 	    </c:otherwise>
 	</c:choose>    
 </div>
+<jsp:include page="../users/passChange.jsp">
+	<jsp:param value="${user}" name="bean"/>
+</jsp:include>

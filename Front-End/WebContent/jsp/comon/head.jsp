@@ -23,6 +23,7 @@
 <script src="//cdn.jsdelivr.net/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
 <!-- LOAD MENU JS-->
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/script/menu.js"></script>
+<script type="text/javascript" src="http://malsup.github.io/jquery.blockUI.js"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
 	showPopup();

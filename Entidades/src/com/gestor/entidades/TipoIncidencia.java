@@ -1,6 +1,7 @@
 package com.gestor.entidades;
 
 import com.gestor.common.annotations.RequestMapped;
+import com.gestor.common.dto.MailMessage;
 import com.gestor.common.interfaces.Identificable;
 
 public class TipoIncidencia implements Identificable {
@@ -39,6 +40,11 @@ public class TipoIncidencia implements Identificable {
 	}
 	@Override
 	public Boolean getEstadoAlta() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public MailMessage getMailMessage() {
 		// TODO Auto-generated method stub
 		return null;
 	}
