@@ -2,6 +2,7 @@ package com.gestor.common.dto;
 
 import org.apache.catalina.tribes.util.Arrays;
 
+import com.gestor.common.util.Constants;
 import com.gestor.common.util.Utils;
 
 public class MailMessage {
@@ -14,10 +15,10 @@ public class MailMessage {
 	
 	private String body;
 	
-	public MailMessage(String remitente, String[] destinatarios,
+	public MailMessage(String[] destinatarios,
 			String subject, String body) {
 		super();
-		this.remitente = remitente;
+		this.remitente = Constants.FROM_ADDRESS;
 		this.destinatarios = Utils.removeExpression(Arrays.toString(destinatarios),new char[]{'[',']','{','}'});
 		this.subject = subject;
 		this.body = body;

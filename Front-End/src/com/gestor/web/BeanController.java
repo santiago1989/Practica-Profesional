@@ -14,6 +14,8 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.jasperreports.engine.JRException;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -30,8 +32,10 @@ import com.gestor.backend.dto.CriteriaIncidencia;
 import com.gestor.backend.dto.CriteriaTipoIncidencia;
 import com.gestor.backend.dto.CriteriaUsuario;
 import com.gestor.backend.service.MailService;
+import com.gestor.backend.service.ReportService;
 import com.gestor.backend.service.Service;
 import com.gestor.backend.service.impl.MailServiceImpl;
+import com.gestor.backend.service.impl.ReportServiceImpl;
 import com.gestor.backend.service.impl.ServiceImpl;
 import com.gestor.backend.util.CriteriaUtils;
 import com.gestor.common.enums.ContentType;
@@ -59,7 +63,9 @@ public class BeanController {
 
 	private static Service service = new ServiceImpl();
 	
-//	private static MailService mailService = new MailServiceImpl();
+	private static MailService mailService = new MailServiceImpl();
+	
+	private static ReportService reportService = new ReportServiceImpl();
 	
 	private static Map<Class<?>,String> searchNavigationMap = new HashMap<Class<?>,String>();
 	
@@ -178,7 +184,7 @@ public class BeanController {
 			if(result.getErrorMessages().isEmpty()){
 				service.guardar(result.getEntity());
 				viewPath = searchNavigationMap.get(claz);
-//				mailService.sendMail(result.getEntity().getMailMessage());
+				mailService.sendMail(result.getEntity().getMailMessage());
 				showPopup(request,popupTextMap.get(claz).concat(String.valueOf(result.getEntity().getId())),PopupType.INFORMATION);
 			}
 			else{
@@ -189,7 +195,8 @@ public class BeanController {
 			}
 		} catch (ClassNotFoundException e) {
 			return new ModelAndView(ERROR_VIEW);
-		} catch(MessagingException e){
+		} 
+		catch(MessagingException e){
 			e.printStackTrace();
 		}
 		return new ModelAndView(viewPath,model);
@@ -270,7 +277,8 @@ public class BeanController {
 	private ModelAndView getResults(HttpServletRequest request,BaseCriteria criteria,Class<?> claz){
 		Map<String,Object> model = new HashMap<String,Object>();
 		String viewPath = searchNavigationMap.get(claz);
-		List collection = (List) service.buscar(claz, criteria.getCriteria());
+		List<?> collection = (List<?>) service.buscar(claz, criteria.getCriteria());
+		request.getSession().setAttribute(claz.getName().toLowerCase(),collection);
 		model.put(COLLECTION,collection);
 		model.put(SEARCH_BEAN_REQUEST,criteria);
 		model.put(COLLECTIONS_BEAN_REQUEST,getCollectionsBean(claz));
@@ -411,6 +419,26 @@ public class BeanController {
 		}
 	}
 	
+	
+	@RequestMapping("/descargarReporte")
+	public void descargarReporte(HttpServletRequest request,HttpServletResponse response){
+		String clazName = request.getParameter("clazName");
+		String templateName = clazName.toLowerCase().concat(".jrxml");
+		String templatePath = request.getServletContext().getRealPath("/WEB-INF/jasper/".concat(templateName));
+		List<?> collection = (List<?>) request.getAttribute(clazName.toLowerCase());
+		try {
+			InputStream input = reportService.writeReport(templatePath,collection);
+			OutputStream output = response.getOutputStream();
+			response.setContentType(ContentType.XLS.getMimeType());
+			IOUtils.copy(input, output);
+			response.flushBuffer();
+		} catch (IOException | JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	
 	private ModelAndView returnToUpdateTicket(Incidencia incidencia,HttpServletRequest request){
 		Map<String,Object> model = new HashMap<String,Object>();
 		model.put(READ_BEAN,incidencia);
@@ -442,4 +470,5 @@ public class BeanController {
 		return new ModelAndView(USER_DATA_LOAD, model);
 
 	}
+	
 }

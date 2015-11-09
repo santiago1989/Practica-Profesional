@@ -164,8 +164,7 @@ public class Usuario implements Identificable{
 	public MailMessage getMailMessage() {
 		String body = "Su usuario ha sido creado de forma exitosa, y puede acceder al mismo, ingresando con su legajo: ".concat(String.valueOf(legajo));
 		String subject = "Creacion de usuario";
-		return	new MailMessage(Constants.FROM_ADDRESS, 
-						new String[]{this.correo}, 
+		return	new MailMessage(new String[]{this.correo}, 
 						subject, 
 						body);
 	}
