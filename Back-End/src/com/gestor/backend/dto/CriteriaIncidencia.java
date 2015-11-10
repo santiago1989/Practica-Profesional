@@ -1,5 +1,7 @@
 package com.gestor.backend.dto;
 
+import java.text.ParseException;
+
 import org.hibernate.Criteria;
 
 import com.gestor.backend.util.SessionSingletion;
@@ -23,16 +25,20 @@ public class CriteriaIncidencia extends BaseCriteria {
 	@Override
 	public Criteria getCriteria() {
 		Criteria criteria = SessionSingletion.getInstance().getSession().createCriteria(Incidencia.class);
-		addEqualInteger("numero",!Utils.isNullOrEmpty(numero)?Integer.parseInt(numero):0,criteria);
-		addEqualInteger("owner.legajo",!Utils.isNullOrEmpty(owner)?Integer.parseInt(owner):0,criteria);
-		addEqualInteger("responsable.legajo",!Utils.isNullOrEmpty(responsable)?Integer.parseInt(responsable):0,criteria);
-		addEqualInteger("estado.id",!Utils.isNullOrEmpty(estado)?Integer.parseInt(estado):0,criteria);
-		addEqualInteger("prioridad.id",!Utils.isNullOrEmpty(prioridad)?Integer.parseInt(prioridad):0,criteria);	
-		addEqualInteger("tipoIncidencia.id",!Utils.isNullOrEmpty(tipo)?Integer.parseInt(tipo):0,criteria);
-		addLike("detalle",detalle,criteria);
-		addLike("titulo",titulo,criteria);
-		addEqual("fechaCreacion",fechaCreacion,criteria);
-		addEqual("fechaModificacion",fechaModificacion,criteria);
+		try {
+			addEqualInteger("numero",!Utils.isNullOrEmpty(numero)?Integer.parseInt(numero):0,criteria);
+			addEqualInteger("owner.legajo",!Utils.isNullOrEmpty(owner)?Integer.parseInt(owner):0,criteria);
+			addEqualInteger("responsable.legajo",!Utils.isNullOrEmpty(responsable)?Integer.parseInt(responsable):0,criteria);
+			addEqualInteger("estado.id",!Utils.isNullOrEmpty(estado)?Integer.parseInt(estado):0,criteria);
+			addEqualInteger("prioridad.id",!Utils.isNullOrEmpty(prioridad)?Integer.parseInt(prioridad):0,criteria);	
+			addEqualInteger("tipoIncidencia.id",!Utils.isNullOrEmpty(tipo)?Integer.parseInt(tipo):0,criteria);
+			addLike("detalle",detalle,criteria);
+			addLike("titulo",titulo,criteria);
+			addGreaterThanDate("fechaCreacion",fechaCreacion,criteria);
+			addGreaterThanDate("fechaModificacion",fechaModificacion,criteria);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		return criteria;
 	}
 

@@ -114,15 +114,16 @@ $( document ).ready(function() {
 			<div>
 				<!-- FechaCreación -->
 				<span>Fecha de creaci&oacute;n </span>
-				<input id="fechaC" type="text" name="fechaCreacion"/>
+				<input id="fechaC" type="text" name="fechaCreacion" value="${resultsIncidencia.criteria.fechaCreacion}"/>
 			</div>
 			<div>
 				<!-- FechaModificación -->
 				<span>&Uacute;ltima modificaci&oacute;n </span>
-				<input id="fechaM" type="text" name="fechaModificacion"/>
+				<input id="fechaM" type="text" name="fechaModificacion" value="${resultsIncidencia.criteria.fechaModificacion}"/>
 			</div>
 			<div>
 				<input type="submit" value="Buscar"/>
+				<input type="button" value="Limpiar" onclick="clean()">
 			</div>
 			<div  style="position: relative;left: -82%">
 			    <c:if test="${not empty resultsIncidencia.results}">

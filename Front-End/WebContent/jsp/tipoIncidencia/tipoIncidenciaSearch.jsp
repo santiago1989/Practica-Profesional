@@ -29,6 +29,7 @@
 			</div>
 			<div>
 				<input type="submit" value="Buscar"/>
+				<input type="button" value="Limpiar" onclick="clean()">
 			</div>
 			<div style="position: relative;left: -82%">
 			    <c:if test="${not empty resultsTipoIncidencia.results}">

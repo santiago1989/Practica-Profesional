@@ -1,10 +1,16 @@
 package com.gestor.common.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.commons.lang.StringUtils;
 
 public class Utils {
 
 	private static final String NUMERIC_EXPRESSION = "[0-9]+";
+
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public static boolean isNullOrEmpty(String str){
 		return (str ==null) || (str.isEmpty());
@@ -17,6 +23,10 @@ public class Utils {
 			source = StringUtils.remove(source,ch);
 		}
 		return source;
+	}
+	
+	public static Date formatDate(String dateStr) throws ParseException{
+		return sdf.parse(dateStr);
 	}
 	
 }

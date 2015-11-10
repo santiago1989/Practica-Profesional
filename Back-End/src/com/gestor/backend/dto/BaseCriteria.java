@@ -1,5 +1,7 @@
 package com.gestor.backend.dto;
 
+import java.text.ParseException;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
@@ -35,7 +37,13 @@ public abstract class BaseCriteria{
 		if(!Utils.isNullOrEmpty(value)){
 			criteria.add(Restrictions.eq(property, value));
 		}
-	}	
+	}
+	
+	protected void addGreaterThanDate(String property,String value,Criteria criteria) throws ParseException{
+		if(!Utils.isNullOrEmpty(value)){
+			criteria.add(Restrictions.gt(property, Utils.formatDate(value)));
+		}
+	}
 	
 	protected void addIn(String property,String ids,Criteria criteria) {
 		if(!Utils.isNullOrEmpty(ids)){

@@ -29,4 +29,12 @@ $( document ).ready(function() {
 	showPopup();
 	loadMenu();
 });
+function clean(){
+	$("input[type='text']").each(function( index ) {
+		this.value = '';
+	});
+	$("select option").each(function( index ) {
+		this.selected = '';
+	});
+}
 </script>
