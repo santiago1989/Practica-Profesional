@@ -18,7 +18,7 @@ function onInvokeAction(id, action){
   createHiddenInputFieldsForLimitAndSubmit(id);
 }
 function onInvokeExportAction(id,action) {
-	var clazName = $('clazName').attr('value');
+	var clazName = $('#clazName').attr('value');
     location.href = '${pageContext.request.contextPath}/descargarReporte.htm?clazName='+clazName;
 }
 </script>
@@ -56,28 +56,28 @@ function onInvokeExportAction(id,action) {
 			</div>
 			<div style="position: relative;left: -82%">
 			    <c:if test="${not empty resultsUsuario.results}">
-				     <jmesa:tableModel id="jmesaTag" items="${resultsUsuario.results}" exportTypes="excel" 
-				       stateAttr="restore" var="bean" > 
-				           <jmesa:htmlTable captionKey="presidents.caption" width="600px">		 
-				                 <jmesa:htmlRow>	 
-				                     <jmesa:htmlColumn property="legajo" title="Legajo"/> 
-				                     <jmesa:htmlColumn property="apellido" title="Apellido"/> 
-				                     <jmesa:htmlColumn property="nombre" filterEditor="org.jmesa.view.html.editor.DroplistFilterEditor"/>
-				                     <jmesa:htmlColumn property="rolesDescription" title="Roles"/>
-				                     <jmesa:htmlColumn title="Acciones">
-   				                         <a href="${pageContext.request.contextPath}/readOrUpdateUsuario.htm?entityId=${bean.legajo}&read=true">
-   				                         	<img title="Consultar" alt="Consultar" src="${pageContext.request.contextPath}/images/buttons/icono-estado.jpg">
-   				                      	 </a>
-				                         <a href="${pageContext.request.contextPath}/readOrUpdateUsuario.htm?entityId=${bean.legajo}&update=true">
-				                         	<img title="Editar" alt="Editar" src="${pageContext.request.contextPath}/images/buttons/iglu-editar.png">
-				                         </a> 
-				                         <a href="#" onclick="showAlert('Esta seguro que desea eliminar el usuario?','${pageContext.request.contextPath}/removeUser.htm?entityId=${bean.legajo}')">
-				                         	<img title="Eliminar" alt="Eliminar" src="${pageContext.request.contextPath}/images/buttons/remove.png">
-				                         </a>
-				                     </jmesa:htmlColumn>
-				                 </jmesa:htmlRow> 
-				             </jmesa:htmlTable>  
-				       </jmesa:tableModel>
+			       <jmesa:tableModel id="jmesaTag" items="${resultsUsuario.results}" exportTypes="excel" 
+			       stateAttr="restore" var="bean" > 
+			           <jmesa:htmlTable captionKey="presidents.caption" width="600px">		 
+			                 <jmesa:htmlRow>	 
+			                     <jmesa:htmlColumn property="legajo" title="Legajo"/> 
+			                     <jmesa:htmlColumn property="apellido" title="Apellido"/> 
+			                     <jmesa:htmlColumn property="nombre" filterEditor="org.jmesa.view.html.editor.DroplistFilterEditor"/>
+			                     <jmesa:htmlColumn property="rolesDescription" title="Roles"/>
+			                     <jmesa:htmlColumn title="Acciones">
+			                         <a href="${pageContext.request.contextPath}/readOrUpdateUsuario.htm?entityId=${bean.legajo}&read=true">
+			                         	<img title="Consultar" alt="Consultar" src="${pageContext.request.contextPath}/images/buttons/icono-estado.jpg">
+			                      	 </a>
+			                         <a href="${pageContext.request.contextPath}/readOrUpdateUsuario.htm?entityId=${bean.legajo}&update=true">
+			                         	<img title="Editar" alt="Editar" src="${pageContext.request.contextPath}/images/buttons/iglu-editar.png">
+			                         </a> 
+			                         <a href="#" onclick="showAlert('Esta seguro que desea eliminar el usuario?','${pageContext.request.contextPath}/removeUser.htm?entityId=${bean.legajo}')">
+			                         	<img title="Eliminar" alt="Eliminar" src="${pageContext.request.contextPath}/images/buttons/remove.png">
+			                         </a>
+			                     </jmesa:htmlColumn>
+			                 </jmesa:htmlRow> 
+			             </jmesa:htmlTable>  
+			       </jmesa:tableModel>
 			    </c:if>
 			</div>
 		</div>

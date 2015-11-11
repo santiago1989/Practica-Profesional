@@ -444,7 +444,7 @@ public class BeanController {
 		String clazName = request.getParameter("clazName");
 		String templateName = clazName.toLowerCase().concat(".jrxml");
 		String templatePath = request.getServletContext().getRealPath("/WEB-INF/jasper/".concat(templateName));
-		List<?> collection = (List<?>) request.getAttribute(clazName.toLowerCase());
+		List<?> collection = ((BeanResults) request.getSession().getAttribute(SEARCH_RESULTS_PREFIX.concat(clazName))).getResults();
 		try {
 			InputStream input = reportService.writeReport(templatePath,collection);
 			OutputStream output = response.getOutputStream();
