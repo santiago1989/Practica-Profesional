@@ -26,7 +26,7 @@ $( document ).ready(function() {
 	<jsp:include page="../comon/menu.jsp"/>
 	<jsp:include page="../comon/alert.jsp"/>
 	<form action="${pageContext.request.contextPath}/getTicketsResults.htm" method="post">
-		<div class="parent" style="display: inline-block;">			
+		<div class="parent" style="display: inline-block;width: 310px;">
 			<div>
 				<span>N&uacute;mero</span>
 				<input name="numero" type="text" value="${resultsIncidencia.criteria.numero}"/>
@@ -64,7 +64,7 @@ $( document ).ready(function() {
 				</select>
 			</div>
 			<div>
-				<span>Tipo de incidencia</span>
+				<span>Tipo incidencia</span>
 				<select name="tipo">
 					<option value="">Seleccionar Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionIncidencia.tiposIncidencia}">
