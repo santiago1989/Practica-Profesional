@@ -158,9 +158,9 @@ function onInvokeExportAction(id) {
 				                         <a href="${pageContext.request.contextPath}/readOrUpdateTicket.htm?entityId=${bean.numero}&update=true">
 				                         	<img title="Editar" alt="Editar" src="${pageContext.request.contextPath}/images/buttons/iglu-editar.png">
 				                         </a> 
-				                         <a href="#" onclick="showAlert('Esta seguro que desea eliminar el usuario?','${pageContext.request.contextPath}/removeTicket.htm?entityId=${bean.numero}')">
-				                         	<img title="Eliminar" alt="Eliminar" src="${pageContext.request.contextPath}/images/buttons/remove.png">
-				                         </a>
+<%-- 				                         <a href="#" onclick="showAlert('Esta seguro que desea eliminar el usuario?','${pageContext.request.contextPath}/removeTicket.htm?entityId=${bean.numero}')"> --%>
+<%-- 				                         	<img title="Eliminar" alt="Eliminar" src="${pageContext.request.contextPath}/images/buttons/remove.png"> --%>
+<!-- 				                         </a> -->
 				                     </jmesa:htmlColumn>
 				                 </jmesa:htmlRow> 
 				             </jmesa:htmlTable>  

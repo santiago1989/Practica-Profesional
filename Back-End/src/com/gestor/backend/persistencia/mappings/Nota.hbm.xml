@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 17/10/2015 11:28:34 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.gestor.entidades.Nota" table="NOTAS" where="estado = true">
+    <class name="com.gestor.entidades.Nota" table="NOTAS" where="estado=1">
         <id name="id" type="java.lang.Integer">
             <column name="id"/>	
 			<generator class="increment"/>
@@ -23,7 +23,7 @@
             <column name="fechaPublicacion" />
         </property>
         <property name="estado" type="boolean">
-            <column name="ESTADO" />
+            <column name="estado" />
         </property>
    </class>
 </hibernate-mapping>

@@ -60,7 +60,7 @@ function onInvokeExportAction(id) {
 				                         <a href="${pageContext.request.contextPath}/readOrUpdateTicketType.htm?entityId=${bean.id}&update=true">
 				                         	<img title="Editar" alt="Editar" src="${pageContext.request.contextPath}/images/buttons/iglu-editar.png">
 				                         </a> 
-				                         <a href="#" onclick="showAlert('Esta seguro que desea eliminar el Tipo Incidencia?','${pageContext.request.contextPath}/removeUser.htm?entityId=${bean.id}')">
+				                         <a href="#" onclick="showAlert('Esta seguro que desea eliminar el Tipo Incidencia '${bean.nombre}'?','${pageContext.request.contextPath}/removeTipoIncidencia.htm?entityId=${bean.id}')">
 				                         	<img title="Eliminar" alt="Eliminar" src="${pageContext.request.contextPath}/images/buttons/remove.png">
 				                         </a>
 				                     </jmesa:htmlColumn>

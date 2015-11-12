@@ -8,7 +8,6 @@ import com.gestor.common.annotations.Table;
 import com.gestor.common.dto.MailMessage;
 import com.gestor.common.enums.Schema;
 import com.gestor.common.interfaces.Identificable;
-import com.gestor.common.util.Constants;
 import com.gestor.common.util.Utils;
 
 @Table(name="T_USUARIO",schema=Schema.SEGURIDAD)

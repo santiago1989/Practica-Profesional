@@ -11,7 +11,15 @@ public class TipoIncidencia implements Identificable {
 	
 	@RequestMapped(regexp="[A-záéíóúÁÉÍÓÚÑñ ]+")
 	private String nombre;
+	
+	private Boolean estado = Boolean.TRUE;
 
+	public Boolean getEstado() {
+		return estado;
+	}
+	public void setEstado(Boolean estado) {
+		this.estado = estado;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -35,13 +43,11 @@ public class TipoIncidencia implements Identificable {
 	}
 	@Override
 	public void setEstado() {
-		// TODO Auto-generated method stub
-		
+		this.estado = Boolean.FALSE;
 	}
 	@Override
 	public Boolean getEstadoAlta() {
-		// TODO Auto-generated method stub
-		return null;
+		return getEstado();
 	}
 	@Override
 	public MailMessage getMailMessage() {

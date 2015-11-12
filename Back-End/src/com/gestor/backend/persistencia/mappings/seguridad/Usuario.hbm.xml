@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 30/09/2015 20:49:03 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.gestor.web.seguridad.Usuario" table="USUARIOS">
+    <class name="com.gestor.web.seguridad.Usuario" table="USUARIOS" where="estado=1">
         <id name="legajo" type="java.lang.Integer">
             <column name="LEGAJO" />
             <generator class="increment" />

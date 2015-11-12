@@ -148,7 +148,7 @@ public class BeanController {
 		String PASSWORD = "password";
 		String password = request.getParameter(PASSWORD);
 		Usuario usuario = (Usuario)service.get(Usuario.class,legajo);
-		if(usuario != null && usuario.getContrasena().equals(password)){
+		if(usuario != null && usuario.isEstado() && usuario.getContrasena().equals(password)){
 			request.getSession(true).setAttribute(Constants.USER_SESSION,usuario);
 			request.getSession().setAttribute("administrativo",RolType.ADMINISTRATIVO.getCode());
 			request.getSession().setAttribute("superusuario",RolType.SUPERUSUARIO.getCode());
@@ -273,6 +273,11 @@ public class BeanController {
 	@RequestMapping("/removeUser")
 	public ModelAndView removeUsuario(HttpServletRequest request){
 		return removeEntity(request,Usuario.class);
+	}
+	
+	@RequestMapping("/removeTipoIncidencia")
+	public ModelAndView removeTipoIncidencia(HttpServletRequest request){
+		return removeEntity(request,TipoIncidencia.class);
 	}
 	
 
