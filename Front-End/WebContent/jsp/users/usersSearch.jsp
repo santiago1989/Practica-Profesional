@@ -56,9 +56,9 @@ function onInvokeExportAction(id,action) {
 			</div>
 			<div style="position: relative;left: -82%">
 			    <c:if test="${not empty resultsUsuario.results}">
-			       <jmesa:tableModel id="jmesaTag" items="${resultsUsuario.results}" exportTypes="excel" 
+			       <jmesa:tableModel id="jmesaTag" items="${resultsUsuario.results}" toolbar="com.gestor.web.jmesa.CustomToolBar"
 			       stateAttr="restore" var="bean" > 
-			           <jmesa:htmlTable captionKey="presidents.caption" width="600px">		 
+			           <jmesa:htmlTable captionKey="presidents.caption" width="600px" >		 
 			                 <jmesa:htmlRow>	 
 			                     <jmesa:htmlColumn property="legajo" title="Legajo"/> 
 			                     <jmesa:htmlColumn property="apellido" title="Apellido"/> 

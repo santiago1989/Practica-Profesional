@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="User" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="14d38332-49c8-4137-bf32-86befa325a98">
+	<property name="ireport.zoom" value="1.4641000000000035"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="id" class="java.lang.String"/>
+	<field name="nombre" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="-2" width="555" height="43" uuid="b3e107e1-6e1a-463f-b861-003de9745acf"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="18" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TIPO INCIDENCIA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="4" width="38" height="24" uuid="9f827f58-6f0b-463e-b58e-0afc3371b0b1"/>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="38" y="4" width="517" height="24" uuid="581b558c-fbc5-48b0-a9df-7ac85ffd9842"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="38" height="22" uuid="c90a5f83-79ac-4655-a1cb-28a6fdae6ced"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="38" y="0" width="517" height="22" uuid="302a0376-f992-44e3-8e24-b0f27e426b0a"/>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
