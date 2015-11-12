@@ -1,3 +1,4 @@
+<%@page import="com.gestor.entidades.Incidencia"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="/WEB-INF/tld/jmesa.tld" prefix="jmesa" %>
@@ -37,6 +38,7 @@ function onInvokeExportAction(id) {
 	<jsp:include page="../comon/menu.jsp"/>
 	<jsp:include page="../comon/alert.jsp"/>
 	<form action="${pageContext.request.contextPath}/getTicketsResults.htm" method="post">
+		<input type="hidden" id="clazName" value="<%=Incidencia.class.getSimpleName()%>"/>
 		<div class="parent" style="display: inline-block;width: 310px;">
 			<div>
 				<span>N&uacute;mero</span>
