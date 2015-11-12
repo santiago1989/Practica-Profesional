@@ -32,6 +32,7 @@ import com.gestor.backend.dto.BeanResults;
 import com.gestor.backend.dto.CriteriaIncidencia;
 import com.gestor.backend.dto.CriteriaTipoIncidencia;
 import com.gestor.backend.dto.CriteriaUsuario;
+import com.gestor.backend.dto.ReportResult;
 import com.gestor.backend.service.MailService;
 import com.gestor.backend.service.ReportService;
 import com.gestor.backend.service.Service;
@@ -441,15 +442,16 @@ public class BeanController {
 	
 	@RequestMapping("/descargarReporte")
 	public void descargarReporte(HttpServletRequest request,HttpServletResponse response){
+		String reportType = request.getParameter("jmesaTag_e_");
 		String clazName = request.getParameter("clazName");
 		String templateName = clazName.toLowerCase().concat(".jrxml");
 		String templatePath = request.getServletContext().getRealPath("/WEB-INF/jasper/".concat(templateName));
 		List<?> collection = ((BeanResults) request.getSession().getAttribute(SEARCH_RESULTS_PREFIX.concat(clazName))).getResults();
 		try {
-			InputStream input = reportService.writeReport(templatePath,collection);
+			ReportResult bean = reportService.writeReport(reportType,templatePath,collection);
 			OutputStream output = response.getOutputStream();
-			response.setContentType(ContentType.XLS.getMimeType());
-			IOUtils.copy(input, output);
+			response.setContentType(bean.getContentType().getMimeType());
+			IOUtils.copy(bean.getInputStream(), output);
 			response.flushBuffer();
 		} catch (IOException | JRException e) {
 			// TODO Auto-generated catch block

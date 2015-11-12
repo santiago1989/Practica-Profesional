@@ -6,20 +6,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa/jmesa.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa/jquery.jmesa.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jmesa.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
 <jsp:include page="../comon/head.jsp"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa/jmesa.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa/jquery.jmesa.js"></script>
 <title>B&uacute;squeda de Usuarios</title>
 <script type="text/javascript">
 function onInvokeAction(id, action){
   setExportToLimit(id, '');
   createHiddenInputFieldsForLimitAndSubmit(id);
 }
-function onInvokeExportAction(id,action) {
+function onInvokeExportAction(id) {
+	var parameterString = createParameterStringForLimit(id);
 	var clazName = $('#clazName').attr('value');
-    location.href = '${pageContext.request.contextPath}/descargarReporte.htm?clazName='+clazName;
+    location.href = '${pageContext.request.contextPath}/descargarReporte.htm?clazName='+clazName+'&exportType='+parameterString;
 }
 </script>
 </head>
