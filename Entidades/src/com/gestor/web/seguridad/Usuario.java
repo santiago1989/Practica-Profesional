@@ -160,11 +160,16 @@ public class Usuario implements Identificable{
 	}
 
 	@Override
-	public MailMessage getMailMessage() {
+	public MailMessage getMailMessageCreate() {
 		String body = "Su usuario ha sido creado de forma exitosa, y puede acceder al mismo, ingresando con su legajo: ".concat(String.valueOf(legajo));
 		String subject = "Creacion de usuario";
 		return	new MailMessage(new String[]{this.correo}, 
 						subject, 
 						body);
+	}
+
+	@Override
+	public MailMessage getMailMessageUpdate() {
+		return null;
 	}
 }

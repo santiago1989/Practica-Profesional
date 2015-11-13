@@ -7,5 +7,6 @@ public interface Identificable {
 	void copyFrom(Object object);
 	void setEstado();
 	Boolean getEstadoAlta();
-	MailMessage getMailMessage();
+	MailMessage getMailMessageCreate();
+	MailMessage getMailMessageUpdate();
 }

@@ -50,7 +50,12 @@ public class TipoIncidencia implements Identificable {
 		return getEstado();
 	}
 	@Override
-	public MailMessage getMailMessage() {
+	public MailMessage getMailMessageCreate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public MailMessage getMailMessageUpdate() {
 		// TODO Auto-generated method stub
 		return null;
 	}

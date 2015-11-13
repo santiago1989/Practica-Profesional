@@ -1,9 +1,11 @@
 package com.gestor.entidades;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.gestor.common.annotations.RequestMapped;
@@ -166,8 +168,28 @@ public class Incidencia implements Identificable{
 	}
 
 	@Override
-	public MailMessage getMailMessage() {
-		// TODO Auto-generated method stub
-		return null;
+	public MailMessage getMailMessageCreate() {
+		String asunto = "Creación de ticket#".concat(numero.toString()).concat(":".concat(titulo));
+		String detalle = "Se ha creado el ticket, con Número:".concat(this.numero.toString()).concat(": ".concat(this.detalle)).concat("Estado:".concat(this.estado.getNombre()));
+		return buildMail(asunto, detalle);
 	}
+	
+	@Override
+	public MailMessage getMailMessageUpdate() {
+		String asunto = "Actualización de ticket#".concat(numero.toString()).concat(":".concat(titulo));
+		String detalle = "Se ha actualizado el ticket, con Número:".concat(this.numero.toString()).concat(": ".concat(this.detalle)).concat("Estado:".concat(this.estado.getNombre()));
+		return buildMail(asunto, detalle);
+	}
+	
+	private MailMessage buildMail(String asunto,String detalle){
+		String[] array = new String[2];
+		List<String> destinatarios = new ArrayList<String>(2);
+		destinatarios.add(this.owner.getCorreo());
+		if(responsable != null){
+			destinatarios.add(this.responsable.getCorreo());
+		}		
+		MailMessage mail = new MailMessage(destinatarios.toArray(array),asunto,detalle);
+		return mail;
+	}
+
 }

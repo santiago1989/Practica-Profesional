@@ -53,7 +53,7 @@ public class MailServiceImpl implements MailService {
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(mail.getRemitente()));
 			if(mail.getDestinatarios().contains(",")){
-				message.setReplyTo(InternetAddress.parse(mail.getDestinatarios()));
+				message.setRecipients(RecipientType.CC,InternetAddress.parse(mail.getDestinatarios()));
 			}else{
 				message.setRecipient(RecipientType.TO, new InternetAddress(mail.getDestinatarios()));
 			}

@@ -199,8 +199,8 @@ public class BeanController {
 			if(result.getErrorMessages().isEmpty()){
 				service.guardar(result.getEntity());
 				viewPath = searchNavigationMap.get(claz);
-				mailService.sendMail(result.getEntity().getMailMessage());
 				showPopup(request,popupTextMap.get(claz).concat(String.valueOf(result.getEntity().getId())),PopupType.INFORMATION);
+				mailService.sendMail(result.getEntity().getMailMessageCreate());
 			}
 			else{
 				viewPath = loadNavigationMap.get(claz);
@@ -238,13 +238,14 @@ public class BeanController {
 				oldEntity.copyFrom(entity);
 				service.actualizar(oldEntity);
 				showPopup(request,"Se actualizo correctamente",PopupType.INFORMATION);
+				mailService.sendMail(result.getEntity().getMailMessageUpdate());
 				viewPath = searchNavigationMap.get(claz);
 			}else{
 				viewPath = loadNavigationMap.get(claz);
 				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
 				request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
 			}
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException | MessagingException e) {
 			return new ModelAndView(ERROR_VIEW);
 		}
 		request.setAttribute(VIEW_FROM,viewPath);

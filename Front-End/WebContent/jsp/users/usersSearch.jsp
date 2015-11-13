@@ -47,7 +47,14 @@ function onInvokeExportAction(id) {
 				<select name="rol">
 					<option value="">Seleccione Opci&oacute;n</option>
 					<c:forEach var="item" items="${collectionUsuario.roles}">
-						<option value="${item.code}">${item.nombre}</option>
+						<c:choose>
+							<c:when test="${resultsUsuario.criteria.rol == item.code}">
+								<option value="${item.code}" selected="selected">${item.nombre}</option>
+							</c:when>
+							<c:otherwise>
+								<option value="${item.code}">${item.nombre}</option>
+							</c:otherwise>
+						</c:choose>
 					</c:forEach>
 				</select>
 			</div>

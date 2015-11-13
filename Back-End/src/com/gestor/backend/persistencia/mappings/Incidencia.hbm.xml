@@ -35,9 +35,9 @@
             </key>
             <one-to-many class="com.gestor.entidades.Adjunto"/>
         </set>
-        <set name="notas" table="NOTAS" inverse="false">
+        <set name="notas" where="estado=1" table="NOTAS" inverse="false">
             <key>
-                <column name="idIncidencia"/>
+                <column name="idIncidencia" />
             </key>
             <one-to-many class="com.gestor.entidades.Nota"/>
         </set>
