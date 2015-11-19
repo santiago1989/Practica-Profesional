@@ -166,7 +166,7 @@ public class BeanController {
 
 	@RequestMapping("/homePage")
 	public ModelAndView homePage(HttpServletRequest request){
-		if(request.getSession().getAttribute(Constants.USER_SESSION)== null){
+		if(!isSessionStillAlive(request)){
 			request.setAttribute(VIEW_FROM,HOME_VIEW);
 			return new ModelAndView(LOGIN_VIEW);
 		}else {
@@ -180,42 +180,38 @@ public class BeanController {
 		return new ModelAndView(LOGIN_VIEW);
 	}
 	
-	@RequestMapping("/showPopup")
-	public ModelAndView showPopup(HttpServletRequest request){
-		String desc = request.getParameter(POPUP_TYPE);
-		PopupType popupType = PopupType.lookUp(desc);
-		showPopup(request,"Prueba de popup",popupType == null? PopupType.INFORMATION:popupType);
-		return new ModelAndView(HOME_VIEW);
-	}
-	
 	@RequestMapping("/saveEntity")
 	public ModelAndView saveEntity(HttpServletRequest request){
-		Map<String,Object> model = new HashMap<String, Object>();
-		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
-		String viewPath = null;
-		try {
-			Class<?> claz = Class.forName(clazName);
-			MapperResult result = new RequestMapper(claz).build(request);
-			if(result.getErrorMessages().isEmpty()){
-				service.guardar(result.getEntity());
-				viewPath = searchNavigationMap.get(claz);
-				showPopup(request,popupTextMap.get(claz).concat(String.valueOf(result.getEntity().getId())),PopupType.INFORMATION);
-				mailService.sendMail(result.getEntity().getMailMessageCreate());
+		if(isSessionStillAlive(request)){
+			Map<String,Object> model = new HashMap<String, Object>();
+			String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+			String viewPath = null;
+			try {
+				Class<?> claz = Class.forName(clazName);
+				MapperResult result = new RequestMapper(claz).build(request);
+				if(result.getErrorMessages().isEmpty()){
+					service.guardar(result.getEntity());
+					viewPath = searchNavigationMap.get(claz);
+					showPopup(request,popupTextMap.get(claz).concat(String.valueOf(result.getEntity().getId())),PopupType.INFORMATION);
+					mailService.sendMail(result.getEntity().getMailMessageCreate());
+				}
+				else{
+					viewPath = loadNavigationMap.get(claz);
+					showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
+					request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
+					model.put(READ_BEAN,result.getEntity());
+				}
+			} catch (ClassNotFoundException e) {
+				return new ModelAndView(ERROR_VIEW);
+			} 
+			catch(MessagingException e){
+				e.printStackTrace();
 			}
-			else{
-				viewPath = loadNavigationMap.get(claz);
-				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
-				request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
-				model.put(READ_BEAN,result.getEntity());
-			}
-		} catch (ClassNotFoundException e) {
-			return new ModelAndView(ERROR_VIEW);
-		} 
-		catch(MessagingException e){
-			e.printStackTrace();
+			request.setAttribute(VIEW_FROM,viewPath);
+			return new ModelAndView(viewPath,model);
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
 		}
-		request.setAttribute(VIEW_FROM,viewPath);
-		return new ModelAndView(viewPath,model);
 	}
 
 	private CollectionsBean getCollectionsBean(Class<?> claz) {
@@ -226,48 +222,56 @@ public class BeanController {
 	
 	@RequestMapping("/updateEntity")
 	public ModelAndView updateEntity(HttpServletRequest request){
-		Map<String,Object> model = new HashMap<String, Object>();
-		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
-		String viewPath = null;
-		try {
-			Class<?> claz = Class.forName(clazName);
-			MapperResult result = new RequestMapper(claz).build(request);
-			if(result.getErrorMessages().isEmpty()){
-				Identificable entity = result.getEntity();
-				Identificable oldEntity = (Identificable) service.get(claz,entity.getId());
-				oldEntity.copyFrom(entity);
-				service.actualizar(oldEntity);
-				showPopup(request,"Se actualizo correctamente",PopupType.INFORMATION);
-				mailService.sendMail(result.getEntity().getMailMessageUpdate());
-				viewPath = searchNavigationMap.get(claz);
-			}else{
-				viewPath = loadNavigationMap.get(claz);
-				showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
-				request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
+		if(isSessionStillAlive(request)){
+			Map<String,Object> model = new HashMap<String, Object>();
+			String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+			String viewPath = null;
+			try {
+				Class<?> claz = Class.forName(clazName);
+				MapperResult result = new RequestMapper(claz).build(request);
+				if(result.getErrorMessages().isEmpty()){
+					Identificable entity = result.getEntity();
+					Identificable oldEntity = (Identificable) service.get(claz,entity.getId());
+					oldEntity.copyFrom(entity);
+					service.actualizar(oldEntity);
+					showPopup(request,"Se actualizo correctamente",PopupType.INFORMATION);
+					mailService.sendMail(result.getEntity().getMailMessageUpdate());
+					viewPath = searchNavigationMap.get(claz);
+				}else{
+					viewPath = loadNavigationMap.get(claz);
+					showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
+					request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
+				}
+			} catch (ClassNotFoundException | MessagingException e) {
+				return new ModelAndView(ERROR_VIEW);
 			}
-		} catch (ClassNotFoundException | MessagingException e) {
-			return new ModelAndView(ERROR_VIEW);
+			request.setAttribute(VIEW_FROM,viewPath);
+			return new ModelAndView(viewPath, model);
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
 		}
-		request.setAttribute(VIEW_FROM,viewPath);
-		return new ModelAndView(viewPath, model);
 	}
 	
 	
 	private ModelAndView removeEntity(HttpServletRequest request,Class<?> claz){
-		Map<String,Object> model = new HashMap<String, Object>();
-		String viewPath = searchNavigationMap.get(claz);
-		Integer id = Integer.parseInt(request.getParameter(ENTITY_ID));
-		try {
-			Identificable object = (Identificable)service.get(claz, id);
-			service.eliminar(object);
-			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
-			request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
-			showPopup(request,"Eliminación realizada correctamente",PopupType.INFORMATION);
-			request.setAttribute(VIEW_FROM,viewPath);
-			return new ModelAndView(viewPath);
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-			return new ModelAndView(ERROR_VIEW);
+		if(isSessionStillAlive(request)){
+			Map<String,Object> model = new HashMap<String, Object>();
+			String viewPath = searchNavigationMap.get(claz);
+			Integer id = Integer.parseInt(request.getParameter(ENTITY_ID));
+			try {
+				Identificable object = (Identificable)service.get(claz, id);
+				service.eliminar(object);
+				model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
+				request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
+				showPopup(request,"Eliminación realizada correctamente",PopupType.INFORMATION);
+				request.setAttribute(VIEW_FROM,viewPath);
+				return new ModelAndView(viewPath);
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+				return new ModelAndView(ERROR_VIEW);
+			}
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
 		}
 	}
 	
@@ -298,71 +302,92 @@ public class BeanController {
 	}
 	
 	private ModelAndView getResults(HttpServletRequest request,BaseCriteria criteria,Class<?> claz){
-		Map<String,Object> model = new HashMap<String,Object>();
-		String viewPath = searchNavigationMap.get(claz);
-		List<?> collection = (List<?>) service.buscar(claz, criteria.getCriteria());
-		request.getSession().setAttribute(claz.getName().toLowerCase(),collection);
-		request.getSession().setAttribute(SEARCH_RESULTS_PREFIX.concat(claz.getSimpleName()),new BeanResults(collection, criteria));
-		request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
-		if(collection.isEmpty()){
-			showPopup(request, "No se han encontrado resultados, para la busqueda realizada.",PopupType.INFORMATION);
+		if(isSessionStillAlive(request)){
+			Map<String,Object> model = new HashMap<String,Object>();
+			String viewPath = searchNavigationMap.get(claz);
+			List<?> collection = (List<?>) service.buscar(claz, criteria.getCriteria());
+			request.getSession().setAttribute(claz.getName().toLowerCase(),collection);
+			request.getSession().setAttribute(SEARCH_RESULTS_PREFIX.concat(claz.getSimpleName()),new BeanResults(collection, criteria));
+			request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
+			if(collection.isEmpty()){
+				showPopup(request, "No se han encontrado resultados, para la busqueda realizada.",PopupType.INFORMATION);
+			}
+			request.setAttribute(VIEW_FROM,viewPath);
+			return new ModelAndView(viewPath,model);
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
 		}
-		request.setAttribute(VIEW_FROM,viewPath);
-		return new ModelAndView(viewPath,model);		
 	}
 	
 	@RequestMapping("/searchEntity")
 	public ModelAndView searchEntity(HttpServletRequest request){
-		Map<String,Object> model = new HashMap<String,Object>();
-		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
-		try {
-			Class<?> claz = Class.forName(clazName);
-			model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
-			request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
-			String viewPath = searchNavigationMap.get(claz);
-			request.setAttribute(VIEW_FROM,viewPath);
-			return new ModelAndView(viewPath,model);
-		} catch (InstantiationException | IllegalAccessException
-				| ClassNotFoundException e) {
-			e.printStackTrace();
-			return new ModelAndView(ERROR_VIEW);
+		if(isSessionStillAlive(request)){
+			Map<String,Object> model = new HashMap<String,Object>();
+			String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+			try {
+				Class<?> claz = Class.forName(clazName);
+				model.put(SEARCH_BEAN_REQUEST,CriteriaUtils.getCriteriaBean(claz));
+				request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
+				String viewPath = searchNavigationMap.get(claz);
+				request.setAttribute(VIEW_FROM,viewPath);
+				return new ModelAndView(viewPath,model);
+			} catch (InstantiationException | IllegalAccessException
+					| ClassNotFoundException e) {
+				e.printStackTrace();
+				return new ModelAndView(ERROR_VIEW);
+			}
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
 		}
 	}
 
 	@RequestMapping("/newEntity")
 	public ModelAndView newEntity(HttpServletRequest request){
-		String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
-		try {
-			Class<?> claz = Class.forName(clazName);
-			String viewPath = loadNavigationMap.get(claz);
-			request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
-			request.setAttribute(VIEW_FROM,viewPath);
-			return new ModelAndView(viewPath);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			return new ModelAndView(ERROR_VIEW);
+		if(isSessionStillAlive(request)){
+			String clazName = request.getParameter(ENTITY_NAME_REQUEST_PARAM);
+			try {
+				Class<?> claz = Class.forName(clazName);
+				String viewPath = loadNavigationMap.get(claz);
+				request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
+				request.setAttribute(VIEW_FROM,viewPath);
+				return new ModelAndView(viewPath);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+				return new ModelAndView(ERROR_VIEW);
+			}
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
 		}
+
 	}
 
 	
 	@RequestMapping("/readOrUpdateUsuario")
 	public ModelAndView readOrUpdateUsuario(HttpServletRequest request){
-		Map<String,Object> model = new HashMap<String,Object>();
-		Integer id = Integer.parseInt(request.getParameter(ENTITY_ID));
-		return update(request, model, id,Usuario.class);
+		if(isSessionStillAlive(request)){
+			Map<String,Object> model = new HashMap<String,Object>();
+			Integer id = Integer.parseInt(request.getParameter(ENTITY_ID));
+			return update(request, model, id,Usuario.class);
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
+		}
 	}
 
 	private ModelAndView update(HttpServletRequest request,Map<String, Object> model, Serializable id,Class<?> claz) {
-		Boolean update = Boolean.parseBoolean(request.getParameter(UPDATE_FLAG)  == null? "false":request.getParameter(UPDATE_FLAG));
-		Boolean read = Boolean.parseBoolean(request.getParameter(READ_FLAG) == null? "false":request.getParameter(READ_FLAG));
-		Identificable bean = (Identificable) service.get(claz,id);
-		model.put(READ_BEAN,bean);
-		model.put(UPDATE_FLAG,update);
-		model.put(READ_FLAG,read);
-		request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
-		String view = loadNavigationMap.get(claz);
-		request.setAttribute(VIEW_FROM,view);
-		return new ModelAndView(view, model);
+		if(isSessionStillAlive(request)){
+			Boolean update = Boolean.parseBoolean(request.getParameter(UPDATE_FLAG)  == null? "false":request.getParameter(UPDATE_FLAG));
+			Boolean read = Boolean.parseBoolean(request.getParameter(READ_FLAG) == null? "false":request.getParameter(READ_FLAG));
+			Identificable bean = (Identificable) service.get(claz,id);
+			model.put(READ_BEAN,bean);
+			model.put(UPDATE_FLAG,update);
+			model.put(READ_FLAG,read);
+			request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
+			String view = loadNavigationMap.get(claz);
+			request.setAttribute(VIEW_FROM,view);
+			return new ModelAndView(view, model);
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
+		}
 	}
 	
 	@RequestMapping("/readOrUpdateTicket")
@@ -386,106 +411,129 @@ public class BeanController {
 	
 	@RequestMapping("/comentar")
 	public ModelAndView comentar(HttpServletRequest request){
-		Map<String,Object> model = new HashMap<String,Object>();
-		Integer numeroIncidencia = Integer.parseInt(request.getParameter("incidencia"));
-		Integer numeroUsuario = Integer.parseInt(request.getParameter("usuario"));
-		String comentario = request.getParameter("comentario");
-		Incidencia incidencia = service.get(Incidencia.class,numeroIncidencia);
-		Usuario usuario = service.get(Usuario.class,numeroUsuario);
-		Nota nota = new Nota(comentario, usuario);
-		incidencia.addNota(nota);
-		service.guardar(nota);
-		model.put(READ_BEAN,incidencia);
-		model.put(UPDATE_FLAG,Boolean.TRUE);
-		model.put(READ_FLAG,Boolean.FALSE);
-		request.setAttribute(VIEW_FROM,TICKET_DATA_LOAD);
-		return new ModelAndView(TICKET_DATA_LOAD,model);
+		if(isSessionStillAlive(request)){
+			Map<String,Object> model = new HashMap<String,Object>();
+			Integer numeroIncidencia = Integer.parseInt(request.getParameter("incidencia"));
+			Integer numeroUsuario = Integer.parseInt(request.getParameter("usuario"));
+			String comentario = request.getParameter("comentario");
+			Incidencia incidencia = service.get(Incidencia.class,numeroIncidencia);
+			Usuario usuario = service.get(Usuario.class,numeroUsuario);
+			Nota nota = new Nota(comentario, usuario);
+			incidencia.addNota(nota);
+			service.guardar(nota);
+			model.put(READ_BEAN,incidencia);
+			model.put(UPDATE_FLAG,Boolean.TRUE);
+			model.put(READ_FLAG,Boolean.FALSE);
+			request.setAttribute(VIEW_FROM,TICKET_DATA_LOAD);
+			return new ModelAndView(TICKET_DATA_LOAD,model);
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
+		}
 	}
 	
 	@RequestMapping("/eliminarComentario")
 	public ModelAndView eliminarComentario(HttpServletRequest request){
-		Integer numeroNota = Integer.parseInt(request.getParameter("nota"));
-		Nota nota = service.get(Nota.class,numeroNota);
-		service.eliminar(nota);
-		Incidencia incidencia = nota.getIncidencia();
-		incidencia.removeNota(nota);
-		return returnToUpdateTicket(incidencia, request);	
+		if(isSessionStillAlive(request)){
+			Integer numeroNota = Integer.parseInt(request.getParameter("nota"));
+			Nota nota = service.get(Nota.class,numeroNota);
+			service.eliminar(nota);
+			Incidencia incidencia = nota.getIncidencia();
+			incidencia.removeNota(nota);
+			return returnToUpdateTicket(incidencia, request);	
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
+		}
 	}
 	
 	@RequestMapping("/adjuntar")
 	public ModelAndView adjuntar(HttpServletRequest request){
-		Integer numeroIncidencia = Integer.parseInt(request.getParameter("incidencia"));
-		FileItemFactory factory = new DiskFileItemFactory();
-		ServletFileUpload upload = new ServletFileUpload(factory);
-		try {
-			Incidencia incidencia = service.get(Incidencia.class,numeroIncidencia);
-			List<FileItem> files = upload.parseRequest(request);
-			List<Adjunto> adjuntos = ServletIOUtils.writeFiles(files, incidencia);
-			service.guardar(adjuntos);
-			incidencia.addAdjuntos(adjuntos);
-			return returnToUpdateTicket(incidencia, request);
-		} catch (FileUploadException | IOException e) {
-			e.printStackTrace();
-			return new ModelAndView(ERROR_VIEW);
+		if(isSessionStillAlive(request)){
+			Integer numeroIncidencia = Integer.parseInt(request.getParameter("incidencia"));
+			FileItemFactory factory = new DiskFileItemFactory();
+			ServletFileUpload upload = new ServletFileUpload(factory);
+			try {
+				Incidencia incidencia = service.get(Incidencia.class,numeroIncidencia);
+				List<FileItem> files = upload.parseRequest(request);
+				List<Adjunto> adjuntos = ServletIOUtils.writeFiles(files, incidencia);
+				service.guardar(adjuntos);
+				incidencia.addAdjuntos(adjuntos);
+				return returnToUpdateTicket(incidencia, request);
+			} catch (FileUploadException | IOException e) {
+				e.printStackTrace();
+				return new ModelAndView(ERROR_VIEW);
+			}
+		}else{
+			return new ModelAndView(LOGIN_VIEW);
 		}
 	}
 	
 	@RequestMapping("/descargar")
 	public void descargar(HttpServletRequest request,HttpServletResponse response){
-		String url = request.getParameter("url");
-		try{
-			String contentType = ContentType.lookUp(FilenameUtils.getExtension(url)).getMimeType();
-			response.setContentType(contentType);
-			InputStream input = new FileInputStream(url);
-			OutputStream output = response.getOutputStream();
-			IOUtils.copy(input, output);
-			response.flushBuffer();
-		}catch(IOException ioe){
-			ioe.printStackTrace();
+		if(isSessionStillAlive(request)){
+			String url = request.getParameter("url");
+			try{
+				String contentType = ContentType.lookUp(FilenameUtils.getExtension(url)).getMimeType();
+				response.setContentType(contentType);
+				InputStream input = new FileInputStream(url);
+				OutputStream output = response.getOutputStream();
+				IOUtils.copy(input, output);
+				response.flushBuffer();
+			}catch(IOException ioe){
+				ioe.printStackTrace();
+			}
+		}else{
+			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 		}
 	}
 	
 	
 	@RequestMapping("/descargarReporte")
 	public void descargarReporte(HttpServletRequest request,HttpServletResponse response){
-		String reportType = request.getParameter("jmesaTag_e_");
-		String clazName = request.getParameter("clazName");
-		String templateName = clazName.toLowerCase().concat(".jrxml");
-		String templatePath = request.getServletContext().getRealPath("/WEB-INF/jasper/".concat(templateName));
-		List<?> collection = ((BeanResults) request.getSession().getAttribute(SEARCH_RESULTS_PREFIX.concat(clazName))).getResults();
-		try {
-			ReportResult bean = reportService.writeReport(reportType,templatePath,collection);
-			OutputStream output = response.getOutputStream();
-			response.setContentType(bean.getContentType().getMimeType());
-			IOUtils.copy(bean.getInputStream(), output);
-			response.flushBuffer();
-		} catch (IOException | JRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(isSessionStillAlive(request)){
+			String reportType = request.getParameter("jmesaTag_e_");
+			String clazName = request.getParameter("clazName");
+			String templateName = clazName.toLowerCase().concat(".jrxml");
+			String templatePath = request.getServletContext().getRealPath("/WEB-INF/jasper/".concat(templateName));
+			List<?> collection = ((BeanResults) request.getSession().getAttribute(SEARCH_RESULTS_PREFIX.concat(clazName))).getResults();
+			try {
+				ReportResult bean = reportService.writeReport(reportType,templatePath,collection);
+				OutputStream output = response.getOutputStream();
+				response.setContentType(bean.getContentType().getMimeType());
+				IOUtils.copy(bean.getInputStream(), output);
+				response.flushBuffer();
+			} catch (IOException | JRException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 		}
 	}
 	
 	@RequestMapping("changePassword")
 	public ModelAndView changePassword(HttpServletRequest request){
-		Map<String,Object> model = new HashMap<String,Object>();
-		Integer legajo = Integer.parseInt(request.getParameter("legajo"));
-		Usuario usuario = service.get(Usuario.class,legajo);
-		String oldPass = request.getParameter("oldPass");
-		String newPass = request.getParameter("newPass");
-		String newPassConf = request.getParameter("newPassConf");
-		String viewFrom = request.getParameter("viewFrom");
-		if(usuario.getContrasena().equals(oldPass) && !Utils.isNullOrEmpty(newPass) && newPass.equals(newPassConf)){
-			usuario.setContrasena(newPass);
-			service.guardar(usuario);
-			showPopup(request,"Contraseña cambiada correctamente",PopupType.INFORMATION);
+		if(isSessionStillAlive(request)){
+			Map<String,Object> model = new HashMap<String,Object>();
+			Integer legajo = Integer.parseInt(request.getParameter("legajo"));
+			Usuario usuario = service.get(Usuario.class,legajo);
+			String oldPass = request.getParameter("oldPass");
+			String newPass = request.getParameter("newPass");
+			String newPassConf = request.getParameter("newPassConf");
+			String viewFrom = request.getParameter("viewFrom");
+			if(usuario.getContrasena().equals(oldPass) && !Utils.isNullOrEmpty(newPass) && newPass.equals(newPassConf)){
+				usuario.setContrasena(newPass);
+				service.guardar(usuario);
+				showPopup(request,"Contraseña cambiada correctamente",PopupType.INFORMATION);
+			}else{
+				showPopup(request, "Las contraseñas no coinciden.",PopupType.ERROR);
+			}
+			model.put(READ_BEAN,usuario);
+			model.put(UPDATE_FLAG,Boolean.TRUE);
+			model.put(READ_FLAG,Boolean.FALSE);
+			return new ModelAndView(viewFrom, model);
 		}else{
-			showPopup(request, "Las contraseñas no coinciden.",PopupType.ERROR);
+			return new ModelAndView(LOGIN_VIEW);
 		}
-		model.put(READ_BEAN,usuario);
-		model.put(UPDATE_FLAG,Boolean.TRUE);
-		model.put(READ_FLAG,Boolean.FALSE);
-		return new ModelAndView(viewFrom, model);
-
 	}
 	
 	private ModelAndView returnToUpdateTicket(Incidencia incidencia,HttpServletRequest request){
@@ -497,4 +545,20 @@ public class BeanController {
 		request.setAttribute(VIEW_FROM,TICKET_DATA_LOAD);
 		return new ModelAndView(TICKET_DATA_LOAD,model);
 	}
+	
+	private boolean isSessionStillAlive(HttpServletRequest request){
+		return request.getSession(true).getAttribute(Constants.USER_SESSION) != null;
+	}
+
+//	NO USADO, SOLO A MODO DE PRUEBA
+	
+	@RequestMapping("/showPopup")
+	public ModelAndView showPopup(HttpServletRequest request){
+		String desc = request.getParameter(POPUP_TYPE);
+		PopupType popupType = PopupType.lookUp(desc);
+		showPopup(request,"Prueba de popup",popupType == null? PopupType.INFORMATION:popupType);
+		return new ModelAndView(HOME_VIEW);
+	}
+	
+
 }
