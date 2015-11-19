@@ -6,14 +6,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<jsp:include page="../comon/head.jsp"/>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa/jquery.jmesa.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jmesa.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
+<jsp:include page="../comon/head.jsp"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jquery/jquery-ui.min.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-ui.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa/jmesa.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa/jquery.jmesa.js"></script>
 <title>Gestión de Tickets</title>
 <script type="text/javascript">
 $( document ).ready(function() {

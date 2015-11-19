@@ -22,7 +22,9 @@
 						</div>
 						<div>
 							<textarea rows="4" cols="10" disabled="disabled">${item.detalle}</textarea>
-							<a href="${pageContext.request.contextPath}/eliminarComentario.htm?nota=${item.id}">Remove</a>
+							<c:if test="${user.legajo  == item.usuario.legajo}">
+								<a href="${pageContext.request.contextPath}/eliminarComentario.htm?nota=${item.id}">Remove</a>
+							</c:if>
 						</div>
 						<br>
 					</div>

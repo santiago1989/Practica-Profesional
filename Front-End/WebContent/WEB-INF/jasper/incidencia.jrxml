@@ -3,7 +3,7 @@
 	<property name="ireport.zoom" value="1.4641000000000035"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="legajo" class="java.lang.String"/>
+	<field name="numero" class="java.lang.String"/>
 	<field name="titulo" class="java.lang.String"/>
 	<field name="owner.nombre" class="java.lang.String"/>
 	<field name="responsable.nombre" class="java.lang.String"/>

@@ -8,7 +8,7 @@
 <head>
 <jsp:include page="../comon/head.jsp"/>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa/jmesa.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jmesa/jquery.jmesa.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jmesa.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common/form.css">
