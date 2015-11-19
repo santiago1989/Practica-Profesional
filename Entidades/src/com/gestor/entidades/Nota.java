@@ -1,5 +1,6 @@
 package com.gestor.entidades;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import com.gestor.common.dto.MailMessage;
@@ -62,6 +63,9 @@ public class Nota implements Identificable{
 	}
 
 	public Date getFechaPublicacion() {
+		if(fechaPublicacion == null){
+			this.fechaPublicacion = Calendar.getInstance().getTime();
+		}
 		return fechaPublicacion;
 	}
 
