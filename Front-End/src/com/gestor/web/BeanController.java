@@ -235,15 +235,16 @@ public class BeanController {
 					oldEntity.copyFrom(entity);
 					service.actualizar(oldEntity);
 					showPopup(request,"Se actualizo correctamente",PopupType.INFORMATION);
-					mailService.sendMail(result.getEntity().getMailMessageUpdate());
 					viewPath = searchNavigationMap.get(claz);
+					mailService.sendMail(result.getEntity().getMailMessageUpdate());
 				}else{
 					viewPath = loadNavigationMap.get(claz);
 					showPopup(request,Arrays.toString(result.getErrorMessages().toArray()),PopupType.ERROR);
 					request.getSession().setAttribute(COLLECTION_PREFIX.concat(claz.getSimpleName()),getCollectionsBean(claz));
 				}
-			} catch (ClassNotFoundException | MessagingException e) {
+			} catch (ClassNotFoundException e) {
 				return new ModelAndView(ERROR_VIEW);
+			} catch(MessagingException e){
 			}
 			request.setAttribute(VIEW_FROM,viewPath);
 			return new ModelAndView(viewPath, model);
